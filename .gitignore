@@ -1,0 +1,21 @@
+# KHÔNG đưa log / dữ liệu lớn lên GitHub
+*.evtx
+*.log
+*.zip
+*.7z
+*.duckdb
+*.duckdb.wal
+data/raw/
+output/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# IDE / hệ điều hành
+.vscode/
+.idea/
+Thumbs.db
