@@ -5,8 +5,8 @@
 | Thành viên | MSSV | Vai trò |
 |---|---|---|
 | Phạm Thái Khôi | 2380601102 | Nhóm trưởng |
-| Trần Trọng Thiên | 2380602102| |
-| Nguyễn Châu Anh Dũng | 2380600296 | |
+| Trần Trọng Thiên | 2380602102| Dữ liệu|
+| Nguyễn Châu Anh Dũng | 2380600296 | Môi trường và mô hình|
 
 Giảng viên hướng dẫn: ...
 
