@@ -27,5 +27,5 @@
 | Máy | Bắt đầu thu | Cấu hình | Tình trạng |
 |---|---|---|---|
 | Khôi | 17/10/2026 00:09 | sysmonconfig-dacn.xml | Đang thu |
-| Thiên | | sysmonconfig-dacn.xml | Đang thu |
-| Dũng | | sysmonconfig-dacn.xml | Đang thu |
+| Thiên | 17/10/2026 08:58| sysmonconfig-dacn.xml | Đang thu |
+| Dũng | 17/10/2026| sysmonconfig-dacn.xml | Đang thu |
