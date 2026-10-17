@@ -15,10 +15,10 @@
 
 | Mô hình | Kích thước tải về | Eval rate (tokens/s) | RAM (ollama ps) | Processor | Thời gian tổng | Câu trả lời đúng/sai |
 |---|---:|---:|---:|---|---:|---|
-| qwen3:4b-instruct-2507-q4_K_M | 2.5 GB | 7.47 | 3.2 GB | 100% CPU | 15.904 giây | sai |
+| qwen3:4b-instruct-2507-q4_K_M | 2.5 GB | 7.47 | 3.2 GB | 100% CPU | 15.904 giây | sai một phần |
 | llama3.2:3b | 2.0 GB | 10.15 | 2.6 GB | 100% CPU | 12.502 giây | sai|
-| gemma3:4b | 3.4 GB | 8.08 | 2.9 GB | 100% CPU | 9.180 giây | Đúng |
-| phi4-mini | 2.0 GB | 7.54 | 3.1 GB | 100% CPU | 8.853 giây | Đúng |
+| gemma3:4b | 3.4 GB | 8.08 | 2.9 GB | 100% CPU | 9.180 giây | khá chính xác |
+| phi4-mini | 2.0 GB | 7.54 | 3.1 GB | 100% CPU | 8.853 giây | khá chính xác |
 
 
 # Nhận xét
@@ -40,16 +40,11 @@ thuộc vào số token được sinh ra và các yếu tố xử lý khác. Vì
 
 - Đánh giá độ chính xác trong bảng hiện chỉ mang tính sơ bộ, dựa trên câu hỏi kiến thức chung về PowerShell Script Block Logging. Câu hỏi này phù hợp để quan sát tốc độ và mức sử dụng tài nguyên, nhưng chưa đủ để đánh giá khả năng phân tích log của một AI Agent. Việc đánh giá khả năng phân tích log cần được thực hiện ở giai đoạn sau bằng các câu hỏi và dữ liệu log thực tế, theo kế hoạch của đồ án.
 
-**\ Bổ sung câu trả lời nguyên văn của cả bốn mô hình tại đây, giữ đúng nội dung đầu ra thực tế từ Ollama, không viết lại hoặc diễn giải:**
-1. Qwen3:4b-instruct-2507-q4_K_M
+## Nhận xét chi tiết câu trả lời
 
-- Sai một phần: giải thích đúng chức năng chính nhưng hướng dẫn bật tính năng chưa đúng.
-2. Llama 3.2 3B
-
-- Sai: có nhầm lẫn về cơ chế hoạt động và cách bật tính năng.
-3. Gemma 3 4B
-
-- Khá chính xác: nắm được chức năng cơ bản nhưng phần kỹ thuật còn thiếu hoặc chưa rõ.
-4. Phi-4-mini
-
-- Khá chính xác: hiểu mục đích bảo mật nhưng chưa giải thích rõ cơ chế ghi nội dung script.
+| Mô hình | Đánh giá |
+|---|---|
+| qwen3:4b-instruct-2507-q4_K_M | Sai một phần: giải thích đúng chức năng chính nhưng hướng dẫn bật tính năng chưa đúng |
+| llama3.2:3b | Sai: nhầm lẫn về cơ chế hoạt động và cách bật tính năng |
+| gemma3:4b | Khá chính xác: nắm được chức năng cơ bản nhưng phần kỹ thuật còn thiếu |
+| phi4-mini | Khá chính xác: hiểu mục đích bảo mật nhưng chưa giải thích rõ cơ chế ghi nội dung script |
