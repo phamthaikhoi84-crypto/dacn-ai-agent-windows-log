@@ -9,7 +9,7 @@
 - Ngày thử nghiệm: 16/10/2026
 - Context: 4096
 
-- Câu hỏi dùng chung cho cả 4 mô hình:
+**- Câu hỏi dùng chung cho cả 4 mô hình:**
 
 - Explain what PowerShell Script Block Logging is in 3 sentences.
 
