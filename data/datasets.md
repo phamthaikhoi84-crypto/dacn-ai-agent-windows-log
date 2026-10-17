@@ -20,3 +20,12 @@
 **Loại log** ghi rõ: Sysmon / PowerShell 4104 / Security, và định dạng file (EVTX / JSON / XML-text / text khóa=giá trị).
 
 **Lưu ý T1021.001:** log chính (EVTX) là phía máy đích, có Sysmon 3 tới cổng 3389 nhưng không có mstsc.exe; log dự phòng (Splunk) là phía máy khởi tạo, có mstsc.exe nhưng không có Sysmon 3.
+## Log bình thường
+
+> Thu trên máy 3 thành viên, Sysmon dùng cấu hình chung `config/sysmonconfig-dacn.xml` và bật PowerShell Script Block Logging. Log lưu trên máy, xuất mỗi tuần, không đưa lên GitHub.
+
+| Máy | Bắt đầu thu | Cấu hình | Tình trạng |
+|---|---|---|---|
+| Khôi | 17/10/2026 00:09 | sysmonconfig-dacn.xml | Đang thu |
+| Thiên | | sysmonconfig-dacn.xml | Đang thu |
+| Dũng | | sysmonconfig-dacn.xml | Đang thu |
