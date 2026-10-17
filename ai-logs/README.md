@@ -9,6 +9,8 @@ Mỗi lần dùng công cụ AI (Claude, ChatGPT, Gemini, Copilot...) cho đồ 
 | 16/10/2026 | Khôi | Claude | Nhờ viết script đọc file .evtx và nạp vào DuckDB; hỏi cách cài Python, thư viện và chạy script | src/evtx_to_duckdb.py — đã chạy thử thành công trên máy Khôi với file LM_sysmon_3_12_13_1_SharpRDP.evtx, nạp 38 bản ghi | như trên |
 | 16/10/2026 | Khôi | Claude | Nhờ rà soát bảng datasets.md và rà lại phân việc tuần 1 | Góp ý cho Thiên sửa bảng; danh sách việc còn thiếu | như trên |
 | 16/10/2026 | Dũng | chat GPT | Hướng dẫn cấu hình Sysmon, bật Script Block Logging, kiểm tra sự kiện log và hướng dẫn ghi nhận kết quả chạy model | Hỗ trợ cấu hình môi trường thu thập log và hoàn thiện tài liệu docs/models.md | không có|
+| 16–17/10/2026 | Thiên | Claude | Hướng dẫn tải log tấn công cho 8 kỹ thuật (Splunk, EVTX-ATTACK-SAMPLES), lập bảng datasets.md, cài Sysmon dùng chung config và bật Script Block Logging | data/datasets.md (bảng 8/8 kỹ thuật; tự chạy lệnh kiểm tra trên máy và điền ghi chú theo kết quả, sửa lại theo góp ý của Khôi); cài Sysmon và bật Script Block Logging trên máy | Không chia sẻ (chat có ảnh chụp và đường dẫn chứa thông tin cá nhân), nội dung tóm tắt ở cột Hỏi gì |
+
 Quy ước:
 - Không dán mật khẩu, token, thông tin cá nhân vào cuộc chat trước khi chia sẻ link.
 - Cột "Dùng kết quả vào đâu" ghi rõ file nào, và phần nào đã tự sửa lại.
