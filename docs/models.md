@@ -48,3 +48,36 @@ thuộc vào số token được sinh ra và các yếu tố xử lý khác. Vì
 | llama3.2:3b | Sai: nhầm lẫn về cơ chế hoạt động và cách bật tính năng |
 | gemma3:4b | Khá chính xác: nắm được chức năng cơ bản nhưng phần kỹ thuật còn thiếu |
 | phi4-mini | Khá chính xác: hiểu mục đích bảo mật nhưng chưa giải thích rõ cơ chế ghi nội dung script |
+
+## Kết quả đầu ra của các mô hình (lần chạy 16/10)
+
+
+
+<details>
+<summary>1. qwen3:4b-instruct-2507-q4_K_M</summary>
+
+PowerShell script block logging is a feature that records the execution of specific script blocks within a PowerShell session, capturing details like the script content, parameters, and execution context. It allows administrators and developers to track what commands are run, when, and under what conditions, aiding in troubleshooting and auditing. This logging is typically enabled using the Start-Transcript and Stop-Transcript cmdlets, or via configuration in PowerShell's logging settings, and can be applied to individual script blocks using the Register-EngineEvent or custom logging functions.
+
+</details>
+
+
+
+
+<details>
+<summary>2. Llama 3.2 3B — llama3.2:3b</summary>
+
+PowerShell script block logging is a feature that allows you to capture and save the output of a PowerShell script, including variables, values, and any errors that occur, to a log file. This feature is enabled by default in PowerShell 3 and later versions, and can be accessed by calling the & operator before a script block, followed by the >> operator, which writes the output to a log file. By enabling PowerShell script block logging, you can track the execution of your scripts, diagnose issues, and improve the overall reliability and security of your automation tasks.
+
+</details>
+
+<details>
+<summary>3. Gemma 3 4B — gemma3:4b</summary>
+
+PowerShell script block logging records the execution of individual script blocks within a PowerShell script, providing detailed information about each step. It captures data like timestamps, script block names, and the output or errors generated during each block's execution. This logging is crucial for troubleshooting, debugging, and understanding the flow of complex PowerShell scripts.
+
+</details>
+
+<details>
+<summary>4. Phi-4-mini — phi4-mini</summary>
+PowerShell script block logging is a feature that allows administrators to record details of all PowerShell sessions, such as the commands executed and the outcomes. This logging helps in auditing and monitoring activities for security and compliance purposes. Script block logging captures both successful and unsuccessful script executions to provide a comprehensive view of script activity.
+</details>
