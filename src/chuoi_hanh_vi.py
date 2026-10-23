@@ -16,6 +16,7 @@ Các bước script làm:
 Cách chạy (PowerShell, đứng ở thư mục gốc của repo):
   python src\\chuoi_hanh_vi.py D:\\DACN\\log\\file1.evtx D:\\DACN\\log\\file2.evtx
   python src\\chuoi_hanh_vi.py D:\\DACN\\log           (nạp mọi file .evtx trong thư mục)
+  python src\\chuoi_hanh_vi.py D:\\DACN\\log --phien 3 (chỉ in chi tiết phiên số 3)
 
 Lưu ý: KHÔNG dùng trường RuleName để nhận diện. RuleName do người viết cấu hình Sysmon
 đặt (ví dụ "CredAccess - Memdump"), dùng nó là "nhìn trộm đáp án".
@@ -148,6 +149,8 @@ def main():
     ap.add_argument("--db", default="output/chuoi_hanh_vi.duckdb")
     ap.add_argument("--khoang-cach", type=int, default=300,
                     help="2 sự kiện cách nhau quá số giây này thì tách thành 2 phiên (mặc định 300)")
+    ap.add_argument("--phien", type=int, nargs="*",
+                    help="chỉ in chi tiết các phiên có số thứ tự này, vd: --phien 3  hoặc  --phien 1 3")
     args = ap.parse_args()
 
     files = []
@@ -170,7 +173,7 @@ def main():
             "SELECT nguon, event_id, COUNT(*) FROM su_kien GROUP BY ALL ORDER BY nguon, event_id").fetchall():
         print(f"   {nguon:<65} Event ID {eid:<5} {n:>3} sự kiện")
 
-    # ---------- BƯỚC 2: cây tiến trình (từ Event ID 1) ----------
+    # ---------- Chuẩn bị A: cây tiến trình (từ Event ID 1) ----------
     tien_trinh = con.execute("""
         SELECT guid, parent_guid, image, parent_image, logon_id, nguoi_dung
         FROM su_kien WHERE event_id = 1
@@ -182,17 +185,29 @@ def main():
         ten_tien_trinh[g] = ten_ngan(i)
         ten_tien_trinh.setdefault(pg, ten_ngan(pi))
 
-    # ---------- BƯỚC 3: gắn LogonId + gốc cây cho mọi sự kiện, rồi gom phiên ----------
+    # ---------- Chuẩn bị B: gắn LogonId + gốc cây cho mọi sự kiện, rồi gom phiên ----------
     cot = ["nguon", "record_id", "thoi_gian", "event_id", "may", "guid", "parent_guid", "image",
            "parent_image", "command_line", "nguoi_dung", "logon_id", "doi_tuong", "quyen"]
     su_kien = [dict(zip(cot, r)) for r in con.execute(
         "SELECT * FROM su_kien ORDER BY may, thoi_gian, record_id").fetchall()]
 
+    # LogonId của cả cây: nếu mọi tiến trình con trong cây cùng 1 LogonId thì gán LogonId đó cho cây.
+    # Nhờ vậy, sự kiện của tiến trình gốc (vd explorer.exe không có Event ID 1 trong log)
+    # vẫn được gom chung phiên với các tiến trình con của nó.
+    logon_theo_cay = {}
+    for g in thong_tin:
+        tt = thong_tin[g]
+        if tt["logon_id"]:
+            logon_theo_cay.setdefault(tim_goc(g, cha_cua), set()).add((tt["logon_id"], tt["nguoi_dung"]))
+    logon_cua_cay = {goc: next(iter(ds)) for goc, ds in logon_theo_cay.items() if len(ds) == 1}
+
     for e in su_kien:
         tt = thong_tin.get(e["guid"], {})
-        e["logon_id"] = e["logon_id"] or tt.get("logon_id")      # Event 7/10/11 không có LogonId -> lấy từ Event 1
-        e["nguoi_dung"] = e["nguoi_dung"] or tt.get("nguoi_dung")
         e["goc"] = tim_goc(e["guid"], cha_cua)
+        cay = logon_cua_cay.get(e["goc"], (None, None))
+        # Event 7/10/11/12/13 không có LogonId -> lấy từ Event 1 của chính tiến trình, nếu không có thì lấy theo cây
+        e["logon_id"] = e["logon_id"] or tt.get("logon_id") or cay[0]
+        e["nguoi_dung"] = e["nguoi_dung"] or tt.get("nguoi_dung") or cay[1]
         ten_tien_trinh.setdefault(e["guid"], ten_ngan(e["image"]))
 
     nhom = {}
@@ -210,8 +225,18 @@ def main():
             phien.append(sau)
         phien_list.append((khoa, phien))
 
-    # ---------- BƯỚC 4: in chuỗi hành động ----------
+    # ---------- BƯỚC 2: danh sách tóm tắt các phiên ----------
+    print("\n" + "=" * 78)
+    print(f"BƯỚC 2. Tìm được {len(phien_list)} phiên hành vi (xem chi tiết 1 phiên: thêm --phien <số>)")
     for so, ((may, logon), ds) in enumerate(phien_list, 1):
+        nguon = ", ".join(dict.fromkeys(e["nguon"] for e in ds))
+        print(f"   #{so:<2} {len(ds):>3} sự kiện | {ds[0]['thoi_gian'].strftime('%Y-%m-%d %H:%M:%S')} | "
+              f"{ds[0]['nguoi_dung'] or '(không rõ người dùng)'} | file: {nguon}")
+
+    # ---------- BƯỚC 3: in chi tiết từng phiên ----------
+    for so, ((may, logon), ds) in enumerate(phien_list, 1):
+        if args.phien and so not in args.phien:
+            continue
         cac_goc = list(dict.fromkeys(e["goc"] for e in ds))
         nhan_cay = {g: chr(ord("A") + i) for i, g in enumerate(cac_goc)}
         print("\n" + "=" * 78)
@@ -223,11 +248,17 @@ def main():
               + ("  <- chuỗi trải qua nhiều cây, chỉ nối được nhờ LogonId + thời gian" if len(cac_goc) > 1 else ""))
 
         print("\n   Cây tiến trình:")
+        guid_trong_phien = {e["guid"] for e in ds}
+
+        def in_cay(g, muc):
+            for con_g, cha_g in cha_cua.items():
+                if cha_g == g and con_g in guid_trong_phien:
+                    print("   " + "   " * muc + f"└─ {ten_tien_trinh.get(con_g)}")
+                    in_cay(con_g, muc + 1)
+
         for g in cac_goc:
             print(f"   Cây {nhan_cay[g]}: {ten_tien_trinh.get(g, '?')}")
-            for con_g, cha_g in cha_cua.items():
-                if cha_g == g and any(e["guid"] == con_g for e in ds):
-                    print(f"      └─ {ten_tien_trinh.get(con_g)}")
+            in_cay(g, 1)
 
         print("\n   Dòng thời gian:")
         for i, e in enumerate(ds, 1):
