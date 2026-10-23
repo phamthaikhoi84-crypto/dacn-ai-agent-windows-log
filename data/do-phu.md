@@ -56,7 +56,7 @@ T1021.001 và T1070.001 dưới 3 file theo quy tắc đếm ở mục 1. Kết 
 - Tên file và mô tả không đảm bảo nội dung: file mstsc_sysmon.log của T1021.001 có cả sự kiện Sysmon 1 và Security 4688.
 - Hai thư mục viết thường (t1547.014, t1592) không được tính vì quy tắc chỉ nhận thư mục bắt đầu bằng chữ T hoa.
 - Cột "áp dụng cho Windows" dựa vào nền tảng ghi trong ATT&CK, chưa kiểm tra nội dung log.
-- EVTX-ATTACK-SAMPLES chỉ đưa vào cho T1021.001 và T1070.001 (mục 7). OTRF chưa đưa vào bản này.
+- EVTX-ATTACK-SAMPLES chỉ đưa vào cho T1021.001 và T1070.001 (mục 7). OTRF chỉ đọc metadata (mục 8).
 
 ## 7. Bổ sung cho T1021.001 và T1070.001 (kiểm tra theo nội dung)
 
@@ -109,3 +109,33 @@ DE_1102_security_log_cleared.evtx (Security 1102) và DE_104_system_log_cleared.
 - Theo nội dung: Splunk có 9 file chứa sự kiện Sysmon cho T1021.001 (mỗi file 1 đến 12 sự kiện) và 3 file chứa sự kiện Sysmon hoặc PowerShell cho T1070.001. Thêm nguồn EVTX thì T1021.001 có thêm 1 file đã kiểm tra, T1070.001 chưa có thêm file Sysmon hoặc PowerShell.
 - Ví dụ cho hạn chế của "dòng khớp": file windows-sysmon.log của T1070.001 có 6226 sự kiện Sysmon nhưng chỉ 6 dòng chứa wevtutil hoặc Clear-EventLog (khoảng 0,1%).
 - Cách đếm dùng để báo cáo với thầy cần Khôi quyết định.
+
+## 8. Bổ sung từ OTRF Security Datasets
+
+Nguồn: metadata trong kho OTRF/Security-Datasets (thư mục datasets/atomic/_metadata). Bản lấy ngày 23/10/2026, commit mới nhất của kho: 2023-09-20. Chỉ lấy các bộ dữ liệu có nền tảng Windows (100 bộ có ánh xạ kỹ thuật).
+
+### Tám kỹ thuật tầng sâu
+
+| Mã | Splunk (theo danh sách) | OTRF (số bộ dữ liệu) | Cộng |
+|---|---|---|---|
+| T1003.001 | 4 | 5 | 9 |
+| T1021.001 | 1 | 0 | 1 |
+| T1053.005 | 11 | 4 | 15 |
+| T1059.001 | 92 | 1 | 93 |
+| T1070.001 | 2 | 0 | 2 |
+| T1105 | 5 | 0 | 5 |
+| T1136.001 | 4 | 0 | 4 |
+| T1547.001 | 3 | 2 | 5 |
+
+### Toàn danh sách
+
+- Trong 161 kỹ thuật của danh sách, 90 kỹ thuật đang dưới 3 file theo quy tắc ở mục 1; 14 kỹ thuật trong số đó có ánh xạ trong OTRF.
+- 10 kỹ thuật lên được từ 3 file trở lên khi cộng OTRF: T1003.003 (2 + 5), T1003.004 (1 + 2), T1049 (2 + 1), T1135 (2 + 1), T1197 (2 + 1), T1218.004 (2 + 1), T1218.010 (2 + 1), T1550.002 (2 + 1), T1562.002 (2 + 6), T1574.001 (2 + 1).
+- 14 kỹ thuật có trong OTRF (Windows) nhưng không có trong danh sách 161.
+
+### Hạn chế
+
+- Cộng hai đơn vị khác nhau: Splunk tính theo file, OTRF tính theo bộ dữ liệu (mỗi bộ là một gói dữ liệu; chưa kiểm tra bên trong có những kênh log nào).
+- Chỉ đọc metadata (ánh xạ kỹ thuật do OTRF ghi), chưa tải và mở file nén để kiểm tra có Sysmon hoặc PowerShell hay không.
+- OTRF dùng mã ATT&CK cũ, chưa gộp theo mã v20.0.
+- OTRF không có bộ dữ liệu nào cho T1021.001 và T1070.001 (cột OTRF bằng 0), nên hai kỹ thuật này chỉ bổ sung được từ EVTX-ATTACK-SAMPLES (mục 7).
