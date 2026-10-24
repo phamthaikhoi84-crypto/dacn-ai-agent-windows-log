@@ -1,0 +1,868 @@
+﻿ma,ten,trang_thai_v20,ma_v20,ten_v20,chien_thuat_v20,nen_tang_v20,co_windows
+T1001,Data Obfuscation,active,T1001,Data Obfuscation,command-and-control,ESXi;Linux;macOS;Windows,co
+T1001.001,Junk Data,active,T1001.001,Junk Data,command-and-control,ESXi;Linux;macOS;Windows,co
+T1001.002,Steganography,active,T1001.002,Steganography,command-and-control,Linux;macOS;Windows;ESXi,co
+T1001.003,Protocol or Service Impersonation,active,T1001.003,Protocol or Service Impersonation,command-and-control,ESXi;Linux;macOS;Windows,co
+T1002,Data Compressed,revoked,T1560,Archive Collected Data,collection,Linux;macOS;Windows,co
+T1003,OS Credential Dumping,active,T1003,OS Credential Dumping,credential-access,Linux;macOS;Windows,co
+T1003.001,LSASS Memory,active,T1003.001,LSASS Memory,credential-access,Windows,co
+T1003.002,Security Account Manager,active,T1003.002,Security Account Manager,credential-access,Windows,co
+T1003.003,NTDS,active,T1003.003,NTDS,credential-access,Windows,co
+T1003.004,LSA Secrets,active,T1003.004,LSA Secrets,credential-access,Windows,co
+T1003.005,Cached Domain Credentials,active,T1003.005,Cached Domain Credentials,credential-access,Windows;Linux,co
+T1003.006,DCSync,active,T1003.006,DCSync,credential-access,Windows,co
+T1003.007,Proc Filesystem,active,T1003.007,Proc Filesystem,credential-access,Linux,khong
+T1003.008,/etc/passwd and /etc/shadow,active,T1003.008,/etc/passwd and /etc/shadow,credential-access,Linux,khong
+T1004,Winlogon Helper DLL,revoked,T1547.004,Winlogon Helper DLL,persistence;privilege-escalation,Windows,co
+T1005,Data from Local System,active,T1005,Data from Local System,collection,ESXi;Linux;macOS;Network Devices;Windows,co
+T1006,Direct Volume Access,active,T1006,Direct Volume Access,stealth,Network Devices;Windows,co
+T1007,System Service Discovery,active,T1007,System Service Discovery,discovery,Linux;macOS;Windows,co
+T1008,Fallback Channels,active,T1008,Fallback Channels,command-and-control,ESXi;Linux;macOS;Windows,co
+T1009,Binary Padding,revoked,T1027.001,Binary Padding,stealth,Linux;macOS;Windows,co
+T1010,Application Window Discovery,active,T1010,Application Window Discovery,discovery,Linux;macOS;Windows,co
+T1011,Exfiltration Over Other Network Medium,active,T1011,Exfiltration Over Other Network Medium,exfiltration,Linux;macOS;Windows,co
+T1011.001,Exfiltration Over Bluetooth,active,T1011.001,Exfiltration Over Bluetooth,exfiltration,Linux;macOS;Windows,co
+T1012,Query Registry,active,T1012,Query Registry,discovery,Windows,co
+T1013,Port Monitors,revoked,T1547.010,Port Monitors,persistence;privilege-escalation,Windows,co
+T1014,Rootkit,active,T1014,Rootkit,stealth,Linux;macOS;Windows,co
+T1015,Accessibility Features,revoked,T1546.008,Accessibility Features,privilege-escalation;persistence,Windows,co
+T1016,System Network Configuration Discovery,active,T1016,System Network Configuration Discovery,discovery,ESXi;Linux;macOS;Network Devices;Windows,co
+T1016.001,Internet Connection Discovery,active,T1016.001,Internet Connection Discovery,discovery,Windows;Linux;macOS;ESXi,co
+T1016.002,Wi-Fi Discovery,active,T1016.002,Wi-Fi Discovery,discovery,Linux;Windows;macOS,co
+T1017,Application Deployment Software,revoked,T1072,Software Deployment Tools,execution;lateral-movement,Linux;macOS;Network Devices;SaaS;Windows,co
+T1018,Remote System Discovery,active,T1018,Remote System Discovery,discovery,ESXi;Linux;macOS;Network Devices;Windows,co
+T1019,System Firmware,revoked,T1542.001,System Firmware,stealth;persistence,Network Devices;Windows,co
+T1020,Automated Exfiltration,active,T1020,Automated Exfiltration,exfiltration,Linux;macOS;Network Devices;Windows,co
+T1020.001,Traffic Duplication,active,T1020.001,Traffic Duplication,exfiltration,Network Devices;IaaS,khong
+T1021,Remote Services,active,T1021,Remote Services,lateral-movement,Linux;macOS;Windows;IaaS;ESXi,co
+T1021.001,Remote Desktop Protocol,active,T1021.001,Remote Desktop Protocol,lateral-movement,Windows,co
+T1021.002,SMB/Windows Admin Shares,active,T1021.002,SMB/Windows Admin Shares,lateral-movement,Windows,co
+T1021.003,Distributed Component Object Model,active,T1021.003,Distributed Component Object Model,lateral-movement,Windows,co
+T1021.004,SSH,active,T1021.004,SSH,lateral-movement,ESXi;Linux;macOS;Windows,co
+T1021.005,VNC,active,T1021.005,VNC,lateral-movement,Linux;Windows;macOS,co
+T1021.006,Windows Remote Management,active,T1021.006,Windows Remote Management,lateral-movement,Windows,co
+T1021.007,Cloud Services,active,T1021.007,Cloud Services,lateral-movement,IaaS;Identity Provider;Office Suite;SaaS,khong
+T1021.008,Direct Cloud VM Connections,active,T1021.008,Direct Cloud VM Connections,lateral-movement,IaaS,khong
+T1022,Data Encrypted,revoked,T1560,Archive Collected Data,collection,Linux;macOS;Windows,co
+T1023,Shortcut Modification,revoked,T1547.009,Shortcut Modification,persistence;privilege-escalation,Windows,co
+T1024,Custom Cryptographic Protocol,revoked,T1573,Encrypted Channel,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1025,Data from Removable Media,active,T1025,Data from Removable Media,collection,Linux;macOS;Windows,co
+T1026,Multiband Communication,deprecated,,,,,khong ro
+T1027,Obfuscated Files or Information,active,T1027,Obfuscated Files or Information,stealth,ESXi;Linux;macOS;Network Devices;Windows,co
+T1027.001,Binary Padding,active,T1027.001,Binary Padding,stealth,Linux;macOS;Windows,co
+T1027.002,Software Packing,active,T1027.002,Software Packing,stealth,Linux;macOS;Windows,co
+T1027.003,Steganography,active,T1027.003,Steganography,stealth,Linux;macOS;Windows,co
+T1027.004,Compile After Delivery,active,T1027.004,Compile After Delivery,stealth,Linux;macOS;Windows,co
+T1027.005,Indicator Removal from Tools,active,T1027.005,Indicator Removal from Tools,stealth,Linux;macOS;Windows,co
+T1027.006,HTML Smuggling,active,T1027.006,HTML Smuggling,stealth,Linux;macOS;Windows,co
+T1027.007,Dynamic API Resolution,active,T1027.007,Dynamic API Resolution,stealth,Windows,co
+T1027.008,Stripped Payloads,active,T1027.008,Stripped Payloads,stealth,Linux;macOS;Network Devices;Windows,co
+T1027.009,Embedded Payloads,active,T1027.009,Embedded Payloads,stealth,Linux;macOS;Windows,co
+T1027.010,Command Obfuscation,active,T1027.010,Command Obfuscation,stealth,Linux;macOS;Windows,co
+T1027.011,Fileless Storage,active,T1027.011,Fileless Storage,stealth,Linux;Windows,co
+T1027.012,LNK Icon Smuggling,active,T1027.012,LNK Icon Smuggling,stealth,Windows,co
+T1027.013,Encrypted/Encoded File,active,T1027.013,Encrypted/Encoded File,stealth,Linux;macOS;Windows,co
+T1027.014,Polymorphic Code,active,T1027.014,Polymorphic Code,stealth,Linux;macOS;Windows,co
+T1027.015,Compression,active,T1027.015,Compression,stealth,Linux;macOS;Windows,co
+T1027.016,Junk Code Insertion,active,T1027.016,Junk Code Insertion,stealth,Linux;macOS;Windows,co
+T1027.017,SVG Smuggling,active,T1027.017,SVG Smuggling,stealth,Linux;macOS;Windows,co
+T1027.018,Invisible Unicode,active,T1027.018,Invisible Unicode,stealth,Linux;macOS;Windows,co
+T1028,Windows Remote Management,revoked,T1021.006,Windows Remote Management,lateral-movement,Windows,co
+T1029,Scheduled Transfer,active,T1029,Scheduled Transfer,exfiltration,Linux;macOS;Windows,co
+T1030,Data Transfer Size Limits,active,T1030,Data Transfer Size Limits,exfiltration,Linux;macOS;Windows;ESXi,co
+T1031,Modify Existing Service,revoked,T1543.003,Windows Service,persistence;privilege-escalation,Windows,co
+T1032,Standard Cryptographic Protocol,revoked,T1573,Encrypted Channel,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1033,System Owner/User Discovery,active,T1033,System Owner/User Discovery,discovery,Linux;macOS;Network Devices;Windows,co
+T1034,Path Interception,deprecated,,,,,khong ro
+T1035,Service Execution,revoked,T1569.002,Service Execution,execution,Windows,co
+T1036,Masquerading,active,T1036,Masquerading,stealth,Containers;ESXi;Linux;macOS;Windows,co
+T1036.001,Invalid Code Signature,active,T1036.001,Invalid Code Signature,stealth,macOS;Windows,co
+T1036.002,Right-to-Left Override,active,T1036.002,Right-to-Left Override,stealth,Linux;macOS;Windows,co
+T1036.003,Rename Legitimate Utilities,active,T1036.003,Rename Legitimate Utilities,stealth,Linux;macOS;Windows,co
+T1036.004,Masquerade Task or Service,active,T1036.004,Masquerade Task or Service,stealth,Linux;macOS;Windows,co
+T1036.005,Match Legitimate Resource Name or Location,active,T1036.005,Match Legitimate Resource Name or Location,stealth,Containers;ESXi;Linux;macOS;Windows,co
+T1036.006,Space after Filename,active,T1036.006,Space after Filename,stealth,Linux;macOS,khong
+T1036.007,Double File Extension,active,T1036.007,Double File Extension,stealth,Windows,co
+T1036.008,Masquerade File Type,active,T1036.008,Masquerade File Type,stealth,Linux;macOS;Windows,co
+T1036.009,Break Process Trees,active,T1036.009,Break Process Trees,stealth,Linux;macOS,khong
+T1036.010,Masquerade Account Name,active,T1036.010,Masquerade Account Name,stealth,Containers;IaaS;Identity Provider;Linux;macOS;Office Suite;SaaS;Windows,co
+T1036.011,Overwrite Process Arguments,active,T1036.011,Overwrite Process Arguments,stealth,Linux,khong
+T1036.012,Browser Fingerprint,active,T1036.012,Browser Fingerprint,stealth,Linux;macOS;Windows,co
+T1037,Boot or Logon Initialization Scripts,active,T1037,Boot or Logon Initialization Scripts,persistence;privilege-escalation,ESXi;Linux;macOS;Network Devices;Windows,co
+T1037.001,Logon Script (Windows),active,T1037.001,Logon Script (Windows),persistence;privilege-escalation,Windows,co
+T1037.002,Login Hook,active,T1037.002,Login Hook,persistence;privilege-escalation,macOS,khong
+T1037.003,Network Logon Script,active,T1037.003,Network Logon Script,persistence;privilege-escalation,Windows,co
+T1037.004,RC Scripts,active,T1037.004,RC Scripts,persistence;privilege-escalation,macOS;Linux;Network Devices;ESXi,khong
+T1037.005,Startup Items,active,T1037.005,Startup Items,persistence;privilege-escalation,macOS,khong
+T1038,DLL Search Order Hijacking,revoked,T1574.001,DLL,stealth;execution,Windows,co
+T1039,Data from Network Shared Drive,active,T1039,Data from Network Shared Drive,collection,Linux;macOS;Windows,co
+T1040,Network Sniffing,active,T1040,Network Sniffing,credential-access;discovery,IaaS;Linux;macOS;Network Devices;Windows,co
+T1041,Exfiltration Over C2 Channel,active,T1041,Exfiltration Over C2 Channel,exfiltration,ESXi;Linux;macOS;Windows,co
+T1042,Change Default File Association,revoked,T1546.001,Change Default File Association,privilege-escalation;persistence,Windows,co
+T1043,Commonly Used Port,deprecated,,,,,khong ro
+T1044,File System Permissions Weakness,revoked,T1574.010,Services File Permissions Weakness,stealth;execution,Windows,co
+T1045,Software Packing,revoked,T1027.002,Software Packing,stealth,Linux;macOS;Windows,co
+T1046,Network Service Discovery,active,T1046,Network Service Discovery,discovery,Containers;IaaS;Linux;macOS;Network Devices;Windows,co
+T1047,Windows Management Instrumentation,active,T1047,Windows Management Instrumentation,execution,Windows,co
+T1048,Exfiltration Over Alternative Protocol,active,T1048,Exfiltration Over Alternative Protocol,exfiltration,ESXi;IaaS;Linux;macOS;Network Devices;Office Suite;SaaS;Windows,co
+T1048.001,Exfiltration Over Symmetric Encrypted Non-C2 Protocol,active,T1048.001,Exfiltration Over Symmetric Encrypted Non-C2 Protocol,exfiltration,Linux;macOS;Windows;ESXi,co
+T1048.002,Exfiltration Over Asymmetric Encrypted Non-C2 Protocol,active,T1048.002,Exfiltration Over Asymmetric Encrypted Non-C2 Protocol,exfiltration,ESXi;Linux;macOS;Windows,co
+T1048.003,Exfiltration Over Unencrypted Non-C2 Protocol,active,T1048.003,Exfiltration Over Unencrypted Non-C2 Protocol,exfiltration,ESXi;Linux;macOS;Network Devices;Windows,co
+T1049,System Network Connections Discovery,active,T1049,System Network Connections Discovery,discovery,ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1050,New Service,revoked,T1543.003,Windows Service,persistence;privilege-escalation,Windows,co
+T1051,Shared Webroot,deprecated,,,,,khong ro
+T1052,Exfiltration Over Physical Medium,active,T1052,Exfiltration Over Physical Medium,exfiltration,Linux;macOS;Windows,co
+T1052.001,Exfiltration over USB,active,T1052.001,Exfiltration over USB,exfiltration,Linux;Windows;macOS,co
+T1053,Scheduled Task/Job,active,T1053,Scheduled Task/Job,execution;persistence;privilege-escalation,Containers;ESXi;Linux;macOS;Network Devices;Windows,co
+T1053.001,At (Linux),revoked,T1053.002,At,execution;persistence;privilege-escalation,Windows;Linux;macOS,co
+T1053.002,At,active,T1053.002,At,execution;persistence;privilege-escalation,Windows;Linux;macOS,co
+T1053.003,Cron,active,T1053.003,Cron,execution;persistence;privilege-escalation,Linux;macOS;ESXi,khong
+T1053.004,Launchd,deprecated,,,,,khong ro
+T1053.005,Scheduled Task,active,T1053.005,Scheduled Task,execution;persistence;privilege-escalation,Windows,co
+T1053.006,Systemd Timers,active,T1053.006,Systemd Timers,execution;persistence;privilege-escalation,Linux,khong
+T1053.007,Container Orchestration Job,active,T1053.007,Container Orchestration Job,execution;persistence;privilege-escalation,Containers,khong
+T1054,Indicator Blocking,revoked,T1685,Disable or Modify Tools,defense-impairment,Containers;ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1055,Process Injection,active,T1055,Process Injection,stealth;privilege-escalation,Linux;macOS;Windows,co
+T1055.001,Dynamic-link Library Injection,active,T1055.001,Dynamic-link Library Injection,stealth;privilege-escalation,Windows,co
+T1055.002,Portable Executable Injection,active,T1055.002,Portable Executable Injection,stealth;privilege-escalation,Windows,co
+T1055.003,Thread Execution Hijacking,active,T1055.003,Thread Execution Hijacking,stealth;privilege-escalation,Windows,co
+T1055.004,Asynchronous Procedure Call,active,T1055.004,Asynchronous Procedure Call,stealth;privilege-escalation,Windows,co
+T1055.005,Thread Local Storage,active,T1055.005,Thread Local Storage,stealth;privilege-escalation,Windows,co
+T1055.008,Ptrace System Calls,active,T1055.008,Ptrace System Calls,stealth;privilege-escalation,Linux,khong
+T1055.009,Proc Memory,active,T1055.009,Proc Memory,stealth;privilege-escalation,Linux,khong
+T1055.011,Extra Window Memory Injection,active,T1055.011,Extra Window Memory Injection,stealth;privilege-escalation,Windows,co
+T1055.012,Process Hollowing,active,T1055.012,Process Hollowing,stealth;privilege-escalation,Windows,co
+T1055.013,Process Doppelgänging,active,T1055.013,Process Doppelgänging,stealth;privilege-escalation,Windows,co
+T1055.014,VDSO Hijacking,active,T1055.014,VDSO Hijacking,stealth;privilege-escalation,Linux,khong
+T1055.015,ListPlanting,active,T1055.015,ListPlanting,stealth;privilege-escalation,Windows,co
+T1056,Input Capture,active,T1056,Input Capture,collection;credential-access,Linux;macOS;Network Devices;Windows,co
+T1056.001,Keylogging,active,T1056.001,Keylogging,collection;credential-access,Linux;macOS;Network Devices;Windows,co
+T1056.002,GUI Input Capture,active,T1056.002,GUI Input Capture,collection;credential-access,Linux;macOS;Windows,co
+T1056.003,Web Portal Capture,active,T1056.003,Web Portal Capture,collection;credential-access,Linux;macOS;Windows,co
+T1056.004,Credential API Hooking,active,T1056.004,Credential API Hooking,collection;credential-access,Windows;Linux;macOS,co
+T1057,Process Discovery,active,T1057,Process Discovery,discovery,ESXi;Linux;macOS;Network Devices;Windows,co
+T1058,Service Registry Permissions Weakness,revoked,T1574.011,Services Registry Permissions Weakness,stealth;execution,Windows,co
+T1059,Command and Scripting Interpreter,active,T1059,Command and Scripting Interpreter,execution,Containers;ESXi;IaaS;Identity Provider;Linux;macOS;Network Devices;Office Suite;SaaS;Windows,co
+T1059.001,PowerShell,active,T1059.001,PowerShell,execution,Windows;Linux;macOS,co
+T1059.002,AppleScript,active,T1059.002,AppleScript,execution,macOS,khong
+T1059.003,Windows Command Shell,active,T1059.003,Windows Command Shell,execution,Windows,co
+T1059.004,Unix Shell,active,T1059.004,Unix Shell,execution,ESXi;Linux;macOS;Network Devices,khong
+T1059.005,Visual Basic,active,T1059.005,Visual Basic,execution,Linux;macOS;Windows,co
+T1059.006,Python,active,T1059.006,Python,execution,ESXi;Linux;macOS;Windows,co
+T1059.007,JavaScript,active,T1059.007,JavaScript,execution,Linux;macOS;Windows,co
+T1059.008,Network Device CLI,active,T1059.008,Network Device CLI,execution,Network Devices,khong
+T1059.009,Cloud API,active,T1059.009,Cloud API,execution,IaaS;Identity Provider;Office Suite;SaaS,khong
+T1059.010,AutoHotKey & AutoIT,active,T1059.010,AutoHotKey & AutoIT,execution,Windows,co
+T1059.011,Lua,active,T1059.011,Lua,execution,Linux;Network Devices;Windows;macOS,co
+T1059.012,Hypervisor CLI,active,T1059.012,Hypervisor CLI,execution,ESXi,khong
+T1059.013,Container CLI/API,active,T1059.013,Container CLI/API,execution,Containers,khong
+T1060,Registry Run Keys / Startup Folder,revoked,T1547.001,Registry Run Keys / Startup Folder,persistence;privilege-escalation,Windows,co
+T1061,Graphical User Interface,deprecated,,,,,khong ro
+T1062,Hypervisor,deprecated,,,,,khong ro
+T1063,Security Software Discovery,revoked,T1518.001,Security Software Discovery,discovery,IaaS;Linux;macOS;Windows,co
+T1064,Scripting,deprecated,,,,,khong ro
+T1065,Uncommonly Used Port,revoked,T1571,Non-Standard Port,command-and-control,ESXi;Linux;macOS;Windows,co
+T1066,Indicator Removal from Tools,revoked,T1027.005,Indicator Removal from Tools,stealth,Linux;macOS;Windows,co
+T1067,Bootkit,revoked,T1542.003,Bootkit,stealth;persistence,Linux;Windows,co
+T1068,Exploitation for Privilege Escalation,active,T1068,Exploitation for Privilege Escalation,privilege-escalation,Containers;Linux;macOS;Windows,co
+T1069,Permission Groups Discovery,active,T1069,Permission Groups Discovery,discovery,Containers;IaaS;Identity Provider;Linux;macOS;Office Suite;SaaS;Windows,co
+T1069.001,Local Groups,active,T1069.001,Local Groups,discovery,Linux;macOS;Windows,co
+T1069.002,Domain Groups,active,T1069.002,Domain Groups,discovery,Linux;macOS;Windows,co
+T1069.003,Cloud Groups,active,T1069.003,Cloud Groups,discovery,SaaS;IaaS;Office Suite;Identity Provider,khong
+T1070,Indicator Removal,active,T1070,Indicator Removal,stealth,Containers;ESXi;Linux;macOS;Network Devices;Office Suite;Windows,co
+T1070.001,Clear Windows Event Logs,revoked,T1685.005,Clear Windows Event Logs,defense-impairment,Windows,co
+T1070.002,Clear Linux or Mac System Logs,revoked,T1685.006,Clear Linux or Mac System Logs,defense-impairment,Linux;macOS,khong
+T1070.003,Clear Command History,active,T1070.003,Clear Command History,stealth,ESXi;Linux;macOS;Network Devices;Windows,co
+T1070.004,File Deletion,active,T1070.004,File Deletion,stealth,ESXi;Linux;macOS;Windows,co
+T1070.005,Network Share Connection Removal,active,T1070.005,Network Share Connection Removal,stealth,Windows,co
+T1070.006,Timestomp,active,T1070.006,Timestomp,stealth,ESXi;Linux;macOS;Windows,co
+T1070.007,Clear Network Connection History and Configurations,active,T1070.007,Clear Network Connection History and Configurations,stealth,Linux;macOS;Windows;Network Devices,co
+T1070.008,Clear Mailbox Data,active,T1070.008,Clear Mailbox Data,stealth,Linux;macOS;Office Suite;Windows,co
+T1070.009,Clear Persistence,active,T1070.009,Clear Persistence,stealth,ESXi;Linux;macOS;Windows,co
+T1070.010,Relocate Malware,active,T1070.010,Relocate Malware,stealth,Linux;macOS;Network Devices;Windows,co
+T1071,Application Layer Protocol,active,T1071,Application Layer Protocol,command-and-control,Linux;macOS;Windows;Network Devices;ESXi,co
+T1071.001,Web Protocols,active,T1071.001,Web Protocols,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1071.002,File Transfer Protocols,active,T1071.002,File Transfer Protocols,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1071.003,Mail Protocols,active,T1071.003,Mail Protocols,command-and-control,Linux;macOS;Network Devices;Windows,co
+T1071.004,DNS,active,T1071.004,DNS,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1071.005,Publish/Subscribe Protocols,active,T1071.005,Publish/Subscribe Protocols,command-and-control,macOS;Linux;Windows;Network Devices,co
+T1072,Software Deployment Tools,active,T1072,Software Deployment Tools,execution;lateral-movement,Linux;macOS;Network Devices;SaaS;Windows,co
+T1073,DLL Side-Loading,revoked,T1574.001,DLL,stealth;execution,Windows,co
+T1074,Data Staged,active,T1074,Data Staged,collection,ESXi;IaaS;Linux;macOS;Windows,co
+T1074.001,Local Data Staging,active,T1074.001,Local Data Staging,collection,ESXi;Linux;macOS;Windows,co
+T1074.002,Remote Data Staging,active,T1074.002,Remote Data Staging,collection,ESXi;IaaS;Linux;macOS;Windows,co
+T1075,Pass the Hash,revoked,T1550.002,Pass the Hash,lateral-movement,Windows,co
+T1076,Remote Desktop Protocol,revoked,T1021.001,Remote Desktop Protocol,lateral-movement,Windows,co
+T1077,Windows Admin Shares,revoked,T1021.002,SMB/Windows Admin Shares,lateral-movement,Windows,co
+T1078,Valid Accounts,active,T1078,Valid Accounts,stealth;persistence;privilege-escalation;initial-access,Containers;ESXi;IaaS;Identity Provider;Linux;macOS;Network Devices;Office Suite;SaaS;Windows,co
+T1078.001,Default Accounts,active,T1078.001,Default Accounts,stealth;persistence;privilege-escalation;initial-access,Containers;ESXi;IaaS;Identity Provider;Linux;macOS;Network Devices;Office Suite;SaaS;Windows,co
+T1078.002,Domain Accounts,active,T1078.002,Domain Accounts,stealth;persistence;privilege-escalation;initial-access,ESXi;Linux;macOS;Windows,co
+T1078.003,Local Accounts,active,T1078.003,Local Accounts,stealth;persistence;privilege-escalation;initial-access,Containers;ESXi;Linux;macOS;Network Devices;Windows,co
+T1078.004,Cloud Accounts,active,T1078.004,Cloud Accounts,stealth;persistence;privilege-escalation;initial-access,IaaS;Identity Provider;Office Suite;SaaS,khong
+T1079,Multilayer Encryption,revoked,T1573,Encrypted Channel,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1080,Taint Shared Content,active,T1080,Taint Shared Content,lateral-movement,Windows;SaaS;Linux;macOS;Office Suite,co
+T1081,Credentials in Files,revoked,T1552.001,Credentials In Files,credential-access,Containers;IaaS;Linux;macOS;Windows,co
+T1082,System Information Discovery,active,T1082,System Information Discovery,discovery,ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1083,File and Directory Discovery,active,T1083,File and Directory Discovery,discovery,ESXi;Linux;macOS;Network Devices;Windows,co
+T1084,Windows Management Instrumentation Event Subscription,revoked,T1546.003,Windows Management Instrumentation Event Subscription,privilege-escalation;persistence,Windows,co
+T1085,Rundll32,revoked,T1218.011,Rundll32,stealth,Windows,co
+T1086,PowerShell,revoked,T1059.001,PowerShell,execution,Windows;Linux;macOS,co
+T1087,Account Discovery,active,T1087,Account Discovery,discovery,ESXi;IaaS;Identity Provider;Linux;macOS;Office Suite;SaaS;Windows,co
+T1087.001,Local Account,active,T1087.001,Local Account,discovery,ESXi;Linux;macOS;Windows,co
+T1087.002,Domain Account,active,T1087.002,Domain Account,discovery,Linux;macOS;Windows,co
+T1087.003,Email Account,active,T1087.003,Email Account,discovery,Windows;Office Suite,co
+T1087.004,Cloud Account,active,T1087.004,Cloud Account,discovery,IaaS;Identity Provider;Office Suite;SaaS,khong
+T1088,Bypass User Account Control,revoked,T1548.002,Bypass User Account Control,privilege-escalation,Windows,co
+T1089,Disabling Security Tools,revoked,T1685,Disable or Modify Tools,defense-impairment,Containers;ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1090,Proxy,active,T1090,Proxy,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1090.001,Internal Proxy,active,T1090.001,Internal Proxy,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1090.002,External Proxy,active,T1090.002,External Proxy,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1090.003,Multi-hop Proxy,active,T1090.003,Multi-hop Proxy,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1090.004,Domain Fronting,active,T1090.004,Domain Fronting,command-and-control,Linux;macOS;Windows;ESXi,co
+T1091,Replication Through Removable Media,active,T1091,Replication Through Removable Media,lateral-movement;initial-access,Windows,co
+T1092,Communication Through Removable Media,active,T1092,Communication Through Removable Media,command-and-control,Linux;macOS;Windows,co
+T1093,Process Hollowing,revoked,T1055.012,Process Hollowing,stealth;privilege-escalation,Windows,co
+T1094,Custom Command and Control Protocol,revoked,T1095,Non-Application Layer Protocol,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1095,Non-Application Layer Protocol,active,T1095,Non-Application Layer Protocol,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1096,NTFS File Attributes,revoked,T1564.004,NTFS File Attributes,stealth,Windows,co
+T1097,Pass the Ticket,revoked,T1550.003,Pass the Ticket,lateral-movement,Windows,co
+T1098,Account Manipulation,active,T1098,Account Manipulation,persistence;privilege-escalation,Containers;ESXi;IaaS;Identity Provider;Linux;macOS;Network Devices;Office Suite;SaaS;Windows,co
+T1098.001,Additional Cloud Credentials,active,T1098.001,Additional Cloud Credentials,persistence;privilege-escalation,IaaS;Identity Provider;SaaS,khong
+T1098.002,Additional Email Delegate Permissions,active,T1098.002,Additional Email Delegate Permissions,persistence;privilege-escalation,Windows;Office Suite,co
+T1098.003,Additional Cloud Roles,active,T1098.003,Additional Cloud Roles,persistence;privilege-escalation,IaaS;Identity Provider;Office Suite;SaaS,khong
+T1098.004,SSH Authorized Keys,active,T1098.004,SSH Authorized Keys,persistence;privilege-escalation,ESXi;IaaS;Linux;macOS;Network Devices,khong
+T1098.005,Device Registration,active,T1098.005,Device Registration,persistence;privilege-escalation,Windows;Identity Provider,co
+T1098.006,Additional Container Cluster Roles,active,T1098.006,Additional Container Cluster Roles,persistence;privilege-escalation,Containers,khong
+T1098.007,Additional Local or Domain Groups,active,T1098.007,Additional Local or Domain Groups,persistence;privilege-escalation,Windows;macOS;Linux,co
+T1099,Timestomp,revoked,T1070.006,Timestomp,stealth,ESXi;Linux;macOS;Windows,co
+T1100,Web Shell,revoked,T1505.003,Web Shell,persistence,Linux;macOS;Network Devices;Windows,co
+T1101,Security Support Provider,revoked,T1547.005,Security Support Provider,persistence;privilege-escalation,Windows,co
+T1102,Web Service,active,T1102,Web Service,command-and-control,ESXi;Linux;macOS;Windows,co
+T1102.001,Dead Drop Resolver,active,T1102.001,Dead Drop Resolver,command-and-control,ESXi;Linux;macOS;Windows,co
+T1102.002,Bidirectional Communication,active,T1102.002,Bidirectional Communication,command-and-control,ESXi;Linux;macOS;Windows,co
+T1102.003,One-Way Communication,active,T1102.003,One-Way Communication,command-and-control,Linux;macOS;Windows;ESXi,co
+T1103,AppInit DLLs,revoked,T1546.010,AppInit DLLs,privilege-escalation;persistence,Windows,co
+T1104,Multi-Stage Channels,active,T1104,Multi-Stage Channels,command-and-control,Linux;macOS;Windows;ESXi,co
+T1105,Ingress Tool Transfer,active,T1105,Ingress Tool Transfer,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1106,Native API,active,T1106,Native API,execution,Linux;macOS;Windows,co
+T1107,File Deletion,revoked,T1070.004,File Deletion,stealth,ESXi;Linux;macOS;Windows,co
+T1108,Redundant Access,deprecated,,,,,khong ro
+T1109,Component Firmware,revoked,T1542.002,Component Firmware,stealth;persistence,Windows;Linux;macOS,co
+T1110,Brute Force,active,T1110,Brute Force,credential-access,Containers;ESXi;IaaS;Identity Provider;Linux;macOS;Network Devices;Office Suite;SaaS;Windows,co
+T1110.001,Password Guessing,active,T1110.001,Password Guessing,credential-access,Containers;ESXi;IaaS;Identity Provider;Linux;macOS;Network Devices;Office Suite;SaaS;Windows,co
+T1110.002,Password Cracking,active,T1110.002,Password Cracking,credential-access,Identity Provider;Linux;macOS;Network Devices;Office Suite;Windows,co
+T1110.003,Password Spraying,active,T1110.003,Password Spraying,credential-access,Containers;ESXi;IaaS;Identity Provider;Linux;Network Devices;Office Suite;SaaS;Windows;macOS,co
+T1110.004,Credential Stuffing,active,T1110.004,Credential Stuffing,credential-access,Containers;ESXi;IaaS;Identity Provider;Linux;macOS;Network Devices;Office Suite;SaaS;Windows,co
+T1111,Multi-Factor Authentication Interception,active,T1111,Multi-Factor Authentication Interception,credential-access,Linux;macOS;Windows,co
+T1112,Modify Registry,active,T1112,Modify Registry,defense-impairment;persistence,Windows,co
+T1113,Screen Capture,active,T1113,Screen Capture,collection,Linux;macOS;Windows,co
+T1114,Email Collection,active,T1114,Email Collection,collection,Windows;macOS;Linux;Office Suite,co
+T1114.001,Local Email Collection,active,T1114.001,Local Email Collection,collection,Windows,co
+T1114.002,Remote Email Collection,active,T1114.002,Remote Email Collection,collection,Office Suite;Windows,co
+T1114.003,Email Forwarding Rule,active,T1114.003,Email Forwarding Rule,collection,Linux;macOS;Office Suite;Windows,co
+T1115,Clipboard Data,active,T1115,Clipboard Data,collection,Linux;macOS;Windows,co
+T1116,Code Signing,revoked,T1553.002,Code Signing,defense-impairment,macOS;Windows,co
+T1117,Regsvr32,revoked,T1218.010,Regsvr32,stealth,Windows,co
+T1118,InstallUtil,revoked,T1218.004,InstallUtil,stealth,Windows,co
+T1119,Automated Collection,active,T1119,Automated Collection,collection,IaaS;Linux;macOS;Office Suite;SaaS;Windows,co
+T1120,Peripheral Device Discovery,active,T1120,Peripheral Device Discovery,discovery,Linux;macOS;Windows,co
+T1121,Regsvcs/Regasm,revoked,T1218.009,Regsvcs/Regasm,stealth,Windows,co
+T1122,Component Object Model Hijacking,revoked,T1546.015,Component Object Model Hijacking,privilege-escalation;persistence,Windows,co
+T1123,Audio Capture,active,T1123,Audio Capture,collection,Linux;macOS;Windows,co
+T1124,System Time Discovery,active,T1124,System Time Discovery,discovery,ESXi;Linux;macOS;Network Devices;Windows,co
+T1125,Video Capture,active,T1125,Video Capture,collection,Linux;macOS;Windows,co
+T1126,Network Share Connection Removal,revoked,T1070.005,Network Share Connection Removal,stealth,Windows,co
+T1127,Trusted Developer Utilities Proxy Execution,active,T1127,Trusted Developer Utilities Proxy Execution,stealth;execution,Windows,co
+T1127.001,MSBuild,active,T1127.001,MSBuild,stealth;execution,Windows,co
+T1127.002,ClickOnce,active,T1127.002,ClickOnce,stealth;execution,Windows,co
+T1127.003,JamPlus,active,T1127.003,JamPlus,stealth;execution,Windows,co
+T1128,Netsh Helper DLL,revoked,T1546.007,Netsh Helper DLL,privilege-escalation;persistence,Windows,co
+T1129,Shared Modules,active,T1129,Shared Modules,execution,Linux;macOS;Windows,co
+T1130,Install Root Certificate,revoked,T1553.004,Install Root Certificate,defense-impairment,Linux;macOS;Windows,co
+T1131,Authentication Package,revoked,T1547.002,Authentication Package,persistence;privilege-escalation,Windows,co
+T1132,Data Encoding,active,T1132,Data Encoding,command-and-control,ESXi;Linux;macOS;Windows,co
+T1132.001,Standard Encoding,active,T1132.001,Standard Encoding,command-and-control,ESXi;Linux;macOS;Windows,co
+T1132.002,Non-Standard Encoding,active,T1132.002,Non-Standard Encoding,command-and-control,ESXi;Linux;macOS;Windows,co
+T1133,External Remote Services,active,T1133,External Remote Services,persistence;initial-access,Containers;Linux;macOS;Windows,co
+T1134,Access Token Manipulation,active,T1134,Access Token Manipulation,stealth;privilege-escalation,Windows,co
+T1134.001,Token Impersonation/Theft,active,T1134.001,Token Impersonation/Theft,stealth;privilege-escalation,Windows,co
+T1134.002,Create Process with Token,active,T1134.002,Create Process with Token,stealth;privilege-escalation,Windows,co
+T1134.003,Make and Impersonate Token,active,T1134.003,Make and Impersonate Token,stealth;privilege-escalation,Windows,co
+T1134.004,Parent PID Spoofing,active,T1134.004,Parent PID Spoofing,stealth;privilege-escalation,Windows,co
+T1134.005,SID-History Injection,active,T1134.005,SID-History Injection,stealth;privilege-escalation,Windows,co
+T1135,Network Share Discovery,active,T1135,Network Share Discovery,discovery,Linux;macOS;Windows,co
+T1136,Create Account,active,T1136,Create Account,persistence,Windows;IaaS;Linux;macOS;Network Devices;Containers;SaaS;Office Suite;Identity Provider;ESXi,co
+T1136.001,Local Account,active,T1136.001,Local Account,persistence,Containers;ESXi;Linux;macOS;Network Devices;Windows,co
+T1136.002,Domain Account,active,T1136.002,Domain Account,persistence,Linux;macOS;Windows,co
+T1136.003,Cloud Account,active,T1136.003,Cloud Account,persistence,IaaS;SaaS;Office Suite;Identity Provider,khong
+T1137,Office Application Startup,active,T1137,Office Application Startup,persistence,Windows;Office Suite,co
+T1137.001,Office Template Macros,active,T1137.001,Office Template Macros,persistence,Office Suite;Windows,co
+T1137.002,Office Test,active,T1137.002,Office Test,persistence,Windows;Office Suite,co
+T1137.003,Outlook Forms,active,T1137.003,Outlook Forms,persistence,Windows;Office Suite,co
+T1137.004,Outlook Home Page,active,T1137.004,Outlook Home Page,persistence,Windows;Office Suite,co
+T1137.005,Outlook Rules,active,T1137.005,Outlook Rules,persistence,Windows;Office Suite,co
+T1137.006,Add-ins,active,T1137.006,Add-ins,persistence,Windows;Office Suite,co
+T1138,Application Shimming,revoked,T1546.011,Application Shimming,privilege-escalation;persistence,Windows,co
+T1139,Bash History,revoked,T1552.003,Shell History,credential-access,Linux;macOS;Windows,co
+T1140,Deobfuscate/Decode Files or Information,active,T1140,Deobfuscate/Decode Files or Information,stealth,ESXi;Linux;macOS;Windows,co
+T1141,Input Prompt,revoked,T1056.002,GUI Input Capture,collection;credential-access,Linux;macOS;Windows,co
+T1142,Keychain,revoked,T1555.001,Keychain,credential-access,macOS,khong
+T1143,Hidden Window,revoked,T1564.003,Hidden Window,stealth,Linux;macOS;Windows,co
+T1144,Gatekeeper Bypass,revoked,T1553.001,Gatekeeper Bypass,defense-impairment,macOS,khong
+T1145,Private Keys,revoked,T1552.004,Private Keys,credential-access,Linux;macOS;Network Devices;Windows,co
+T1146,Clear Command History,revoked,T1070.003,Clear Command History,stealth,ESXi;Linux;macOS;Network Devices;Windows,co
+T1147,Hidden Users,revoked,T1564.002,Hidden Users,stealth,Linux;macOS;Windows,co
+T1148,HISTCONTROL,revoked,T1690,Prevent Command History Logging,defense-impairment,ESXi;Linux;macOS;Network Devices;Windows,co
+T1149,LC_MAIN Hijacking,deprecated,,,,,khong ro
+T1150,Plist Modification,revoked,T1647,Plist File Modification,defense-impairment,macOS,khong
+T1151,Space after Filename,revoked,T1036.006,Space after Filename,stealth,Linux;macOS,khong
+T1152,Launchctl,revoked,T1569.001,Launchctl,execution,macOS,khong
+T1153,Source,deprecated,,,,,khong ro
+T1154,Trap,revoked,T1546.005,Trap,privilege-escalation;persistence,macOS;Linux,khong
+T1155,AppleScript,revoked,T1059.002,AppleScript,execution,macOS,khong
+T1156,Malicious Shell Modification,revoked,T1546.004,Unix Shell Configuration Modification,privilege-escalation;persistence,Linux;macOS,khong
+T1157,Dylib Hijacking,revoked,T1574.004,Dylib Hijacking,stealth;execution,macOS,khong
+T1158,Hidden Files and Directories,revoked,T1564.001,Hidden Files and Directories,stealth,Linux;macOS;Windows,co
+T1159,Launch Agent,revoked,T1543.001,Launch Agent,persistence;privilege-escalation,macOS,khong
+T1160,Launch Daemon,revoked,T1543.004,Launch Daemon,persistence;privilege-escalation,macOS,khong
+T1161,LC_LOAD_DYLIB Addition,revoked,T1546.006,LC_LOAD_DYLIB Addition,privilege-escalation;persistence,macOS,khong
+T1162,Login Item,revoked,T1647,Plist File Modification,defense-impairment,macOS,khong
+T1163,Rc.common,revoked,T1037.004,RC Scripts,persistence;privilege-escalation,macOS;Linux;Network Devices;ESXi,khong
+T1164,Re-opened Applications,revoked,T1547.007,Re-opened Applications,persistence;privilege-escalation,macOS,khong
+T1165,Startup Items,revoked,T1037.005,Startup Items,persistence;privilege-escalation,macOS,khong
+T1166,Setuid and Setgid,revoked,T1548.001,Setuid and Setgid,privilege-escalation,Linux;macOS,khong
+T1167,Securityd Memory,revoked,T1555.002,Securityd Memory,credential-access,Linux;macOS,khong
+T1168,Local Job Scheduling,revoked,T1053,Scheduled Task/Job,execution;persistence;privilege-escalation,Containers;ESXi;Linux;macOS;Network Devices;Windows,co
+T1169,Sudo,revoked,T1548.003,Sudo and Sudo Caching,privilege-escalation,Linux;macOS,khong
+T1170,Mshta,revoked,T1218.005,Mshta,stealth,Windows,co
+T1171,LLMNR/NBT-NS Poisoning and Relay,revoked,T1557.001,Name Resolution Poisoning and SMB Relay,credential-access;collection,Windows,co
+T1172,Domain Fronting,revoked,T1090.004,Domain Fronting,command-and-control,Linux;macOS;Windows;ESXi,co
+T1173,Dynamic Data Exchange,revoked,T1559.002,Dynamic Data Exchange,execution,Windows,co
+T1174,Password Filter DLL,revoked,T1556.002,Password Filter DLL,defense-impairment;persistence;credential-access,Windows,co
+T1175,Component Object Model and Distributed COM,deprecated,,,,,khong ro
+T1176,Software Extensions,active,T1176,Software Extensions,persistence,Linux;macOS;Windows,co
+T1176.001,Browser Extensions,active,T1176.001,Browser Extensions,persistence,Linux;Windows;macOS,co
+T1176.002,IDE Extensions,active,T1176.002,IDE Extensions,persistence,Linux;macOS;Windows,co
+T1177,LSASS Driver,revoked,T1547.008,LSASS Driver,persistence;privilege-escalation,Windows,co
+T1178,SID-History Injection,revoked,T1134.005,SID-History Injection,stealth;privilege-escalation,Windows,co
+T1179,Hooking,revoked,T1056.004,Credential API Hooking,collection;credential-access,Windows;Linux;macOS,co
+T1180,Screensaver,revoked,T1546.002,Screensaver,privilege-escalation;persistence,Windows,co
+T1181,Extra Window Memory Injection,revoked,T1055.011,Extra Window Memory Injection,stealth;privilege-escalation,Windows,co
+T1182,AppCert DLLs,revoked,T1546.009,AppCert DLLs,privilege-escalation;persistence,Windows,co
+T1183,Image File Execution Options Injection,revoked,T1546.012,Image File Execution Options Injection,privilege-escalation;persistence,Windows,co
+T1184,SSH Hijacking,revoked,T1563.001,SSH Hijacking,lateral-movement,Linux;macOS,khong
+T1185,Browser Session Hijacking,active,T1185,Browser Session Hijacking,collection,Windows,co
+T1186,Process Doppelgänging,revoked,T1055.013,Process Doppelgänging,stealth;privilege-escalation,Windows,co
+T1187,Forced Authentication,active,T1187,Forced Authentication,credential-access,Windows,co
+T1188,Multi-hop Proxy,revoked,T1090.003,Multi-hop Proxy,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1189,Drive-by Compromise,active,T1189,Drive-by Compromise,initial-access,Identity Provider;Linux;macOS;Windows,co
+T1190,Exploit Public-Facing Application,active,T1190,Exploit Public-Facing Application,initial-access,Containers;ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1191,CMSTP,revoked,T1218.003,CMSTP,stealth,Windows,co
+T1192,Spearphishing Link,revoked,T1566.002,Spearphishing Link,initial-access,Identity Provider;Linux;macOS;Office Suite;SaaS;Windows,co
+T1193,Spearphishing Attachment,revoked,T1566.001,Spearphishing Attachment,initial-access,Linux;macOS;Windows,co
+T1194,Spearphishing via Service,revoked,T1566.003,Spearphishing via Service,initial-access,Linux;macOS;Windows,co
+T1195,Supply Chain Compromise,active,T1195,Supply Chain Compromise,initial-access,Linux;Windows;macOS;SaaS,co
+T1195.001,Compromise Software Dependencies and Development Tools,active,T1195.001,Compromise Software Dependencies and Development Tools,initial-access,Linux;macOS;Windows,co
+T1195.002,Compromise Software Supply Chain,active,T1195.002,Compromise Software Supply Chain,initial-access,Linux;Windows;macOS,co
+T1195.003,Compromise Hardware Supply Chain,active,T1195.003,Compromise Hardware Supply Chain,initial-access,Linux;macOS;Windows,co
+T1196,Control Panel Items,revoked,T1218.002,Control Panel,stealth,Windows,co
+T1197,BITS Jobs,active,T1197,BITS Jobs,stealth;persistence;execution,Windows,co
+T1198,SIP and Trust Provider Hijacking,revoked,T1553.003,SIP and Trust Provider Hijacking,defense-impairment,Windows,co
+T1199,Trusted Relationship,active,T1199,Trusted Relationship,initial-access,IaaS;Identity Provider;Linux;macOS;Office Suite;SaaS;Windows,co
+T1200,Hardware Additions,active,T1200,Hardware Additions,initial-access,Windows;Linux;macOS,co
+T1201,Password Policy Discovery,active,T1201,Password Policy Discovery,discovery,Windows;Linux;macOS;IaaS;Network Devices;Identity Provider;SaaS;Office Suite,co
+T1202,Indirect Command Execution,active,T1202,Indirect Command Execution,stealth,Windows,co
+T1203,Exploitation for Client Execution,active,T1203,Exploitation for Client Execution,execution,Linux;macOS;Windows,co
+T1204,User Execution,active,T1204,User Execution,execution,Linux;Windows;macOS;IaaS;Containers,co
+T1204.001,Malicious Link,active,T1204.001,Malicious Link,execution,Linux;macOS;Windows,co
+T1204.002,Malicious File,active,T1204.002,Malicious File,execution,Linux;macOS;Windows,co
+T1204.003,Malicious Image,active,T1204.003,Malicious Image,execution,IaaS;Containers,khong
+T1204.004,Malicious Copy and Paste,active,T1204.004,Malicious Copy and Paste,execution,Linux;macOS;Windows,co
+T1204.005,Malicious Library,active,T1204.005,Malicious Library,execution,Linux;macOS;Windows,co
+T1205,Traffic Signaling,active,T1205,Traffic Signaling,stealth;persistence;command-and-control,Linux;macOS;Network Devices;Windows,co
+T1205.001,Port Knocking,active,T1205.001,Port Knocking,stealth;persistence;command-and-control,Linux;macOS;Network Devices;Windows,co
+T1205.002,Socket Filters,active,T1205.002,Socket Filters,stealth;persistence;command-and-control,Linux;macOS;Windows,co
+T1206,Sudo Caching,revoked,T1548.003,Sudo and Sudo Caching,privilege-escalation,Linux;macOS,khong
+T1207,Rogue Domain Controller,active,T1207,Rogue Domain Controller,defense-impairment,Windows,co
+T1208,Kerberoasting,revoked,T1558.003,Kerberoasting,credential-access,Windows,co
+T1209,Time Providers,revoked,T1547.003,Time Providers,persistence;privilege-escalation,Windows,co
+T1210,Exploitation of Remote Services,active,T1210,Exploitation of Remote Services,lateral-movement,Linux;Windows;macOS;ESXi,co
+T1211,Exploitation for Stealth,active,T1211,Exploitation for Stealth,stealth,Linux;Windows;macOS;SaaS;IaaS,co
+T1212,Exploitation for Credential Access,active,T1212,Exploitation for Credential Access,credential-access,Linux;Windows;macOS;Identity Provider,co
+T1213,Data from Information Repositories,active,T1213,Data from Information Repositories,collection,Linux;Windows;macOS;SaaS;IaaS;Office Suite,co
+T1213.001,Confluence,active,T1213.001,Confluence,collection,SaaS,khong
+T1213.002,Sharepoint,active,T1213.002,Sharepoint,collection,Office Suite;Windows,co
+T1213.003,Code Repositories,active,T1213.003,Code Repositories,collection,SaaS,khong
+T1213.004,Customer Relationship Management Software,active,T1213.004,Customer Relationship Management Software,collection,SaaS,khong
+T1213.005,Messaging Applications,active,T1213.005,Messaging Applications,collection,Office Suite;SaaS,khong
+T1213.006,Databases,active,T1213.006,Databases,collection,IaaS;Linux;macOS;SaaS;Windows,co
+T1214,Credentials in Registry,revoked,T1552.002,Credentials in Registry,credential-access,Windows,co
+T1215,Kernel Modules and Extensions,revoked,T1547.006,Kernel Modules and Extensions,persistence;privilege-escalation,macOS;Linux,khong
+T1216,System Script Proxy Execution,active,T1216,System Script Proxy Execution,stealth,Windows,co
+T1216.001,PubPrn,active,T1216.001,PubPrn,stealth,Windows,co
+T1216.002,SyncAppvPublishingServer,active,T1216.002,SyncAppvPublishingServer,stealth,Windows,co
+T1217,Browser Information Discovery,active,T1217,Browser Information Discovery,discovery,Linux;macOS;Windows,co
+T1218,System Binary Proxy Execution,active,T1218,System Binary Proxy Execution,stealth,Linux;macOS;Windows,co
+T1218.001,Compiled HTML File,active,T1218.001,Compiled HTML File,stealth,Windows,co
+T1218.002,Control Panel,active,T1218.002,Control Panel,stealth,Windows,co
+T1218.003,CMSTP,active,T1218.003,CMSTP,stealth,Windows,co
+T1218.004,InstallUtil,active,T1218.004,InstallUtil,stealth,Windows,co
+T1218.005,Mshta,active,T1218.005,Mshta,stealth,Windows,co
+T1218.007,Msiexec,active,T1218.007,Msiexec,stealth,Windows,co
+T1218.008,Odbcconf,active,T1218.008,Odbcconf,stealth,Windows,co
+T1218.009,Regsvcs/Regasm,active,T1218.009,Regsvcs/Regasm,stealth,Windows,co
+T1218.010,Regsvr32,active,T1218.010,Regsvr32,stealth,Windows,co
+T1218.011,Rundll32,active,T1218.011,Rundll32,stealth,Windows,co
+T1218.012,Verclsid,active,T1218.012,Verclsid,stealth,Windows,co
+T1218.013,Mavinject,active,T1218.013,Mavinject,stealth,Windows,co
+T1218.014,MMC,active,T1218.014,MMC,stealth,Windows,co
+T1218.015,Electron Applications,active,T1218.015,Electron Applications,stealth,Linux;macOS;Windows,co
+T1219,Remote Access Tools,active,T1219,Remote Access Tools,command-and-control,Linux;macOS;Windows,co
+T1219.001,IDE Tunneling,active,T1219.001,IDE Tunneling,command-and-control,Linux;macOS;Windows,co
+T1219.002,Remote Desktop Software,active,T1219.002,Remote Desktop Software,command-and-control,Linux;macOS;Windows,co
+T1219.003,Remote Access Hardware,active,T1219.003,Remote Access Hardware,command-and-control,Linux;macOS;Windows,co
+T1220,XSL Script Processing,active,T1220,XSL Script Processing,stealth,Windows,co
+T1221,Template Injection,active,T1221,Template Injection,stealth,Windows,co
+T1222,File and Directory Permissions Modification,active,T1222,File and Directory Permissions Modification,defense-impairment,ESXi;Linux;macOS;Windows,co
+T1222.001,Windows Permissions,active,T1222.001,Windows Permissions,defense-impairment,Windows,co
+T1222.002,Linux and Mac Permissions,active,T1222.002,Linux and Mac Permissions,defense-impairment,Linux;macOS,khong
+T1223,Compiled HTML File,revoked,T1218.001,Compiled HTML File,stealth,Windows,co
+T1480,Execution Guardrails,active,T1480,Execution Guardrails,stealth,ESXi;Linux;macOS;Windows,co
+T1480.001,Environmental Keying,active,T1480.001,Environmental Keying,stealth,Linux;Windows;macOS,co
+T1480.002,Mutual Exclusion,active,T1480.002,Mutual Exclusion,stealth,Linux;macOS;Windows,co
+T1482,Domain Trust Discovery,active,T1482,Domain Trust Discovery,discovery,Windows,co
+T1483,Domain Generation Algorithms,revoked,T1568.002,Domain Generation Algorithms,command-and-control,ESXi;Linux;macOS;Windows,co
+T1484,Domain or Tenant Policy Modification,active,T1484,Domain or Tenant Policy Modification,defense-impairment;privilege-escalation,Windows;Identity Provider,co
+T1484.001,Group Policy Modification,active,T1484.001,Group Policy Modification,defense-impairment;privilege-escalation,Windows,co
+T1484.002,Trust Modification,active,T1484.002,Trust Modification,defense-impairment;privilege-escalation,Identity Provider;Windows,co
+T1485,Data Destruction,active,T1485,Data Destruction,impact,Containers;ESXi;IaaS;Linux;macOS;Windows,co
+T1485.001,Lifecycle-Triggered Deletion,active,T1485.001,Lifecycle-Triggered Deletion,impact,IaaS,khong
+T1486,Data Encrypted for Impact,active,T1486,Data Encrypted for Impact,impact,ESXi;IaaS;Linux;macOS;Windows,co
+T1487,Disk Structure Wipe,revoked,T1561.002,Disk Structure Wipe,impact,Linux;macOS;Network Devices;Windows,co
+T1488,Disk Content Wipe,revoked,T1561.001,Disk Content Wipe,impact,Linux;macOS;Network Devices;Windows,co
+T1489,Service Stop,active,T1489,Service Stop,impact,ESXi;IaaS;Linux;macOS;Windows,co
+T1490,Inhibit System Recovery,active,T1490,Inhibit System Recovery,impact,Containers;ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1491,Defacement,active,T1491,Defacement,impact,Windows;IaaS;Linux;macOS;ESXi,co
+T1491.001,Internal Defacement,active,T1491.001,Internal Defacement,impact,ESXi;Linux;macOS;Windows,co
+T1491.002,External Defacement,active,T1491.002,External Defacement,impact,Windows;IaaS;Linux;macOS,co
+T1492,Stored Data Manipulation,revoked,T1565.001,Stored Data Manipulation,impact,Linux;macOS;Windows,co
+T1493,Transmitted Data Manipulation,revoked,T1565.002,Transmitted Data Manipulation,impact,Linux;macOS;Windows,co
+T1494,Runtime Data Manipulation,revoked,T1565.003,Runtime Data Manipulation,impact,Linux;macOS;Windows,co
+T1495,Firmware Corruption,active,T1495,Firmware Corruption,impact,Linux;macOS;Network Devices;Windows,co
+T1496,Resource Hijacking,active,T1496,Resource Hijacking,impact,Windows;IaaS;Linux;macOS;Containers;SaaS,co
+T1496.001,Compute Hijacking,active,T1496.001,Compute Hijacking,impact,Windows;IaaS;Linux;macOS;Containers,co
+T1496.002,Bandwidth Hijacking,active,T1496.002,Bandwidth Hijacking,impact,Linux;Windows;macOS;IaaS;Containers,co
+T1496.003,SMS Pumping,active,T1496.003,SMS Pumping,impact,SaaS,khong
+T1496.004,Cloud Service Hijacking,active,T1496.004,Cloud Service Hijacking,impact,SaaS,khong
+T1497,Virtualization/Sandbox Evasion,active,T1497,Virtualization/Sandbox Evasion,stealth;discovery,Linux;macOS;Windows,co
+T1497.001,System Checks,active,T1497.001,System Checks,stealth;discovery,Linux;macOS;Windows,co
+T1497.002,User Activity Based Checks,active,T1497.002,User Activity Based Checks,stealth;discovery,Linux;macOS;Windows,co
+T1497.003,Time Based Checks,active,T1497.003,Time Based Checks,stealth;discovery,Linux;macOS;Windows,co
+T1498,Network Denial of Service,active,T1498,Network Denial of Service,impact,Windows;IaaS;Linux;macOS;Containers,co
+T1498.001,Direct Network Flood,active,T1498.001,Direct Network Flood,impact,Windows;IaaS;Linux;macOS,co
+T1498.002,Reflection Amplification,active,T1498.002,Reflection Amplification,impact,Windows;IaaS;Linux;macOS,co
+T1499,Endpoint Denial of Service,active,T1499,Endpoint Denial of Service,impact,Windows;Linux;macOS;Containers;IaaS,co
+T1499.001,OS Exhaustion Flood,active,T1499.001,OS Exhaustion Flood,impact,Linux;macOS;Windows,co
+T1499.002,Service Exhaustion Flood,active,T1499.002,Service Exhaustion Flood,impact,Windows;IaaS;Linux;macOS,co
+T1499.003,Application Exhaustion Flood,active,T1499.003,Application Exhaustion Flood,impact,Windows;IaaS;Linux;macOS,co
+T1499.004,Application or System Exploitation,active,T1499.004,Application or System Exploitation,impact,Windows;IaaS;Linux;macOS,co
+T1500,Compile After Delivery,revoked,T1027.004,Compile After Delivery,stealth,Linux;macOS;Windows,co
+T1501,Systemd Service,revoked,T1543.002,Systemd Service,persistence;privilege-escalation,Linux,khong
+T1502,Parent PID Spoofing,revoked,T1134.004,Parent PID Spoofing,stealth;privilege-escalation,Windows,co
+T1503,Credentials from Web Browsers,revoked,T1555.003,Credentials from Web Browsers,credential-access,Linux;macOS;Windows,co
+T1504,PowerShell Profile,revoked,T1546.013,PowerShell Profile,privilege-escalation;persistence,Windows,co
+T1505,Server Software Component,active,T1505,Server Software Component,persistence,Windows;Linux;macOS;Network Devices;ESXi,co
+T1505.001,SQL Stored Procedures,active,T1505.001,SQL Stored Procedures,persistence,Windows;Linux,co
+T1505.002,Transport Agent,active,T1505.002,Transport Agent,persistence,Linux;Windows,co
+T1505.003,Web Shell,active,T1505.003,Web Shell,persistence,Linux;macOS;Network Devices;Windows,co
+T1505.004,IIS Components,active,T1505.004,IIS Components,persistence,Windows,co
+T1505.005,Terminal Services DLL,active,T1505.005,Terminal Services DLL,persistence,Windows,co
+T1505.006,vSphere Installation Bundles,active,T1505.006,vSphere Installation Bundles,persistence,ESXi,khong
+T1506,Web Session Cookie,revoked,T1550.004,Web Session Cookie,lateral-movement,IaaS;Office Suite;SaaS,khong
+T1514,Elevated Execution with Prompt,revoked,T1548.004,Elevated Execution with Prompt,privilege-escalation,macOS,khong
+T1518,Software Discovery,active,T1518,Software Discovery,discovery,ESXi;IaaS;Linux;macOS;Windows,co
+T1518.001,Security Software Discovery,active,T1518.001,Security Software Discovery,discovery,IaaS;Linux;macOS;Windows,co
+T1518.002,Backup Software Discovery,active,T1518.002,Backup Software Discovery,discovery,Windows;macOS;Linux,co
+T1519,Emond,revoked,T1546.014,Emond,privilege-escalation;persistence,macOS,khong
+T1522,Cloud Instance Metadata API,revoked,T1552.005,Cloud Instance Metadata API,credential-access,IaaS,khong
+T1525,Implant Internal Image,active,T1525,Implant Internal Image,persistence,IaaS;Containers,khong
+T1526,Cloud Service Discovery,active,T1526,Cloud Service Discovery,discovery,IaaS;Identity Provider;Office Suite;SaaS,khong
+T1527,Application Access Token,revoked,T1550.001,Application Access Token,lateral-movement,Containers;IaaS;Identity Provider;Office Suite;SaaS,khong
+T1528,Steal Application Access Token,active,T1528,Steal Application Access Token,credential-access,Containers;IaaS;Identity Provider;Office Suite;SaaS,khong
+T1529,System Shutdown/Reboot,active,T1529,System Shutdown/Reboot,impact,ESXi;Linux;macOS;Network Devices;Windows,co
+T1530,Data from Cloud Storage,active,T1530,Data from Cloud Storage,collection,IaaS;Office Suite;SaaS,khong
+T1531,Account Access Removal,active,T1531,Account Access Removal,impact,Linux;macOS;Windows;SaaS;IaaS;Office Suite;ESXi,co
+T1534,Internal Spearphishing,active,T1534,Internal Spearphishing,lateral-movement,Linux;macOS;Office Suite;SaaS;Windows,co
+T1535,Unused/Unsupported Cloud Regions,active,T1535,Unused/Unsupported Cloud Regions,stealth,IaaS,khong
+T1536,Revert Cloud Instance,revoked,T1578.004,Revert Cloud Instance,defense-impairment,IaaS,khong
+T1537,Transfer Data to Cloud Account,active,T1537,Transfer Data to Cloud Account,exfiltration,IaaS;Office Suite;SaaS,khong
+T1538,Cloud Service Dashboard,active,T1538,Cloud Service Dashboard,discovery,IaaS;SaaS;Office Suite;Identity Provider,khong
+T1539,Steal Web Session Cookie,active,T1539,Steal Web Session Cookie,credential-access,Linux;macOS;Office Suite;SaaS;Windows,co
+T1542,Pre-OS Boot,active,T1542,Pre-OS Boot,stealth;persistence,Linux;macOS;Network Devices;Windows,co
+T1542.001,System Firmware,active,T1542.001,System Firmware,stealth;persistence,Network Devices;Windows,co
+T1542.002,Component Firmware,active,T1542.002,Component Firmware,stealth;persistence,Windows;Linux;macOS,co
+T1542.003,Bootkit,active,T1542.003,Bootkit,stealth;persistence,Linux;Windows,co
+T1542.004,ROMMONkit,active,T1542.004,ROMMONkit,stealth;persistence,Network Devices,khong
+T1542.005,TFTP Boot,active,T1542.005,TFTP Boot,stealth;persistence,Network Devices,khong
+T1543,Create or Modify System Process,active,T1543,Create or Modify System Process,persistence;privilege-escalation,Containers;Linux;macOS;Windows,co
+T1543.001,Launch Agent,active,T1543.001,Launch Agent,persistence;privilege-escalation,macOS,khong
+T1543.002,Systemd Service,active,T1543.002,Systemd Service,persistence;privilege-escalation,Linux,khong
+T1543.003,Windows Service,active,T1543.003,Windows Service,persistence;privilege-escalation,Windows,co
+T1543.004,Launch Daemon,active,T1543.004,Launch Daemon,persistence;privilege-escalation,macOS,khong
+T1543.005,Container Service,active,T1543.005,Container Service,persistence;privilege-escalation,Containers,khong
+T1546,Event Triggered Execution,active,T1546,Event Triggered Execution,privilege-escalation;persistence,Linux;macOS;Windows;SaaS;IaaS;Office Suite,co
+T1546.001,Change Default File Association,active,T1546.001,Change Default File Association,privilege-escalation;persistence,Windows,co
+T1546.002,Screensaver,active,T1546.002,Screensaver,privilege-escalation;persistence,Windows,co
+T1546.003,Windows Management Instrumentation Event Subscription,active,T1546.003,Windows Management Instrumentation Event Subscription,privilege-escalation;persistence,Windows,co
+T1546.004,Unix Shell Configuration Modification,active,T1546.004,Unix Shell Configuration Modification,privilege-escalation;persistence,Linux;macOS,khong
+T1546.005,Trap,active,T1546.005,Trap,privilege-escalation;persistence,macOS;Linux,khong
+T1546.006,LC_LOAD_DYLIB Addition,active,T1546.006,LC_LOAD_DYLIB Addition,privilege-escalation;persistence,macOS,khong
+T1546.007,Netsh Helper DLL,active,T1546.007,Netsh Helper DLL,privilege-escalation;persistence,Windows,co
+T1546.008,Accessibility Features,active,T1546.008,Accessibility Features,privilege-escalation;persistence,Windows,co
+T1546.009,AppCert DLLs,active,T1546.009,AppCert DLLs,privilege-escalation;persistence,Windows,co
+T1546.010,AppInit DLLs,active,T1546.010,AppInit DLLs,privilege-escalation;persistence,Windows,co
+T1546.011,Application Shimming,active,T1546.011,Application Shimming,privilege-escalation;persistence,Windows,co
+T1546.012,Image File Execution Options Injection,active,T1546.012,Image File Execution Options Injection,privilege-escalation;persistence,Windows,co
+T1546.013,PowerShell Profile,active,T1546.013,PowerShell Profile,privilege-escalation;persistence,Windows,co
+T1546.014,Emond,active,T1546.014,Emond,privilege-escalation;persistence,macOS,khong
+T1546.015,Component Object Model Hijacking,active,T1546.015,Component Object Model Hijacking,privilege-escalation;persistence,Windows,co
+T1546.016,Installer Packages,active,T1546.016,Installer Packages,privilege-escalation;persistence,Linux;macOS;Windows,co
+T1546.017,Udev Rules,active,T1546.017,Udev Rules,persistence;privilege-escalation,Linux,khong
+T1546.018,Python Startup Hooks,active,T1546.018,Python Startup Hooks,persistence;privilege-escalation,Linux;macOS;Windows,co
+T1547,Boot or Logon Autostart Execution,active,T1547,Boot or Logon Autostart Execution,persistence;privilege-escalation,Linux;macOS;Windows;Network Devices,co
+T1547.001,Registry Run Keys / Startup Folder,active,T1547.001,Registry Run Keys / Startup Folder,persistence;privilege-escalation,Windows,co
+T1547.002,Authentication Package,active,T1547.002,Authentication Package,persistence;privilege-escalation,Windows,co
+T1547.003,Time Providers,active,T1547.003,Time Providers,persistence;privilege-escalation,Windows,co
+T1547.004,Winlogon Helper DLL,active,T1547.004,Winlogon Helper DLL,persistence;privilege-escalation,Windows,co
+T1547.005,Security Support Provider,active,T1547.005,Security Support Provider,persistence;privilege-escalation,Windows,co
+T1547.006,Kernel Modules and Extensions,active,T1547.006,Kernel Modules and Extensions,persistence;privilege-escalation,macOS;Linux,khong
+T1547.007,Re-opened Applications,active,T1547.007,Re-opened Applications,persistence;privilege-escalation,macOS,khong
+T1547.008,LSASS Driver,active,T1547.008,LSASS Driver,persistence;privilege-escalation,Windows,co
+T1547.009,Shortcut Modification,active,T1547.009,Shortcut Modification,persistence;privilege-escalation,Windows,co
+T1547.010,Port Monitors,active,T1547.010,Port Monitors,persistence;privilege-escalation,Windows,co
+T1547.011,Plist Modification,revoked,T1647,Plist File Modification,defense-impairment,macOS,khong
+T1547.012,Print Processors,active,T1547.012,Print Processors,persistence;privilege-escalation,Windows,co
+T1547.013,XDG Autostart Entries,active,T1547.013,XDG Autostart Entries,persistence;privilege-escalation,Linux,khong
+T1547.014,Active Setup,active,T1547.014,Active Setup,persistence;privilege-escalation,Windows,co
+T1547.015,Login Items,active,T1547.015,Login Items,persistence;privilege-escalation,macOS,khong
+T1548,Abuse Elevation Control Mechanism,active,T1548,Abuse Elevation Control Mechanism,privilege-escalation,Linux;macOS;Windows;IaaS;Office Suite;Identity Provider,co
+T1548.001,Setuid and Setgid,active,T1548.001,Setuid and Setgid,privilege-escalation,Linux;macOS,khong
+T1548.002,Bypass User Account Control,active,T1548.002,Bypass User Account Control,privilege-escalation,Windows,co
+T1548.003,Sudo and Sudo Caching,active,T1548.003,Sudo and Sudo Caching,privilege-escalation,Linux;macOS,khong
+T1548.004,Elevated Execution with Prompt,active,T1548.004,Elevated Execution with Prompt,privilege-escalation,macOS,khong
+T1548.005,Temporary Elevated Cloud Access,active,T1548.005,Temporary Elevated Cloud Access,privilege-escalation,IaaS;Office Suite;Identity Provider,khong
+T1548.006,TCC Manipulation,active,T1548.006,TCC Manipulation,privilege-escalation,macOS,khong
+T1550,Use Alternate Authentication Material,active,T1550,Use Alternate Authentication Material,lateral-movement,Containers;IaaS;Identity Provider;Linux;Office Suite;SaaS;Windows,co
+T1550.001,Application Access Token,active,T1550.001,Application Access Token,lateral-movement,Containers;IaaS;Identity Provider;Office Suite;SaaS,khong
+T1550.002,Pass the Hash,active,T1550.002,Pass the Hash,lateral-movement,Windows,co
+T1550.003,Pass the Ticket,active,T1550.003,Pass the Ticket,lateral-movement,Windows,co
+T1550.004,Web Session Cookie,active,T1550.004,Web Session Cookie,lateral-movement,IaaS;Office Suite;SaaS,khong
+T1552,Unsecured Credentials,active,T1552,Unsecured Credentials,credential-access,Windows;SaaS;IaaS;Linux;macOS;Containers;Network Devices;Office Suite;Identity Provider,co
+T1552.001,Credentials In Files,active,T1552.001,Credentials In Files,credential-access,Containers;IaaS;Linux;macOS;Windows,co
+T1552.002,Credentials in Registry,active,T1552.002,Credentials in Registry,credential-access,Windows,co
+T1552.003,Shell History,active,T1552.003,Shell History,credential-access,Linux;macOS;Windows,co
+T1552.004,Private Keys,active,T1552.004,Private Keys,credential-access,Linux;macOS;Network Devices;Windows,co
+T1552.005,Cloud Instance Metadata API,active,T1552.005,Cloud Instance Metadata API,credential-access,IaaS,khong
+T1552.006,Group Policy Preferences,active,T1552.006,Group Policy Preferences,credential-access,Windows,co
+T1552.007,Container API,active,T1552.007,Container API,credential-access,Containers,khong
+T1552.008,Chat Messages,active,T1552.008,Chat Messages,credential-access,SaaS;Office Suite,khong
+T1553,Subvert Trust Controls,active,T1553,Subvert Trust Controls,defense-impairment,Linux;macOS;Windows,co
+T1553.001,Gatekeeper Bypass,active,T1553.001,Gatekeeper Bypass,defense-impairment,macOS,khong
+T1553.002,Code Signing,active,T1553.002,Code Signing,defense-impairment,macOS;Windows,co
+T1553.003,SIP and Trust Provider Hijacking,active,T1553.003,SIP and Trust Provider Hijacking,defense-impairment,Windows,co
+T1553.004,Install Root Certificate,active,T1553.004,Install Root Certificate,defense-impairment,Linux;macOS;Windows,co
+T1553.005,Mark-of-the-Web Bypass,active,T1553.005,Mark-of-the-Web Bypass,defense-impairment,Windows,co
+T1553.006,Code Signing Policy Modification,active,T1553.006,Code Signing Policy Modification,defense-impairment,macOS;Windows,co
+T1554,Compromise Host Software Binary,active,T1554,Compromise Host Software Binary,persistence,ESXi;Linux;macOS;Windows,co
+T1555,Credentials from Password Stores,active,T1555,Credentials from Password Stores,credential-access,IaaS;Linux;macOS;Windows,co
+T1555.001,Keychain,active,T1555.001,Keychain,credential-access,macOS,khong
+T1555.002,Securityd Memory,active,T1555.002,Securityd Memory,credential-access,Linux;macOS,khong
+T1555.003,Credentials from Web Browsers,active,T1555.003,Credentials from Web Browsers,credential-access,Linux;macOS;Windows,co
+T1555.004,Windows Credential Manager,active,T1555.004,Windows Credential Manager,credential-access,Windows,co
+T1555.005,Password Managers,active,T1555.005,Password Managers,credential-access,Linux;macOS;Windows,co
+T1555.006,Cloud Secrets Management Stores,active,T1555.006,Cloud Secrets Management Stores,credential-access,IaaS,khong
+T1556,Modify Authentication Process,active,T1556,Modify Authentication Process,defense-impairment;persistence;credential-access,IaaS;Identity Provider;Linux;macOS;Network Devices;Office Suite;SaaS;Windows,co
+T1556.001,Domain Controller Authentication,active,T1556.001,Domain Controller Authentication,defense-impairment;persistence;credential-access,Windows,co
+T1556.002,Password Filter DLL,active,T1556.002,Password Filter DLL,defense-impairment;persistence;credential-access,Windows,co
+T1556.003,Pluggable Authentication Modules,active,T1556.003,Pluggable Authentication Modules,defense-impairment;persistence;credential-access,Linux;macOS,khong
+T1556.004,Network Device Authentication,active,T1556.004,Network Device Authentication,defense-impairment;persistence;credential-access,Network Devices,khong
+T1556.005,Reversible Encryption,active,T1556.005,Reversible Encryption,defense-impairment;persistence;credential-access,Windows,co
+T1556.006,Multi-Factor Authentication,active,T1556.006,Multi-Factor Authentication,defense-impairment;persistence;credential-access,IaaS;Identity Provider;Linux;macOS;Office Suite;SaaS;Windows,co
+T1556.007,Hybrid Identity,active,T1556.007,Hybrid Identity,defense-impairment;persistence;credential-access,IaaS;Identity Provider;Office Suite;SaaS;Windows,co
+T1556.008,Network Provider DLL,active,T1556.008,Network Provider DLL,defense-impairment;persistence;credential-access,Windows,co
+T1556.009,Conditional Access Policies,active,T1556.009,Conditional Access Policies,defense-impairment;persistence;credential-access,IaaS;Identity Provider,khong
+T1557,Adversary-in-the-Middle,active,T1557,Adversary-in-the-Middle,credential-access;collection,Linux;macOS;Network Devices;Windows,co
+T1557.001,Name Resolution Poisoning and SMB Relay,active,T1557.001,Name Resolution Poisoning and SMB Relay,credential-access;collection,Windows,co
+T1557.002,ARP Cache Poisoning,active,T1557.002,ARP Cache Poisoning,credential-access;collection,Linux;Windows;macOS,co
+T1557.003,DHCP Spoofing,active,T1557.003,DHCP Spoofing,credential-access;collection,Linux;Windows;macOS,co
+T1557.004,Evil Twin,active,T1557.004,Evil Twin,credential-access;collection,Network Devices,khong
+T1558,Steal or Forge Kerberos Tickets,active,T1558,Steal or Forge Kerberos Tickets,credential-access,Linux;macOS;Windows,co
+T1558.001,Golden Ticket,active,T1558.001,Golden Ticket,credential-access,Windows,co
+T1558.002,Silver Ticket,active,T1558.002,Silver Ticket,credential-access,Windows,co
+T1558.003,Kerberoasting,active,T1558.003,Kerberoasting,credential-access,Windows,co
+T1558.004,AS-REP Roasting,active,T1558.004,AS-REP Roasting,credential-access,Windows,co
+T1558.005,Ccache Files,active,T1558.005,Ccache Files,credential-access,Linux;macOS,khong
+T1559,Inter-Process Communication,active,T1559,Inter-Process Communication,execution,Linux;macOS;Windows,co
+T1559.001,Component Object Model,active,T1559.001,Component Object Model,execution,Windows,co
+T1559.002,Dynamic Data Exchange,active,T1559.002,Dynamic Data Exchange,execution,Windows,co
+T1559.003,XPC Services,active,T1559.003,XPC Services,execution,macOS,khong
+T1560,Archive Collected Data,active,T1560,Archive Collected Data,collection,Linux;macOS;Windows,co
+T1560.001,Archive via Utility,active,T1560.001,Archive via Utility,collection,Linux;macOS;Windows,co
+T1560.002,Archive via Library,active,T1560.002,Archive via Library,collection,Linux;macOS;Windows,co
+T1560.003,Archive via Custom Method,active,T1560.003,Archive via Custom Method,collection,Linux;macOS;Windows,co
+T1561,Disk Wipe,active,T1561,Disk Wipe,impact,Linux;macOS;Windows;Network Devices,co
+T1561.001,Disk Content Wipe,active,T1561.001,Disk Content Wipe,impact,Linux;macOS;Network Devices;Windows,co
+T1561.002,Disk Structure Wipe,active,T1561.002,Disk Structure Wipe,impact,Linux;macOS;Network Devices;Windows,co
+T1562,Impair Defenses,revoked,T1685,Disable or Modify Tools,defense-impairment,Containers;ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1562.001,Disable or Modify Tools,revoked,T1685,Disable or Modify Tools,defense-impairment,Containers;ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1562.002,Disable Windows Event Logging,revoked,T1685.001,Disable or Modify Windows Event Log,defense-impairment,Windows,co
+T1562.003,Impair Command History Logging,revoked,T1690,Prevent Command History Logging,defense-impairment,ESXi;Linux;macOS;Network Devices;Windows,co
+T1562.004,Disable or Modify System Firewall,revoked,T1686,Disable or Modify System Firewall,defense-impairment,ESXi;Linux;macOS;Network Devices;Windows,co
+T1562.006,Indicator Blocking,revoked,T1685,Disable or Modify Tools,defense-impairment,Containers;ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1562.007,Disable or Modify Cloud Firewall,revoked,T1686.001,Cloud Firewall,defense-impairment,IaaS,khong
+T1562.008,Disable or Modify Cloud Logs,revoked,T1685.002,Disable or Modify Cloud Log,defense-impairment,IaaS;SaaS;Identity Provider;Office Suite,khong
+T1562.009,Safe Mode Boot,revoked,T1688,Safe Mode Boot,defense-impairment,Windows,co
+T1562.010,Downgrade Attack,revoked,T1689,Downgrade Attack,defense-impairment,macOS;Windows;Linux,co
+T1562.011,Spoof Security Alerting,revoked,T1685.003,Modify or Spoof Tool UI,defense-impairment,Linux;macOS;Windows,co
+T1562.012,Disable or Modify Linux Audit System,revoked,T1685.004,Disable or Modify Linux Audit System Log,defense-impairment,Linux,khong
+T1562.013,Disable or Modify Network Device Firewall,revoked,T1686.002,Network Device Firewall,defense-impairment,Network Devices,khong
+T1563,Remote Service Session Hijacking,active,T1563,Remote Service Session Hijacking,lateral-movement,Linux;macOS;Windows,co
+T1563.001,SSH Hijacking,active,T1563.001,SSH Hijacking,lateral-movement,Linux;macOS,khong
+T1563.002,RDP Hijacking,active,T1563.002,RDP Hijacking,lateral-movement,Windows,co
+T1564,Hide Artifacts,active,T1564,Hide Artifacts,stealth,ESXi;Linux;macOS;Office Suite;Windows,co
+T1564.001,Hidden Files and Directories,active,T1564.001,Hidden Files and Directories,stealth,Linux;macOS;Windows,co
+T1564.002,Hidden Users,active,T1564.002,Hidden Users,stealth,Linux;macOS;Windows,co
+T1564.003,Hidden Window,active,T1564.003,Hidden Window,stealth,Linux;macOS;Windows,co
+T1564.004,NTFS File Attributes,active,T1564.004,NTFS File Attributes,stealth,Windows,co
+T1564.005,Hidden File System,active,T1564.005,Hidden File System,stealth,Linux;macOS;Windows,co
+T1564.006,Run Virtual Instance,active,T1564.006,Run Virtual Instance,stealth,ESXi;Linux;macOS;Windows,co
+T1564.007,VBA Stomping,active,T1564.007,VBA Stomping,stealth,Linux;macOS;Windows,co
+T1564.008,Email Hiding Rules,active,T1564.008,Email Hiding Rules,stealth,Windows;Linux;macOS;Office Suite,co
+T1564.009,Resource Forking,active,T1564.009,Resource Forking,stealth,macOS,khong
+T1564.010,Process Argument Spoofing,active,T1564.010,Process Argument Spoofing,stealth,Windows,co
+T1564.011,Ignore Process Interrupts,active,T1564.011,Ignore Process Interrupts,stealth,Linux;macOS;Windows,co
+T1564.012,File/Path Exclusions,active,T1564.012,File/Path Exclusions,stealth,Linux;macOS;Windows,co
+T1564.013,Bind Mounts,active,T1564.013,Bind Mounts,stealth,Linux,khong
+T1564.014,Extended Attributes,active,T1564.014,Extended Attributes,stealth,Linux;macOS,khong
+T1565,Data Manipulation,active,T1565,Data Manipulation,impact,Linux;macOS;Windows,co
+T1565.001,Stored Data Manipulation,active,T1565.001,Stored Data Manipulation,impact,Linux;macOS;Windows,co
+T1565.002,Transmitted Data Manipulation,active,T1565.002,Transmitted Data Manipulation,impact,Linux;macOS;Windows,co
+T1565.003,Runtime Data Manipulation,active,T1565.003,Runtime Data Manipulation,impact,Linux;macOS;Windows,co
+T1566,Phishing,active,T1566,Phishing,initial-access,Identity Provider;Linux;macOS;Office Suite;SaaS;Windows,co
+T1566.001,Spearphishing Attachment,active,T1566.001,Spearphishing Attachment,initial-access,Linux;macOS;Windows,co
+T1566.002,Spearphishing Link,active,T1566.002,Spearphishing Link,initial-access,Identity Provider;Linux;macOS;Office Suite;SaaS;Windows,co
+T1566.003,Spearphishing via Service,active,T1566.003,Spearphishing via Service,initial-access,Linux;macOS;Windows,co
+T1566.004,Spearphishing Voice,active,T1566.004,Spearphishing Voice,initial-access,Linux;macOS;Windows;Identity Provider,co
+T1567,Exfiltration Over Web Service,active,T1567,Exfiltration Over Web Service,exfiltration,ESXi;Linux;macOS;Office Suite;SaaS;Windows,co
+T1567.001,Exfiltration to Code Repository,active,T1567.001,Exfiltration to Code Repository,exfiltration,ESXi;Linux;macOS;Windows,co
+T1567.002,Exfiltration to Cloud Storage,active,T1567.002,Exfiltration to Cloud Storage,exfiltration,ESXi;Linux;macOS;Windows,co
+T1567.003,Exfiltration to Text Storage Sites,active,T1567.003,Exfiltration to Text Storage Sites,exfiltration,Linux;macOS;Windows;ESXi,co
+T1567.004,Exfiltration Over Webhook,active,T1567.004,Exfiltration Over Webhook,exfiltration,ESXi;Linux;macOS;Office Suite;SaaS;Windows,co
+T1568,Dynamic Resolution,active,T1568,Dynamic Resolution,command-and-control,ESXi;Linux;macOS;Windows,co
+T1568.001,Fast Flux DNS,active,T1568.001,Fast Flux DNS,command-and-control,Linux;macOS;Windows;ESXi,co
+T1568.002,Domain Generation Algorithms,active,T1568.002,Domain Generation Algorithms,command-and-control,ESXi;Linux;macOS;Windows,co
+T1568.003,DNS Calculation,active,T1568.003,DNS Calculation,command-and-control,ESXi;Linux;macOS;Windows,co
+T1569,System Services,active,T1569,System Services,execution,Windows;macOS;Linux,co
+T1569.001,Launchctl,active,T1569.001,Launchctl,execution,macOS,khong
+T1569.002,Service Execution,active,T1569.002,Service Execution,execution,Windows,co
+T1569.003,Systemctl,active,T1569.003,Systemctl,execution,Linux,khong
+T1570,Lateral Tool Transfer,active,T1570,Lateral Tool Transfer,lateral-movement,ESXi;Linux;macOS;Windows,co
+T1571,Non-Standard Port,active,T1571,Non-Standard Port,command-and-control,ESXi;Linux;macOS;Windows,co
+T1572,Protocol Tunneling,active,T1572,Protocol Tunneling,command-and-control,ESXi;Linux;macOS;Windows,co
+T1573,Encrypted Channel,active,T1573,Encrypted Channel,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1573.001,Symmetric Cryptography,active,T1573.001,Symmetric Cryptography,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1573.002,Asymmetric Cryptography,active,T1573.002,Asymmetric Cryptography,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1574,Hijack Execution Flow,active,T1574,Hijack Execution Flow,stealth;execution,Linux;macOS;Windows,co
+T1574.001,DLL,active,T1574.001,DLL,stealth;execution,Windows,co
+T1574.002,DLL Side-Loading,revoked,T1574.001,DLL,stealth;execution,Windows,co
+T1574.004,Dylib Hijacking,active,T1574.004,Dylib Hijacking,stealth;execution,macOS,khong
+T1574.005,Executable Installer File Permissions Weakness,active,T1574.005,Executable Installer File Permissions Weakness,stealth;execution,Windows,co
+T1574.006,Dynamic Linker Hijacking,active,T1574.006,Dynamic Linker Hijacking,stealth;execution,Linux;macOS,khong
+T1574.007,Path Interception by PATH Environment Variable,active,T1574.007,Path Interception by PATH Environment Variable,stealth;execution,Linux;macOS;Windows,co
+T1574.008,Path Interception by Search Order Hijacking,active,T1574.008,Path Interception by Search Order Hijacking,stealth;execution,Windows,co
+T1574.009,Path Interception by Unquoted Path,active,T1574.009,Path Interception by Unquoted Path,stealth;execution,Windows,co
+T1574.010,Services File Permissions Weakness,active,T1574.010,Services File Permissions Weakness,stealth;execution,Windows,co
+T1574.011,Services Registry Permissions Weakness,active,T1574.011,Services Registry Permissions Weakness,stealth;execution,Windows,co
+T1574.012,COR_PROFILER,active,T1574.012,COR_PROFILER,stealth;execution,Windows,co
+T1574.013,KernelCallbackTable,active,T1574.013,KernelCallbackTable,stealth;execution,Windows,co
+T1574.014,AppDomainManager,active,T1574.014,AppDomainManager,stealth;execution,Windows,co
+T1578,Modify Cloud Compute Infrastructure,active,T1578,Modify Cloud Compute Infrastructure,defense-impairment,IaaS,khong
+T1578.001,Create Snapshot,active,T1578.001,Create Snapshot,defense-impairment,IaaS,khong
+T1578.002,Create Cloud Instance,active,T1578.002,Create Cloud Instance,defense-impairment,IaaS,khong
+T1578.003,Delete Cloud Instance,active,T1578.003,Delete Cloud Instance,defense-impairment,IaaS,khong
+T1578.004,Revert Cloud Instance,active,T1578.004,Revert Cloud Instance,defense-impairment,IaaS,khong
+T1578.005,Modify Cloud Compute Configurations,active,T1578.005,Modify Cloud Compute Configurations,defense-impairment,IaaS,khong
+T1580,Cloud Infrastructure Discovery,active,T1580,Cloud Infrastructure Discovery,discovery,IaaS,khong
+T1583,Acquire Infrastructure,active,T1583,Acquire Infrastructure,resource-development,PRE,khong
+T1583.001,Domains,active,T1583.001,Domains,resource-development,PRE,khong
+T1583.002,DNS Server,active,T1583.002,DNS Server,resource-development,PRE,khong
+T1583.003,Virtual Private Server,active,T1583.003,Virtual Private Server,resource-development,PRE,khong
+T1583.004,Server,active,T1583.004,Server,resource-development,PRE,khong
+T1583.005,Botnet,active,T1583.005,Botnet,resource-development,PRE,khong
+T1583.006,Web Services,active,T1583.006,Web Services,resource-development,PRE,khong
+T1583.007,Serverless,active,T1583.007,Serverless,resource-development,PRE,khong
+T1583.008,Malvertising,active,T1583.008,Malvertising,resource-development,PRE,khong
+T1584,Compromise Infrastructure,active,T1584,Compromise Infrastructure,resource-development,PRE,khong
+T1584.001,Domains,active,T1584.001,Domains,resource-development,PRE,khong
+T1584.002,DNS Server,active,T1584.002,DNS Server,resource-development,PRE,khong
+T1584.003,Virtual Private Server,active,T1584.003,Virtual Private Server,resource-development,PRE,khong
+T1584.004,Server,active,T1584.004,Server,resource-development,PRE,khong
+T1584.005,Botnet,active,T1584.005,Botnet,resource-development,PRE,khong
+T1584.006,Web Services,active,T1584.006,Web Services,resource-development,PRE,khong
+T1584.007,Serverless,active,T1584.007,Serverless,resource-development,PRE,khong
+T1584.008,Network Devices,active,T1584.008,Network Devices,resource-development,PRE,khong
+T1585,Establish Accounts,active,T1585,Establish Accounts,resource-development,PRE,khong
+T1585.001,Social Media Accounts,active,T1585.001,Social Media Accounts,resource-development,PRE,khong
+T1585.002,Email Accounts,active,T1585.002,Email Accounts,resource-development,PRE,khong
+T1585.003,Cloud Accounts,active,T1585.003,Cloud Accounts,resource-development,PRE,khong
+T1586,Compromise Accounts,active,T1586,Compromise Accounts,resource-development,PRE,khong
+T1586.001,Social Media Accounts,active,T1586.001,Social Media Accounts,resource-development,PRE,khong
+T1586.002,Email Accounts,active,T1586.002,Email Accounts,resource-development,PRE,khong
+T1586.003,Cloud Accounts,active,T1586.003,Cloud Accounts,resource-development,PRE,khong
+T1587,Develop Capabilities,active,T1587,Develop Capabilities,resource-development,PRE,khong
+T1587.001,Malware,active,T1587.001,Malware,resource-development,PRE,khong
+T1587.002,Code Signing Certificates,active,T1587.002,Code Signing Certificates,resource-development,PRE,khong
+T1587.003,Digital Certificates,active,T1587.003,Digital Certificates,resource-development,PRE,khong
+T1587.004,Exploits,active,T1587.004,Exploits,resource-development,PRE,khong
+T1588,Obtain Capabilities,active,T1588,Obtain Capabilities,resource-development,PRE,khong
+T1588.001,Malware,active,T1588.001,Malware,resource-development,PRE,khong
+T1588.002,Tool,active,T1588.002,Tool,resource-development,PRE,khong
+T1588.003,Code Signing Certificates,active,T1588.003,Code Signing Certificates,resource-development,PRE,khong
+T1588.004,Digital Certificates,active,T1588.004,Digital Certificates,resource-development,PRE,khong
+T1588.005,Exploits,active,T1588.005,Exploits,resource-development,PRE,khong
+T1588.006,Vulnerabilities,active,T1588.006,Vulnerabilities,resource-development,PRE,khong
+T1588.007,Artificial Intelligence,active,T1588.007,Artificial Intelligence,resource-development,PRE,khong
+T1589,Gather Victim Identity Information,active,T1589,Gather Victim Identity Information,reconnaissance,PRE,khong
+T1589.001,Credentials,active,T1589.001,Credentials,reconnaissance,PRE,khong
+T1589.002,Email Addresses,active,T1589.002,Email Addresses,reconnaissance,PRE,khong
+T1589.003,Employee Names,active,T1589.003,Employee Names,reconnaissance,PRE,khong
+T1590,Gather Victim Network Information,active,T1590,Gather Victim Network Information,reconnaissance,PRE,khong
+T1590.001,Domain Properties,active,T1590.001,Domain Properties,reconnaissance,PRE,khong
+T1590.002,DNS,active,T1590.002,DNS,reconnaissance,PRE,khong
+T1590.003,Network Trust Dependencies,active,T1590.003,Network Trust Dependencies,reconnaissance,PRE,khong
+T1590.004,Network Topology,active,T1590.004,Network Topology,reconnaissance,PRE,khong
+T1590.005,IP Addresses,active,T1590.005,IP Addresses,reconnaissance,PRE,khong
+T1590.006,Network Security Appliances,active,T1590.006,Network Security Appliances,reconnaissance,PRE,khong
+T1591,Gather Victim Org Information,active,T1591,Gather Victim Org Information,reconnaissance,PRE,khong
+T1591.001,Determine Physical Locations,active,T1591.001,Determine Physical Locations,reconnaissance,PRE,khong
+T1591.002,Business Relationships,active,T1591.002,Business Relationships,reconnaissance,PRE,khong
+T1591.003,Identify Business Tempo,active,T1591.003,Identify Business Tempo,reconnaissance,PRE,khong
+T1591.004,Identify Roles,active,T1591.004,Identify Roles,reconnaissance,PRE,khong
+T1592,Gather Victim Host Information,active,T1592,Gather Victim Host Information,reconnaissance,PRE,khong
+T1592.001,Hardware,active,T1592.001,Hardware,reconnaissance,PRE,khong
+T1592.002,Software,active,T1592.002,Software,reconnaissance,PRE,khong
+T1592.003,Firmware,active,T1592.003,Firmware,reconnaissance,PRE,khong
+T1592.004,Client Configurations,active,T1592.004,Client Configurations,reconnaissance,PRE,khong
+T1593,Search Open Websites/Domains,active,T1593,Search Open Websites/Domains,reconnaissance,PRE,khong
+T1593.001,Social Media,active,T1593.001,Social Media,reconnaissance,PRE,khong
+T1593.002,Search Engines,active,T1593.002,Search Engines,reconnaissance,PRE,khong
+T1593.003,Code Repositories,active,T1593.003,Code Repositories,reconnaissance,PRE,khong
+T1594,Search Victim-Owned Websites,active,T1594,Search Victim-Owned Websites,reconnaissance,PRE,khong
+T1595,Active Scanning,active,T1595,Active Scanning,reconnaissance,PRE,khong
+T1595.001,Scanning IP Blocks,active,T1595.001,Scanning IP Blocks,reconnaissance,PRE,khong
+T1595.002,Vulnerability Scanning,active,T1595.002,Vulnerability Scanning,reconnaissance,PRE,khong
+T1595.003,Wordlist Scanning,active,T1595.003,Wordlist Scanning,reconnaissance,PRE,khong
+T1596,Search Open Technical Databases,active,T1596,Search Open Technical Databases,reconnaissance,PRE,khong
+T1596.001,DNS/Passive DNS,active,T1596.001,DNS/Passive DNS,reconnaissance,PRE,khong
+T1596.002,WHOIS,active,T1596.002,WHOIS,reconnaissance,PRE,khong
+T1596.003,Digital Certificates,active,T1596.003,Digital Certificates,reconnaissance,PRE,khong
+T1596.004,CDNs,active,T1596.004,CDNs,reconnaissance,PRE,khong
+T1596.005,Scan Databases,active,T1596.005,Scan Databases,reconnaissance,PRE,khong
+T1597,Search Closed Sources,active,T1597,Search Closed Sources,reconnaissance,PRE,khong
+T1597.001,Threat Intel Vendors,active,T1597.001,Threat Intel Vendors,reconnaissance,PRE,khong
+T1597.002,Purchase Technical Data,active,T1597.002,Purchase Technical Data,reconnaissance,PRE,khong
+T1598,Phishing for Information,active,T1598,Phishing for Information,reconnaissance,PRE,khong
+T1598.001,Spearphishing Service,active,T1598.001,Spearphishing Service,reconnaissance,PRE,khong
+T1598.002,Spearphishing Attachment,active,T1598.002,Spearphishing Attachment,reconnaissance,PRE,khong
+T1598.003,Spearphishing Link,active,T1598.003,Spearphishing Link,reconnaissance,PRE,khong
+T1598.004,Spearphishing Voice,active,T1598.004,Spearphishing Voice,reconnaissance,PRE,khong
+T1599,Network Boundary Bridging,active,T1599,Network Boundary Bridging,defense-impairment,Network Devices,khong
+T1599.001,Network Address Translation Traversal,active,T1599.001,Network Address Translation Traversal,defense-impairment,Network Devices,khong
+T1600,Weaken Encryption,active,T1600,Weaken Encryption,defense-impairment,Network Devices,khong
+T1600.001,Reduce Key Space,active,T1600.001,Reduce Key Space,defense-impairment,Network Devices,khong
+T1600.002,Disable Crypto Hardware,active,T1600.002,Disable Crypto Hardware,defense-impairment,Network Devices,khong
+T1601,Modify System Image,active,T1601,Modify System Image,defense-impairment,Network Devices,khong
+T1601.001,Patch System Image,active,T1601.001,Patch System Image,defense-impairment,Network Devices,khong
+T1601.002,Downgrade System Image,active,T1601.002,Downgrade System Image,defense-impairment,Network Devices,khong
+T1602,Data from Configuration Repository,active,T1602,Data from Configuration Repository,collection,Network Devices,khong
+T1602.001,SNMP (MIB Dump),active,T1602.001,SNMP (MIB Dump),collection,Network Devices,khong
+T1602.002,Network Device Configuration Dump,active,T1602.002,Network Device Configuration Dump,collection,Network Devices,khong
+T1606,Forge Web Credentials,active,T1606,Forge Web Credentials,credential-access,SaaS;Windows;macOS;Linux;IaaS;Office Suite;Identity Provider,co
+T1606.001,Web Cookies,active,T1606.001,Web Cookies,credential-access,Linux;macOS;Windows;SaaS;IaaS,co
+T1606.002,SAML Tokens,active,T1606.002,SAML Tokens,credential-access,SaaS;Windows;IaaS;Office Suite;Identity Provider,co
+T1608,Stage Capabilities,active,T1608,Stage Capabilities,resource-development,PRE,khong
+T1608.001,Upload Malware,active,T1608.001,Upload Malware,resource-development,PRE,khong
+T1608.002,Upload Tool,active,T1608.002,Upload Tool,resource-development,PRE,khong
+T1608.003,Install Digital Certificate,active,T1608.003,Install Digital Certificate,resource-development,PRE,khong
+T1608.004,Drive-by Target,active,T1608.004,Drive-by Target,resource-development,PRE,khong
+T1608.005,Link Target,active,T1608.005,Link Target,resource-development,PRE,khong
+T1608.006,SEO Poisoning,active,T1608.006,SEO Poisoning,resource-development,PRE,khong
+T1608.007,AI Result Poisoning,active,T1608.007,AI Result Poisoning,resource-development,PRE,khong
+T1609,Container Administration Command,active,T1609,Container Administration Command,execution,Containers,khong
+T1610,Deploy Container,active,T1610,Deploy Container,execution,Containers,khong
+T1611,Escape to Host,active,T1611,Escape to Host,privilege-escalation,Windows;Linux;Containers;ESXi,co
+T1612,Build Image on Host,active,T1612,Build Image on Host,stealth,Containers,khong
+T1613,Container and Resource Discovery,active,T1613,Container and Resource Discovery,discovery,Containers,khong
+T1614,System Location Discovery,active,T1614,System Location Discovery,discovery,IaaS;Linux;macOS;Windows,co
+T1614.001,System Language Discovery,active,T1614.001,System Language Discovery,discovery,Linux;macOS;Windows,co
+T1615,Group Policy Discovery,active,T1615,Group Policy Discovery,discovery,Windows,co
+T1619,Cloud Storage Object Discovery,active,T1619,Cloud Storage Object Discovery,discovery,IaaS,khong
+T1620,Reflective Code Loading,active,T1620,Reflective Code Loading,stealth,Linux;macOS;Windows,co
+T1621,Multi-Factor Authentication Request Generation,active,T1621,Multi-Factor Authentication Request Generation,credential-access,Windows;Linux;macOS;IaaS;SaaS;Office Suite;Identity Provider,co
+T1622,Debugger Evasion,active,T1622,Debugger Evasion,stealth;discovery,Linux;macOS;Windows,co
+T1647,Plist File Modification,active,T1647,Plist File Modification,defense-impairment,macOS,khong
+T1648,Serverless Execution,active,T1648,Serverless Execution,execution,SaaS;IaaS;Office Suite,khong
+T1649,Steal or Forge Authentication Certificates,active,T1649,Steal or Forge Authentication Certificates,credential-access,Windows;Linux;macOS;Identity Provider,co
+T1650,Acquire Access,active,T1650,Acquire Access,resource-development,PRE,khong
+T1651,Cloud Administration Command,active,T1651,Cloud Administration Command,execution,IaaS,khong
+T1652,Device Driver Discovery,active,T1652,Device Driver Discovery,discovery,Linux;macOS;Windows,co
+T1653,Power Settings,active,T1653,Power Settings,persistence,Windows;Linux;macOS;Network Devices,co
+T1654,Log Enumeration,active,T1654,Log Enumeration,discovery,ESXi;IaaS;Linux;macOS;Windows,co
+T1656,Impersonation,revoked,T1684.001,Impersonation,stealth,Linux;macOS;Office Suite;SaaS;Windows,co
+T1657,Financial Theft,active,T1657,Financial Theft,impact,Linux;macOS;Office Suite;SaaS;Windows,co
+T1659,Content Injection,active,T1659,Content Injection,initial-access;command-and-control,Linux;macOS;Windows,co
+T1665,Hide Infrastructure,active,T1665,Hide Infrastructure,command-and-control,ESXi;Linux;macOS;Network Devices;Windows,co
+T1666,Modify Cloud Resource Hierarchy,active,T1666,Modify Cloud Resource Hierarchy,defense-impairment,IaaS,khong
+T1667,Email Bombing,active,T1667,Email Bombing,impact,Linux;Office Suite;Windows;macOS,co
+T1668,Exclusive Control,active,T1668,Exclusive Control,persistence,Linux;macOS;Windows,co
+T1669,Wi-Fi Networks,active,T1669,Wi-Fi Networks,initial-access,Linux;Network Devices;Windows;macOS,co
+T1671,Cloud Application Integration,active,T1671,Cloud Application Integration,persistence,Office Suite;SaaS,khong
+T1672,Email Spoofing,revoked,T1684.002,Email Spoofing,stealth,Linux;macOS;Office Suite;Windows,co
+T1673,Virtual Machine Discovery,active,T1673,Virtual Machine Discovery,discovery,ESXi;Linux;macOS;Windows,co
+T1674,Input Injection,active,T1674,Input Injection,execution,Windows;macOS;Linux,co
+T1675,ESXi Administration Command,active,T1675,ESXi Administration Command,execution,ESXi,khong
+T1677,Poisoned Pipeline Execution,active,T1677,Poisoned Pipeline Execution,execution,SaaS,khong
+T1678,Delay Execution,active,T1678,Delay Execution,stealth,Linux;macOS;Windows,co
+T1679,Selective Exclusion,active,T1679,Selective Exclusion,stealth,Windows,co
+T1680,Local Storage Discovery,active,T1680,Local Storage Discovery,discovery,ESXi;IaaS;Linux;macOS;Windows,co
+T1681,Search Threat Vendor Data,active,T1681,Search Threat Vendor Data,reconnaissance,PRE,khong
+T1682,Query Public AI Services,active,T1682,Query Public AI Services,reconnaissance,PRE,khong
+T1683,Generate Content,active,T1683,Generate Content,resource-development,PRE,khong
+T1683.001,Written Content,active,T1683.001,Written Content,resource-development,PRE,khong
+T1683.002,Audio-Visual Content,active,T1683.002,Audio-Visual Content,resource-development,PRE,khong
+T1684,Social Engineering,active,T1684,Social Engineering,stealth,Linux;macOS;Office Suite;SaaS;Windows,co
+T1684.001,Impersonation,active,T1684.001,Impersonation,stealth,Linux;macOS;Office Suite;SaaS;Windows,co
+T1684.002,Email Spoofing,active,T1684.002,Email Spoofing,stealth,Linux;macOS;Office Suite;Windows,co
+T1685,Disable or Modify Tools,active,T1685,Disable or Modify Tools,defense-impairment,Containers;ESXi;IaaS;Linux;macOS;Network Devices;Windows,co
+T1685.001,Disable or Modify Windows Event Log,active,T1685.001,Disable or Modify Windows Event Log,defense-impairment,Windows,co
+T1685.002,Disable or Modify Cloud Log,active,T1685.002,Disable or Modify Cloud Log,defense-impairment,IaaS;SaaS;Identity Provider;Office Suite,khong
+T1685.003,Modify or Spoof Tool UI,active,T1685.003,Modify or Spoof Tool UI,defense-impairment,Linux;macOS;Windows,co
+T1685.004,Disable or Modify Linux Audit System Log,active,T1685.004,Disable or Modify Linux Audit System Log,defense-impairment,Linux,khong
+T1685.005,Clear Windows Event Logs,active,T1685.005,Clear Windows Event Logs,defense-impairment,Windows,co
+T1685.006,Clear Linux or Mac System Logs,active,T1685.006,Clear Linux or Mac System Logs,defense-impairment,Linux;macOS,khong
+T1685.007,Impair Autonomous Defenses,active,T1685.007,Impair Autonomous Defenses,defense-impairment,Windows;SaaS,co
+T1686,Disable or Modify System Firewall,active,T1686,Disable or Modify System Firewall,defense-impairment,ESXi;Linux;macOS;Network Devices;Windows,co
+T1686.001,Cloud Firewall,active,T1686.001,Cloud Firewall,defense-impairment,IaaS,khong
+T1686.002,Network Device Firewall,active,T1686.002,Network Device Firewall,defense-impairment,Network Devices,khong
+T1686.003,Windows Host Firewall,active,T1686.003,Windows Host Firewall,defense-impairment,Windows,co
+T1687,Exploitation for Defense Impairment,active,T1687,Exploitation for Defense Impairment,defense-impairment,IaaS;Linux;macOS;SaaS;Windows,co
+T1688,Safe Mode Boot,active,T1688,Safe Mode Boot,defense-impairment,Windows,co
+T1689,Downgrade Attack,active,T1689,Downgrade Attack,defense-impairment,macOS;Windows;Linux,co
+T1690,Prevent Command History Logging,active,T1690,Prevent Command History Logging,defense-impairment,ESXi;Linux;macOS;Network Devices;Windows,co
+T1696,Anti-Automation Evasion,active,T1696,Anti-Automation Evasion,stealth,SaaS,khong
+T1696.001,Automate CAPTCHA Completion,active,T1696.001,Automate CAPTCHA Completion,stealth,SaaS,khong
+T1696.002,Avoid CAPTCHA,active,T1696.002,Avoid CAPTCHA,stealth,SaaS,khong
+T1697,Steal Application Specific Passwords,active,T1697,Steal Application Specific Passwords,credential-access,Office Suite;Identity Provider;SaaS,khong
+T1698,Indirect Prompt Injection,active,T1698,Indirect Prompt Injection,execution,Windows;SaaS,co
+T1699,Direct Prompt Injection,active,T1699,Direct Prompt Injection,execution,Windows;SaaS,co
+T1700,AI-Enabled Exfiltration,active,T1700,AI-Enabled Exfiltration,exfiltration,Windows;SaaS,co

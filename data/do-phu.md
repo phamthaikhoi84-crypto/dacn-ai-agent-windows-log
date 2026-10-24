@@ -185,3 +185,10 @@ Hai cách đếm lệch nhau theo cả hai hướng. Cách theo nội dung tính
 - Chưa phân loại sự kiện (ví dụ file chỉ có Sysmon 1 hay có cả 3 và 10).
 - Chưa xét trùng nội dung giữa các file.
 - Chuỗi dùng để nhận Sysmon là Microsoft-Windows-Sysmon, nên log Sysmon for Linux không được tính. Cách đếm theo nội dung chỉ phản ánh dữ liệu Windows.
+
+### Tái lập
+
+- Script: src/dem_theo_noi_dung.ps1. Đọc danh sách data/ky-thuat-splunk-sysmon-powershell.csv và bảng tra mã data/attack-v20-tra-ma.csv, ghi kết quả ra thư mục ngoài repo.
+- Kết quả từng kỹ thuật (144 dòng, chỉ có số đếm, không có log): data/do-phu-theo-noi-dung.csv. Kết quả từng file (2090 dòng) lưu trên máy Thiên, không đưa lên GitHub.
+- Bảng tra mã data/attack-v20-tra-ma.csv tạo từ dữ liệu STIX chính thức của MITRE (ATT&CK Enterprise v20.0).
+- Thời gian chạy trên máy Thiên (log bình thường của máy trong khoảng này có thể bị ảnh hưởng): từ 09:00 đến khoảng 12:12 ngày 24/10/2026 (giờ Việt Nam).
