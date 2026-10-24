@@ -12,6 +12,7 @@
   - dem-noi-dung.csv: kết quả từng file (không chứa log).
   - do-phu-theo-noi-dung.csv: số file theo tên và theo nội dung cho từng kỹ thuật Windows.
 
+  Lưu ý: đóng Excel trước khi chạy (file CSV đang mở thì script dừng với lỗi).
   Hạn chế: xem data/do-phu.md mục 9.
 #>
 param(
@@ -60,7 +61,7 @@ foreach ($f in $files) {
   $p = $f.FullName.Substring($root.Length + 1) -split '\\'
   $rows.Add([pscustomobject]@{ Ma = $p[0].ToUpper(); ThuMuc = $p[1]; Ten = $f.Name; MB = [math]::Round($f.Length/1MB,2); Sysmon = $coSys; PS4104 = $coPS; DaDocMB = [math]::Round($da/1MB,2); TrangThai = $tt })
 }
-$rows | Export-Csv $out -NoTypeInformation -Encoding UTF8
+$rows | Export-Csv $out -NoTypeInformation -Encoding UTF8 -ErrorAction Stop
 "Quet xong: {0} file; co Sysmon: {1}; co PS 4104: {2}; loi: {3}" -f $rows.Count, @($rows | Where-Object Sysmon).Count, @($rows | Where-Object PS4104).Count, @($rows | Where-Object { $_.TrangThai -ne 'ok' }).Count
 
 # ---- Phan 2: gop ve ma ATT&CK v20.0, chi giu ky thuat Windows ----
@@ -98,5 +99,5 @@ $ng = $dat | Group-Object Ma | ForEach-Object {
 } | Where-Object { $_.Windows -eq 'co' -and -not $gset.ContainsKey($_.MaV20) } | Group-Object MaV20
 "Ky thuat Windows NGOAI danh sach nhung co file Sysmon hoac 4104 theo noi dung: {0}" -f @($ng).Count
 $csvKt = Join-Path $ThuMucRa "do-phu-theo-noi-dung.csv"
-$w | Sort-Object Ma | Export-Csv $csvKt -NoTypeInformation -Encoding UTF8
+$w | Sort-Object Ma | Export-Csv $csvKt -NoTypeInformation -Encoding UTF8 -ErrorAction Stop
 "Da ghi: $out va $csvKt"
