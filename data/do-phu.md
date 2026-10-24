@@ -139,3 +139,48 @@ Nguồn: metadata trong kho OTRF/Security-Datasets (thư mục datasets/atomic/_
 - Chỉ đọc metadata (ánh xạ kỹ thuật do OTRF ghi), chưa tải và mở file nén để kiểm tra có Sysmon hoặc PowerShell hay không.
 - OTRF dùng mã ATT&CK cũ, chưa gộp theo mã v20.0.
 - OTRF không có bộ dữ liệu nào cho T1021.001 và T1070.001 (cột OTRF bằng 0), nên hai kỹ thuật này chỉ bổ sung được từ EVTX-ATTACK-SAMPLES (mục 7).
+
+## 9. Đếm lại theo nội dung cho 144 kỹ thuật Windows
+
+Cập nhật: 24/10/2026. Bản Splunk Attack Data: commit 1157854 (lấy ngày 24/10/2026).
+
+### Cách làm
+
+- Đọc tối đa 8 MB đầu của mỗi file dữ liệu trong datasets/attack_techniques (bỏ .yml, .md, .zip): 2090 file, không file nào lỗi.
+- Một file được tính nếu có sự kiện Sysmon (chuỗi Microsoft-Windows-Sysmon) hoặc PowerShell 4104 (EventID hoặc EventCode 4104). Kết quả: 603 file có Sysmon, 213 file có 4104.
+- Gộp theo mã ATT&CK v20.0 và chỉ giữ 144 kỹ thuật có nền tảng Windows (như mục 2).
+
+### Kết quả
+
+| Cách tính | ≥3 file | 2 file | 1 file | 0 file |
+|---|---|---|---|---|
+| Theo tên file hoặc đường dẫn (cách cũ, mục 2) | 68 | 31 | 45 | 0 |
+| Theo nội dung (mới) | 79 | 29 | 33 | 3 |
+
+Kỹ thuật có 0 file theo nội dung: T1021.004, T1115, T1489 (chưa kiểm tra nguyên nhân).
+
+Bậc ≥3 file tăng vì cách đếm theo nội dung tính cả file không ghi "sysmon" hay "powershell" trong đường dẫn (ví dụ file atomic_red_team.log).
+
+### Tám kỹ thuật tầng sâu
+
+| Mã trong danh sách | Mã v20.0 | Số file theo tên | Số file theo nội dung |
+|---|---|---|---|
+| T1003.001 | T1003.001 | 4 | 5 |
+| T1021.001 | T1021.001 | 1 | 9 |
+| T1053.005 | T1053.005 | 11 | 16 |
+| T1059.001 | T1059.001 | 92 | 60 |
+| T1070.001 | T1685.005 | 2 | 3 |
+| T1105 | T1105 | 5 | 8 |
+| T1136.001 | T1136.001 | 4 | 4 |
+| T1547.001 | T1547.001 | 3 | 5 |
+
+### Phạm vi
+
+65 kỹ thuật Windows nằm ngoài danh sách 161 nhưng có file chứa Sysmon hoặc PowerShell 4104 theo nội dung. Chưa đưa vào các bảng trên.
+
+### Hạn chế
+
+- Có sự kiện Sysmon hoặc 4104 chưa chứng minh file mô tả đúng hành vi của kỹ thuật.
+- Chỉ đọc tối đa 8 MB đầu mỗi file, nên sự kiện xuất hiện sau đó bị tính thiếu.
+- Chưa phân loại sự kiện (ví dụ file chỉ có Sysmon 1 hay có cả 3 và 10).
+- Chưa xét trùng nội dung giữa các file.
