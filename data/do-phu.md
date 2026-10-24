@@ -157,9 +157,9 @@ Cập nhật: 24/10/2026. Bản Splunk Attack Data: commit 1157854 (lấy ngày 
 | Theo tên file hoặc đường dẫn (cách cũ, mục 2) | 68 | 31 | 45 | 0 |
 | Theo nội dung (mới) | 79 | 29 | 33 | 3 |
 
-Kỹ thuật có 0 file theo nội dung: T1021.004, T1115, T1489 (chưa kiểm tra nguyên nhân).
+Kỹ thuật có 0 file theo nội dung: T1021.004, T1115, T1489. Theo danh sách file của ba kỹ thuật này, tên file cho thấy phần lớn là log Linux hoặc ESXi (linux-sysmon.log, sysmon_linux.log, linux_auditd_*, esxi_ssh_enabled.log); chưa mở nội dung từng file. ATT&CK ghi các kỹ thuật này có áp dụng cho Windows nhưng dữ liệu Splunk của chúng không có sự kiện Sysmon của Windows hay PowerShell 4104. Bỏ ba kỹ thuật này thì còn 141 kỹ thuật có ít nhất 1 file Windows.
 
-Bậc ≥3 file tăng vì cách đếm theo nội dung tính cả file không ghi "sysmon" hay "powershell" trong đường dẫn (ví dụ file atomic_red_team.log).
+Hai cách đếm lệch nhau theo cả hai hướng. Cách theo nội dung tính thêm file không ghi "sysmon" hay "powershell" trong đường dẫn nhưng có sự kiện Windows (ví dụ atomic_red_team.log), nên bậc ≥3 file tăng. Cách này lại không tính file Sysmon for Linux và file chỉ có chữ sysmon hay powershell trong tên mà không có sự kiện Windows, nên một số kỹ thuật giảm (ví dụ T1059.001 từ 92 xuống 60).
 
 ### Tám kỹ thuật tầng sâu
 
@@ -184,3 +184,4 @@ Bậc ≥3 file tăng vì cách đếm theo nội dung tính cả file không gh
 - Chỉ đọc tối đa 8 MB đầu mỗi file, nên sự kiện xuất hiện sau đó bị tính thiếu.
 - Chưa phân loại sự kiện (ví dụ file chỉ có Sysmon 1 hay có cả 3 và 10).
 - Chưa xét trùng nội dung giữa các file.
+- Chuỗi dùng để nhận Sysmon là Microsoft-Windows-Sysmon, nên log Sysmon for Linux không được tính. Cách đếm theo nội dung chỉ phản ánh dữ liệu Windows.
