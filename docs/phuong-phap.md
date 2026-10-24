@@ -1,12 +1,12 @@
 # Phương pháp phát hiện hành vi tấn công
 
-Bản nháp tuần 2 (23/10/2026). Người soạn: Khôi. Thiên và Dũng đọc, góp ý trước buổi gặp thầy 24/10.
+Bản nháp tuần 2 (cập nhật 24/10/2026 theo số đếm lại theo nội dung của Thiên). Người soạn: Khôi. Thiên và Dũng đọc, góp ý trước buổi báo cáo 24/10.
 
 ## Tóm tắt 3 ý (mỗi thành viên phải tự nói lại được)
 
 1. **Hành vi là gì?** Là một chuỗi hành động có thứ tự, trên cùng một máy, cùng một phiên đăng nhập (tài khoản) hoặc cùng một cây tiến trình, xảy ra trong một khoảng thời gian ngắn. Một dòng log Sysmon chỉ là một hành động lẻ. Chuỗi hành động mới là hành vi.
 2. **Phương pháp gì?** Gom log thành chuỗi hành động, rút gọn chuỗi thành ký hiệu, so khớp với các chuỗi tấn công đã gán nhãn để phát hiện sớm từ vài sự kiện đầu và dự đoán bước tiếp theo, sau đó kiểm chứng bằng dấu vết bắt buộc trước khi kết luận.
-3. **Làm bao nhiêu kỹ thuật, vì sao?** Hai tầng. Tầng rộng nhận diện 161 kỹ thuật có log Sysmon/PowerShell trong Splunk Attack Data, nhưng chỉ báo độ chính xác chính thức cho 71 kỹ thuật có từ 3 file trở lên, vì cần dữ liệu riêng để kiểm tra. Tầng sâu là 8 kỹ thuật tạo thành một chuỗi tấn công hoàn chỉnh, được kiểm chứng kỹ bằng dấu vết và demo đầy đủ.
+3. **Làm bao nhiêu kỹ thuật, vì sao?** Hai tầng. Tầng rộng nhận diện 144 kỹ thuật Windows có log Sysmon/PowerShell trong Splunk Attack Data, nhưng chỉ báo độ chính xác chính thức cho 79 kỹ thuật có từ 3 file trở lên (đếm theo nội dung file), vì cần dữ liệu riêng để kiểm tra. Tầng sâu là 8 kỹ thuật tạo thành một chuỗi tấn công hoàn chỉnh, được kiểm chứng kỹ bằng dấu vết và demo đầy đủ.
 
 ---
 
@@ -118,18 +118,34 @@ Ví dụ thật: phiên #1 ở phần 6 dùng đúng cách dump của T1003.001 
 
 ## 3. Phạm vi: hai tầng
 
-Số liệu lấy từ `data/do-phu.md` (Thiên, cập nhật 23/10).
+Số liệu do Thiên đếm lại theo **nội dung** file ngày 24/10/2026 (chi tiết và bảng đầy đủ: `data/do-phu.md`).
 
 | Tầng | Số kỹ thuật | Làm gì | Báo cáo kết quả |
 |---|---|---|---|
-| Rộng | 161 kỹ thuật có log Sysmon/PowerShell trong Splunk Attack Data | Nhận diện (bước 1–4) | 71 kỹ thuật có ≥3 file: độ chính xác **chính thức**. 34 kỹ thuật có 2 file: **sơ bộ**. 56 kỹ thuật có 1 file: ghi rõ **chưa đo được** |
+| Rộng | 144 kỹ thuật Windows có log Sysmon/PowerShell trong Splunk Attack Data | Nhận diện (bước 1–4) | 79 kỹ thuật có ≥3 file: độ chính xác **chính thức**. 29 kỹ thuật có 2 file: **sơ bộ**. 33 kỹ thuật có 1 file và 3 kỹ thuật chưa tìm thấy file phù hợp: ghi rõ **chưa đo được** |
 | Sâu | 8 kỹ thuật (bảng dưới) | Nhận diện + kiểm chứng dấu vết (bước 5) + demo chuỗi tấn công hoàn chỉnh | Đầy đủ cả 4 chỉ số ở phần 4 |
 
-Ghi chú: khi đổi mã theo ATT&CK v20.0 thì còn 160 kỹ thuật (71 / 33 / 56), xem `data/do-phu.md` và `docs/attack-version.md`.
+### Con số 144 đến từ đâu và vì sao đổi so với 161 / 71
+
+- Danh sách ban đầu có 161 kỹ thuật. Gộp mã theo ATT&CK v20.0 còn 160 (xem `docs/attack-version.md`). Bỏ 16 kỹ thuật mà ATT&CK không ghi nền tảng Windows (đề tài là log Windows) còn **144**.
+- Danh sách ban đầu đếm số file theo **tên** đường dẫn: chỉ tính file có chữ "sysmon" hoặc "powershell" trong đường dẫn, tính cả file mô tả `.yml`. Nhóm tự kiểm tra lại và thấy cách này **đếm thiếu**. Ví dụ file `atomic_red_team.log` chứa log Sysmon nhưng không có chữ "sysmon" trong tên.
+- Cách đếm mới: đọc tối đa 8 MB đầu của mỗi file dữ liệu (bỏ `.yml`, `.md`, `.zip`; tổng 2.090 file, không lỗi). File được tính nếu có sự kiện Sysmon hoặc PowerShell 4104.
+
+| Cách đếm (cùng 144 kỹ thuật) | ≥3 file | 2 file | 1 file | 0 file |
+|---|---|---|---|---|
+| Theo tên đường dẫn (cũ) | 68 | 31 | 45 | 0 |
+| Theo nội dung (mới) | **79** | **29** | **33** | **3** |
+
+Hạn chế của cách đếm mới (nói rõ khi báo cáo):
+
+1. "Có sự kiện Sysmon hoặc 4104" chưa chứng minh file thể hiện đúng hành vi của kỹ thuật.
+2. Chỉ đọc 8 MB đầu nên có thể còn đếm thiếu với file lớn.
+3. 3 kỹ thuật ra 0 file (T1021.004, T1115, T1489) chưa kiểm tra nguyên nhân.
+4. Còn 65 kỹ thuật Windows **ngoài** danh sách 161 cũng có file chứa Sysmon hoặc 4104 theo nội dung. Phạm vi tầng rộng có thể mở rộng thêm, sẽ xem xét ở tuần sau.
 
 ### Vì sao không phải "tất cả kỹ thuật"
 
-Chỉ đo được độ chính xác cho kỹ thuật nào có log tấn công đã gán nhãn. Kỹ thuật không có dữ liệu thì không có gì để học, cũng không có gì để kiểm tra. 161 là số kỹ thuật có log Sysmon/PowerShell trong bộ dữ liệu lớn nhất nhóm tìm được.
+Chỉ đo được độ chính xác cho kỹ thuật nào có log tấn công đã gán nhãn. Kỹ thuật không có dữ liệu thì không có gì để học, cũng không có gì để kiểm tra. 144 là số kỹ thuật Windows trong danh sách hiện tại có log Sysmon/PowerShell trong bộ dữ liệu lớn nhất nhóm tìm được (Splunk Attack Data).
 
 ### Vì sao mốc 3 file
 
@@ -145,7 +161,7 @@ Muốn đo độ chính xác công bằng thì phải thử trên file mà phư�
 - Thể hiện được Sysmon/PowerShell, là nguồn log chính của nhóm. Nhóm 3 dùng Security log, nên hai nhóm khác nhau về nguồn log và phương pháp.
 - Tầng rộng giúp chuỗi **không bị đứt** khi kẻ tấn công dùng kỹ thuật nằm ngoài 8 kỹ thuật này.
 
-Hiện T1021.001 (1 file) và T1070.001 (2 file) chưa đủ 3 file trong Splunk, Thiên đang bổ sung từ EVTX-ATTACK-SAMPLES và OTRF.
+Theo cách đếm cũ, T1021.001 (1 file) và T1070.001 (2 file) chưa đủ 3 file. Kiểm tra theo nội dung, T1021.001 có 9 file chứa log Sysmon và T1070.001 có 3 file, nên cả hai đã đủ ngay trong Splunk. EVTX-ATTACK-SAMPLES và OTRF dùng để bổ sung thêm, không còn bắt buộc.
 
 ## 4. Cách đo kết quả
 
@@ -203,3 +219,5 @@ Một cmd.exe chạy lần lượt Outflank-Dumpert.exe, Outflank-Dumpert-DLL.dl
 | Các file thử đều ngắn, mỗi file một kỹ thuật, chưa có chuỗi nhiều kỹ thuật | Ghép chuỗi tấn công đầy đủ cho phần demo tầng sâu |
 | Ngưỡng 300 giây chọn tạm | Thử nhiều ngưỡng, so sánh số phiên bị cắt/gộp sai |
 | Bước 4 chưa làm | Bắt đầu bằng cách đếm cặp/bộ ba ký hiệu liên tiếp |
+| Đếm độ phủ mới chỉ kiểm tra "có Sysmon/4104", chưa kiểm tra file có đúng hành vi của kỹ thuật | Khi đọc log Splunk ở tuần 3, kiểm tra thêm từng file thuộc 8 kỹ thuật tầng sâu |
+| 65 kỹ thuật Windows ngoài danh sách 161 cũng có dữ liệu | Xem xét đưa vào tầng rộng |
