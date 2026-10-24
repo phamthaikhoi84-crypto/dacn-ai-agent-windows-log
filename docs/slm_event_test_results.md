@@ -83,9 +83,3 @@ Thời gian chạy phụ thuộc tải của máy. Cùng model, lượt chạy t
 - File đầu ra gốc có chữ lặp ở cuối dòng do `ollama run` tự xuống dòng (không phải lỗi mô hình), có thể tránh bằng tham số `--nowordwrap`.
 - Việc chấm điểm thực hiện thủ công, chưa có bộ đáp án chuẩn tự động.
 
-## 8. Việc tiếp theo
-
-- [ ] Xây bộ câu hỏi có đáp án chuẩn (nhận diện Event ID, diễn giải trường, mức độ thận trọng, bằng chứng bổ sung).
-- [ ] Chạy lặp mỗi mô hình ít nhất 3 lần, cố định nhiệt độ (ví dụ qua API với `temperature: 0`).
-- [ ] Thêm `--nowordwrap` vào script để đầu ra sạch.
-- [ ] Chọn mô hình đưa vào AI agent phân tích log dựa trên kết quả chấm lặp.
