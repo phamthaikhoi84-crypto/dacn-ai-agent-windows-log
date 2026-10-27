@@ -22,71 +22,15 @@ Lưu ý: KHÔNG dùng trường RuleName để nhận diện. RuleName do ngư�
 đặt (ví dụ "CredAccess - Memdump"), dùng nó là "nhìn trộm đáp án".
 """
 import argparse
-import json
 import os
 import sys
-from datetime import datetime
 
 import duckdb
-from evtx import PyEvtxParser
+
+from doc_log import COT, liet_ke_file, nap_log
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")  # để in được tiếng Việt khi ghi ra file
-
-TAO_BANG = """
-CREATE OR REPLACE TABLE su_kien (
-    nguon        VARCHAR,    -- tên file .evtx
-    record_id    BIGINT,
-    thoi_gian    TIMESTAMP,  -- UtcTime của Sysmon (thời điểm xảy ra hành động)
-    event_id     INTEGER,
-    may          VARCHAR,    -- Computer
-    guid         VARCHAR,    -- tiến trình THỰC HIỆN hành động
-    parent_guid  VARCHAR,    -- chỉ có ở Event ID 1
-    image        VARCHAR,
-    parent_image VARCHAR,
-    command_line VARCHAR,
-    nguoi_dung   VARCHAR,
-    logon_id     VARCHAR,
-    doi_tuong    VARCHAR,    -- thứ bị tác động: tiến trình đích, file, DLL, khóa registry, địa chỉ mạng...
-    quyen        VARCHAR     -- GrantedAccess (Event ID 10)
-)
-"""
-
-
-def gia_tri(x):
-    """evtx trả về giá trị dạng {'#text': ...} hoặc giá trị thường."""
-    return x.get("#text") if isinstance(x, dict) else x
-
-
-def doc_thoi_gian(event_data, system):
-    utc = event_data.get("UtcTime")
-    if utc:
-        return datetime.strptime(utc[:23], "%Y-%m-%d %H:%M:%S.%f")
-    st = system.get("TimeCreated", {}).get("#attributes", {}).get("SystemTime", "")
-    return datetime.fromisoformat(st.replace("Z", "")[:26]) if st else None
-
-
-def doc_evtx(duong_dan):
-    ten = os.path.basename(duong_dan)
-    for rec in PyEvtxParser(duong_dan).records_json():
-        ev = json.loads(rec["data"])["Event"]
-        sy = ev.get("System", {})
-        d = ev.get("EventData") or {}
-        if not isinstance(d, dict):
-            d = {}
-        eid = int(gia_tri(sy.get("EventID")))
-
-        # Event ID 10 dùng tên trường khác (Source.../Target...)
-        guid = d.get("ProcessGuid") or d.get("SourceProcessGUID") or d.get("SourceProcessGuid")
-        image = d.get("Image") or d.get("SourceImage")
-        doi_tuong = (d.get("TargetImage") or d.get("TargetFilename") or d.get("ImageLoaded")
-                     or d.get("TargetObject") or d.get("ScriptBlockText"))
-        if eid == 3 and d.get("DestinationIp"):
-            doi_tuong = f"{d.get('DestinationIp')}:{d.get('DestinationPort')}"
-
-        yield (ten, rec["event_record_id"], doc_thoi_gian(d, sy), eid, sy.get("Computer"),
-               guid, d.get("ParentProcessGuid"), image, d.get("ParentImage"), d.get("CommandLine"),
-               d.get("User"), d.get("LogonId"), doi_tuong, d.get("GrantedAccess"))
 
 
 def ten_ngan(path):
@@ -153,18 +97,11 @@ def main():
                     help="chỉ in chi tiết các phiên có số thứ tự này, vd: --phien 3  hoặc  --phien 1 3")
     args = ap.parse_args()
 
-    files = []
-    for p in args.duong_dan:
-        if os.path.isdir(p):
-            files += [os.path.join(p, f) for f in sorted(os.listdir(p)) if f.lower().endswith(".evtx")]
-        else:
-            files.append(p)
+    files = liet_ke_file(args.duong_dan)
 
     os.makedirs(os.path.dirname(args.db) or ".", exist_ok=True)
     con = duckdb.connect(args.db)
-    con.execute(TAO_BANG)
-    for f in files:
-        con.executemany("INSERT INTO su_kien VALUES (" + ", ".join(["?"] * 14) + ")", list(doc_evtx(f)))
+    nap_log(con, files)
 
     # ---------- BƯỚC 1: thống kê nhanh ----------
     print("=" * 78)
@@ -186,9 +123,7 @@ def main():
         ten_tien_trinh.setdefault(pg, ten_ngan(pi))
 
     # ---------- Chuẩn bị B: gắn LogonId + gốc cây cho mọi sự kiện, rồi gom phiên ----------
-    cot = ["nguon", "record_id", "thoi_gian", "event_id", "may", "guid", "parent_guid", "image",
-           "parent_image", "command_line", "nguoi_dung", "logon_id", "doi_tuong", "quyen"]
-    su_kien = [dict(zip(cot, r)) for r in con.execute(
+    su_kien = [dict(zip(COT, r)) for r in con.execute(
         "SELECT * FROM su_kien ORDER BY may, thoi_gian, record_id").fetchall()]
 
     # LogonId của cả cây: nếu mọi tiến trình con trong cây cùng 1 LogonId thì gán LogonId đó cho cây.
