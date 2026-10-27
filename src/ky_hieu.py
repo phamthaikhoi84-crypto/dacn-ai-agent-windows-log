@@ -6,6 +6,18 @@ def ten_ngan(path):
     return path.replace("/", "\\").split("\\")[-1] if path else "?"
 
 
+def loai_khoa_registry(khoa):
+    """Xếp khóa registry vào 1 trong 4 loại. Chỉ giữ loại, bỏ SID và phần cụ thể của đường dẫn."""
+    k = (khoa or "").lower()
+    if "\\explorer\\runmru" in k:
+        return "RunMRU"        # lịch sử hộp thoại Run (Win+R), dấu vết của SharpRDP
+    if "\\currentversion\\run" in k:
+        return "Run"           # Run và RunOnce: tự chạy khi đăng nhập (T1547.001)
+    if "controlset" in k and "\\services\\" in k:
+        return "Services"      # tạo/sửa dịch vụ
+    return "khac"
+
+
 def ky_hieu(e):
     """Rút gọn 1 sự kiện thành 1 ký hiệu hành động (bỏ chi tiết như PID, đường dẫn cụ thể)."""
     eid, img, dt = e["event_id"], ten_ngan(e["image"]).lower(), e["doi_tuong"] or ""
@@ -21,7 +33,7 @@ def ky_hieu(e):
     if eid == 3:
         return f"KET_NOI_MANG:{dt.split(':')[-1]}"
     if eid in (12, 13, 14):
-        return "SUA_REGISTRY"
+        return f"SUA_REGISTRY:{loai_khoa_registry(dt)}"
     if eid == 4104:
         return "CHAY_SCRIPT_POWERSHELL"
     return f"EVENT_{eid}"
