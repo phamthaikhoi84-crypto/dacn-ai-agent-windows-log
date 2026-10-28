@@ -140,14 +140,19 @@ def _tach_su_kien_xml(duong_dan, thong_ke):
     bo_dem = ""
     with _mo_file_van_ban(duong_dan) as f:
         for dong in f:
+            if "<Event" not in bo_dem and "<Event" not in dong:
+                bo_dem = ""                  # dòng không thuộc sự kiện XML nào, bỏ qua
+                continue
+            tu = max(0, len(bo_dem) - 8)     # chỉ tìm trong phần mới thêm vào
             bo_dem += dong
             while True:
-                kt = bo_dem.find("</Event>")
+                kt = bo_dem.find("</Event>", tu)
                 if kt < 0:
                     break
                 bd = max(bo_dem.rfind("<Event ", 0, kt), bo_dem.rfind("<Event>", 0, kt))
                 doan = bo_dem[bd:kt + 8] if bd >= 0 else ""
                 bo_dem = bo_dem[kt + 8:]
+                tu = 0
                 if doan:
                     yield doan
                 else:
