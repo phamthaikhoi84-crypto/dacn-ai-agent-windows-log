@@ -5,6 +5,34 @@ import os
 def ten_ngan(path):
     return path.replace("/", "\\").split("\\")[-1] if path else "?"
 
+# ---- Lọc sự kiện cho so khớp chuỗi (train.py và agent.py PHẢI dùng chung) ----
+# Log Splunk ghi nhiều loại sự kiện mà cấu hình Sysmon phổ biến không ghi
+# (Event 10 vào mọi tiến trình, 7, 17, 18, 22, 23). Chỉ giữ phần chung để train và log thật so được với nhau.
+EVENT_GIU = {1, 3, 11, 12, 13, 14}
+
+
+def giu_lai(e):
+    if e["event_id"] in EVENT_GIU:
+        return True
+    return e["event_id"] == 10 and ten_ngan(e["doi_tuong"]).lower() == "lsass.exe"
+
+
+def loc_su_kien(ds):
+    """Bỏ các sự kiện không dùng để so khớp chuỗi."""
+    return [e for e in ds if giu_lai(e)]
+
+
+PROCESS_VM_READ = 0x0010
+
+
+def loai_quyen(quyen):
+    """Có quyền đọc bộ nhớ (PROCESS_VM_READ) -> 'doc' (dump được). Không có -> 'truy_van' (thường là bình thường)."""
+    try:
+        q = int(quyen, 16)
+    except (TypeError, ValueError):
+        return "khong_ro"
+    return "doc" if q & PROCESS_VM_READ else "truy_van"
+
 
 def loai_khoa_registry(khoa):
     """Xếp khóa registry vào 1 trong 4 loại. Chỉ giữ loại, bỏ SID và phần cụ thể của đường dẫn."""
@@ -26,7 +54,7 @@ def ky_hieu(e):
     if eid == 7:
         return f"NAP_DLL:{ten_ngan(dt).lower()}"
     if eid == 10:
-        return f"MO_BO_NHO:{ten_ngan(dt).lower()}"
+        return f"MO_BO_NHO:{ten_ngan(dt).lower()}:{loai_quyen(e['quyen'])}"
     if eid == 11:
         duoi = os.path.splitext(dt)[1].lower() or "(không đuôi)"
         return f"TAO_FILE:*{duoi}"
