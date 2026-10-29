@@ -23,15 +23,21 @@ def loc_su_kien(ds):
 
 
 PROCESS_VM_READ = 0x0010
+TOAN_QUYEN = 0x1FFFFF
 
 
 def loai_quyen(quyen):
-    """Có quyền đọc bộ nhớ (PROCESS_VM_READ) -> 'doc' (dump được). Không có -> 'truy_van' (thường là bình thường)."""
+    """Phân loại quyền mở tiến trình (Event 10). Phải khớp với mô hình đã train (models/mau_chuoi.json):
+    DAY_DU     = 0x1fffff, toàn quyền (thường là công cụ dump)
+    DOC_BO_NHO = có bit PROCESS_VM_READ (0x10), đọc được bộ nhớ (vd Mimikatz 0x1010, 0x1410)
+    TRUY_VAN   = không có bit đó (thường là phần mềm bình thường, vd Defender 0x1400, 0x1000)"""
     try:
         q = int(quyen, 16)
     except (TypeError, ValueError):
-        return "khong_ro"
-    return "doc" if q & PROCESS_VM_READ else "truy_van"
+        return "KHONG_RO"
+    if q == TOAN_QUYEN:
+        return "DAY_DU"
+    return "DOC_BO_NHO" if q & PROCESS_VM_READ else "TRUY_VAN"
 
 
 def loai_khoa_registry(khoa):

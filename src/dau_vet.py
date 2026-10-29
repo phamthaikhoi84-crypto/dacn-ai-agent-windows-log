@@ -75,7 +75,7 @@ def _chuan_bi(con, ds):
     con.execute("CREATE OR REPLACE TEMP TABLE khoa_phien "
                 "(nguon VARCHAR, may VARCHAR, record_id BIGINT, doc_bo_nho BOOLEAN)")
     con.executemany("INSERT INTO khoa_phien VALUES (?, ?, ?, ?)",
-                    [(e["nguon"], e["may"], e["record_id"], loai_quyen(e["quyen"]) == "doc") for e in ds])
+                    [(e["nguon"], e["may"], e["record_id"], loai_quyen(e["quyen"]) in ("DAY_DU", "DOC_BO_NHO")) for e in ds])
     con.execute("""
         CREATE OR REPLACE TEMP VIEW phien AS
         SELECT s.*, k.doc_bo_nho FROM su_kien s JOIN khoa_phien k
