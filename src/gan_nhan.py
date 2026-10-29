@@ -20,6 +20,8 @@ DAU_HIEU = {
 # Hạ tầng lab, không phải bài thử: bỏ qua khi tìm dấu hiệu
 LOAI_TRU = re.compile(r"-NonInteractive -ExecutionPolicy Unrestricted|SplunkUniversalForwarder|amazon-ssm|Reboot initiated|Test-Path", I)
 CHA_HA_TANG = {"splunkd.exe", "winrshost.exe", "amazon-ssm-agent.exe", "services.exe"}
+# Lúc khởi động máy, wininit.exe và csrss.exe mở lsass với 0x1fffff: bình thường (thấy trong log bình thường của nhóm)
+NGUON_KHOI_DONG = {"wininit.exe", "csrss.exe"}
 DO_DAI_TOI_DA = 300     # chuỗi (sau khi lọc) dài hơn coi là gốc nhầm, ví dụ tiến trình chạy bài thử; bỏ
 
 
@@ -38,7 +40,8 @@ def la_dau_hieu(k, e):
         van_ban = e.get("doi_tuong") or ""
     elif eid == 10:
         return k == "T1003.001" and e.get("quyen") == "0x1fffff" \
-            and (e.get("doi_tuong") or "").lower().endswith("lsass.exe")
+            and (e.get("doi_tuong") or "").lower().endswith("lsass.exe") \
+            and _ten(e.get("image")) not in NGUON_KHOI_DONG
     else:
         return False
     if LOAI_TRU.search(van_ban) or _ten(e.get("parent_image")) in CHA_HA_TANG:
