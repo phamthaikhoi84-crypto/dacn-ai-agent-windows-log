@@ -1,0 +1,65 @@
+Tep,KyThuat,SoSuKien,SoChuoi,DungHuanLuyen,GhiChu
+T1003.001/atomic_red_team/createdump_windows-sysmon.log,T1003.001,5,5,co,
+T1003.001/atomic_red_team/windows-sysmon.log,T1003.001,7960,7,co,
+T1003.001/atomic_red_team/windows-sysmon_creddump.log,T1003.001,32,1,co,
+T1003.001/snapattack/snapattack.log,T1003.001,8,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1021.001/bmc_creation/bmc_creation.log,T1021.001,1,1,co,
+T1021.001/execution_from_rdp_share/execution_from_rdp_share.log,T1021.001,7,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1021.001/mstsc_admini/mstsc_admin.log,T1021.001,10,10,co,
+T1021.001/mstsc_rdp_cmd/mstsc_sysmon.log,T1021.001,3,3,co,
+T1021.001/rdp_creation/deafault_rdp_created.log,T1021.001,1,1,co,
+T1021.001/susp_default_rdp_creation/default_rdp.log,T1021.001,2,2,co,
+T1021.001/susp_default_rdp_creation/default_rdp_dropped.log,T1021.001,7,5,co,
+T1021.001/terminal_server_reg_created/terminal_sever_client_Reg_created.log,T1021.001,7,2,co,
+T1021.001/unhide_file/unhide_file.log,T1021.001,12,12,co,
+T1053.005/asyncrat_highest_priv_schtasks/sysmon.log,T1053.005,10378,2,co,
+T1053.005/atomic_red_team/windows-sysmon.log,T1053.005,6277,9,co,
+T1053.005/lateral_movement/windows-sysmon.log,T1053.005,4000,4,co,
+T1053.005/lateral_movement_lolbas/windows-sysmon.log,T1053.005,3583,4,co,
+T1053.005/scheduled_task_on_console/scheduled_task_on_console.log,T1053.005,1,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1053.005/schtasks/windows-sysmon.log,T1053.005,410,3,co,
+T1053.005/schtask_shutdown/windows-sysmon.log,T1053.005,8366,2,co,
+T1053.005/schtask_system/windows-sysmon.log,T1053.005,1,1,co,
+T1053.005/svchost_lolbas_execution_process_spawn/windows-xml.log,T1053.005,287,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1053.005/taskschedule/sd_delete_windows-sysmon.log,T1053.005,284,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1053.005/taskschedule/windows-sysmon.log,T1053.005,176872,,khong,"chưa xử lý (file quá lớn, trên 100.000 sự kiện)"
+T1059.001/atomic_red_team/captcha_windows-sysmon.log,T1059.001,1,1,co,
+T1059.001/atomic_red_team/enableat_windows-sysmon.log,T1059.001,2,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1059.001/atomic_red_team/windows-sysmon.log,T1059.001,21926,79,co,
+T1059.001/encoded_powershell/explorer_spawns_windows-sysmon.log,T1059.001,4,2,co,
+T1059.001/encoded_powershell/padded_windows-sysmon.log,T1059.001,3,2,co,
+T1059.001/encoded_powershell/windows-sysmon.log,T1059.001,1185,1,co,
+T1059.001/hidden_powershell/windows-sysmon.log,T1059.001,17747,23,co,
+T1059.001/malicious_cmd_line_samples/windows-sysmon.log,T1059.001,10,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1059.001/msix_powershell/windows-sysmon.log,T1059.001,3,3,co,
+T1059.001/obfuscated_powershell/windows-sysmon.log,T1059.001,29943,2,co,
+T1059.001/powershell_execution_policy/windows-sysmon.log,T1059.001,7921,1,co,
+T1059.001/powershell_remotesigned/remotesigned_sysmon.log,T1059.001,1,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1059.001/powershell_script_block_logging/windows-sysmon.log,T1059.001,11280,3,co,
+T1059.001/powershell_testing/windows-sysmon.log,T1059.001,8530,16,co,
+T1059.001/powershell_xml_requests/windows-sysmon.log,T1059.001,5958,6,co,
+T1059.001/sharphound/windows-sysmon.log,T1059.001,9662,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1059.001/snapattack/snapattack.log,T1059.001,8,1,co,
+T1059.001/soaphound/sysmon_soaphound.log,T1059.001,77,5,co,
+T1059.001/threat_allow_switch/threat_allow_salat.log,T1059.001,2,1,co,
+T1059.001/trickbot_cmd_powershell/windows-sysmon.log,T1059.001,16,1,co,
+T1059.001/unmanaged_powershell_execution/windows-sysmon.log,T1059.001,58,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1070.001/atomic_red_team/windows-sysmon.log,T1070.001,6226,2,co,
+T1070.001/windows_pwh_log_cleared/wevtutil_clear_log.log,T1070.001,16,1,co,
+T1105/atomic_red_team/curl-linux-sysmon.log,T1105,34,,khong,"log Linux, ngoài phạm vi Windows"
+T1105/atomic_red_team/linux-sysmon_curlwget.log,T1105,106,,khong,"log Linux, ngoài phạm vi Windows"
+T1105/atomic_red_team/windows-sysmon.log,T1105,2289,15,co,
+T1105/atomic_red_team/windows-sysmon_curl.log,T1105,182,1,co,
+T1105/atomic_red_team/windows-sysmon_curl_upload.log,T1105,338,7,co,
+T1105/atomic_red_team/winrar.log,T1105,41,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1105/dll_loaded_in_temp/module_loaded_in_temp.log,T1105,2,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1105/download_to_pipe_exec/download_to_pipe_exec.log,T1105,18,6,co,
+T1105/download_to_pipe_exec/download_to_pipe_exec_linux.log,T1105,1,,khong,"log Linux, ngoài phạm vi Windows"
+T1105/ironlanguage_download/ironlanguage_download.log,T1105,1,1,co,
+T1105/tinyurl_dns_query/tinyurl.log,T1105,1,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1136.001/atomic_red_team/windows-sysmon-esxadmins.log,T1136.001,4,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1136.001/atomic_red_team/windows-sysmon.log,T1136.001,6386,3,co,
+T1547.001/atomic_red_team/bootexecute-windows-sysmon.log,T1547.001,20,0,khong,không tìm thấy chuỗi có dấu hiệu của kỹ thuật
+T1547.001/atomic_red_team/t1547001-runonce.log,T1547.001,22,9,co,
+T1547.001/atomic_red_team/windows-sysmon.log,T1547.001,6287,13,co,
+T1547.001/snapattack/snapattack.log,T1547.001,1,1,co,

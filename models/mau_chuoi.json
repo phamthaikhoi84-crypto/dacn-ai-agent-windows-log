@@ -1,0 +1,1570 @@
+{
+ "phien_ban": 2,
+ "ngay": "2026-10-30",
+ "cua_so": 6,
+ "thong_ke": {
+  "T1003.001": {
+   "so_chuoi": 15,
+   "so_file": 3
+  },
+  "T1021.001": {
+   "so_chuoi": 11,
+   "so_file": 8
+  },
+  "T1053.005": {
+   "so_chuoi": 15,
+   "so_file": 7
+  },
+  "T1059.001": {
+   "so_chuoi": 54,
+   "so_file": 16
+  },
+  "T1070.001": {
+   "so_chuoi": 3,
+   "so_file": 2
+  },
+  "T1105": {
+   "so_chuoi": 14,
+   "so_file": 5
+  },
+  "T1136.001": {
+   "so_chuoi": 3,
+   "so_file": 1
+  },
+  "T1547.001": {
+   "so_chuoi": 13,
+   "so_file": 3
+  }
+ },
+ "tham_so": {
+  "cach_diem": "max",
+  "ty_le": 0.01
+ },
+ "binh_thuong": {
+  "so_cua_so": 6608,
+  "df": {
+   "MO_BO_NHO:lsass.exe:TRUY_VAN": 1215,
+   "SUA_REGISTRY:khac": 783,
+   "SUA_REGISTRY:Run": 206,
+   "TAO_TIEN_TRINH:rundll32.exe": 103,
+   "TAO_TIEN_TRINH:mpcmdrun.exe": 27,
+   "TAO_FILE:*.exe": 314,
+   "KET_NOI_MANG:443": 2715,
+   "TAO_FILE:*.ps1": 736,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 644,
+   "TAO_TIEN_TRINH:wevtutil.exe": 20,
+   "TAO_TIEN_TRINH:powershell.exe": 698,
+   "TAO_TIEN_TRINH:notepad.exe": 3,
+   "TAO_TIEN_TRINH:werfault.exe": 12,
+   "TAO_TIEN_TRINH:cmd.exe": 1580,
+   "SUA_REGISTRY:Services": 31,
+   "TAO_FILE:*.dll": 338,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll > TAO_FILE:*.exe": 184,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll": 233,
+   "TAO_FILE:*.dll > TAO_FILE:*.exe > TAO_FILE:*.dll": 214,
+   "TAO_FILE:*.dll > TAO_FILE:*.exe": 236,
+   "TAO_TIEN_TRINH:reg.exe": 149,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:reg.exe": 58,
+   "TAO_FILE:*.ps1 > SUA_REGISTRY:Run": 2,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:cmd.exe": 213,
+   "KET_NOI_MANG:443 > TAO_FILE:*.dll": 64,
+   "TAO_FILE:*.dll > KET_NOI_MANG:443": 64,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:reg.exe > TAO_TIEN_TRINH:cmd.exe": 19,
+   "TAO_TIEN_TRINH:reg.exe > TAO_TIEN_TRINH:cmd.exe": 33,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:powershell.exe": 8,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll": 29,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll > TAO_FILE:*.ps1": 23,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 22,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1": 30,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.exe": 22,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:powershell.exe": 592,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:powershell.exe": 595,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 589,
+   "TAO_TIEN_TRINH:calc.exe": 2,
+   "TAO_FILE:*(không đuôi)": 12,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat": 2,
+   "TAO_FILE:*.bat": 35,
+   "TAO_FILE:*.dll > TAO_FILE:*.exe > TAO_FILE:*.bat": 1,
+   "TAO_TIEN_TRINH:whoami.exe": 6,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443": 3,
+   "TAO_FILE:*.bat > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:cmd.exe": 3,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:where.exe": 51,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe": 26,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 22,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:where.exe": 29,
+   "KET_NOI_MANG:443 > TAO_FILE:*.ps1": 4,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:powershell.exe > KET_NOI_MANG:443 > TAO_FILE:*.ps1": 2,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:powershell.exe > KET_NOI_MANG:443": 1,
+   "TAO_TIEN_TRINH:powershell.exe > KET_NOI_MANG:443": 2,
+   "KET_NOI_MANG:80": 6,
+   "KET_NOI_MANG:80 > KET_NOI_MANG:443": 4,
+   "TAO_TIEN_TRINH:schtasks.exe": 5,
+   "KET_NOI_MANG:443 > TAO_FILE:*.exe": 4,
+   "KET_NOI_MANG:443 > TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "MO_BO_NHO:lsass.exe:DAY_DU": 2,
+   "SUA_REGISTRY:khac > MO_BO_NHO:lsass.exe:DAY_DU": 2,
+   "TAO_FILE:*.dat": 2,
+   "TAO_FILE:*.tst": 2,
+   "TAO_TIEN_TRINH:net.exe": 4,
+   "TAO_TIEN_TRINH:net1.exe": 4
+  }
+ },
+ "so_chuoi": {
+  "T1003.001": 15,
+  "T1021.001": 11,
+  "T1053.005": 15,
+  "T1059.001": 54,
+  "T1070.001": 3,
+  "T1105": 14,
+  "T1136.001": 3,
+  "T1547.001": 13
+ },
+ "df": {
+  "T1003.001": {
+   "TAO_TIEN_TRINH:createdump.exe": 1,
+   "KET_NOI_MANG:443 > TAO_FILE:*.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe": 5,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > KET_NOI_MANG:443": 2,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443": 2,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443 > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.ps1": 5,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 5,
+   "TAO_FILE:*.exe": 4,
+   "KET_NOI_MANG:443": 2,
+   "TAO_TIEN_TRINH:cmd.exe": 5,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:wce.exe > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.exe > TAO_TIEN_TRINH:644c305e-30f4-470b-b616-d924c3206d1d.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:wce.exe": 1,
+   "TAO_TIEN_TRINH:644c305e-30f4-470b-b616-d924c3206d1d.exe": 2,
+   "TAO_TIEN_TRINH:wce.exe > TAO_FILE:*.exe > TAO_TIEN_TRINH:644c305e-30f4-470b-b616-d924c3206d1d.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:wce.exe > TAO_FILE:*.exe": 1,
+   "TAO_TIEN_TRINH:wce.exe": 1,
+   "MO_BO_NHO:lsass.exe:DAY_DU": 7,
+   "TAO_TIEN_TRINH:644c305e-30f4-470b-b616-d924c3206d1d.exe > TAO_FILE:*.dll > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "TAO_FILE:*.dll > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "TAO_TIEN_TRINH:644c305e-30f4-470b-b616-d924c3206d1d.exe > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.dll": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:procdump.exe > SUA_REGISTRY:khac": 1,
+   "SUA_REGISTRY:khac > MO_BO_NHO:lsass.exe:DAY_DU": 2,
+   "SUA_REGISTRY:khac": 2,
+   "TAO_TIEN_TRINH:procdump64.exe > SUA_REGISTRY:khac": 1,
+   "TAO_TIEN_TRINH:procdump64.exe > SUA_REGISTRY:khac > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "MO_BO_NHO:lsass.exe:DAY_DU > TAO_FILE:*.dmp > MO_BO_NHO:lsass.exe:DAY_DU": 4,
+   "MO_BO_NHO:lsass.exe:DAY_DU > TAO_FILE:*.exe": 2,
+   "TAO_FILE:*.dmp > MO_BO_NHO:lsass.exe:DAY_DU": 5,
+   "TAO_TIEN_TRINH:procdump.exe": 1,
+   "MO_BO_NHO:lsass.exe:DAY_DU > TAO_FILE:*.exe > TAO_TIEN_TRINH:procdump64.exe": 1,
+   "TAO_FILE:*.exe > TAO_TIEN_TRINH:procdump64.exe": 1,
+   "SUA_REGISTRY:khac > MO_BO_NHO:lsass.exe:DAY_DU > TAO_FILE:*.dmp": 2,
+   "TAO_TIEN_TRINH:procdump.exe > SUA_REGISTRY:khac": 1,
+   "TAO_FILE:*.dmp": 5,
+   "TAO_TIEN_TRINH:procdump64.exe": 1,
+   "TAO_FILE:*.exe > TAO_TIEN_TRINH:procdump64.exe > SUA_REGISTRY:khac": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:procdump.exe": 1,
+   "TAO_TIEN_TRINH:procdump.exe > SUA_REGISTRY:khac > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "MO_BO_NHO:lsass.exe:DAY_DU > TAO_FILE:*.dmp": 4,
+   "SUA_REGISTRY:khac > MO_BO_NHO:lsass.exe:DAY_DU > TAO_FILE:*.exe": 2,
+   "TAO_TIEN_TRINH:rundll32.exe > MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1,
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO > TAO_FILE:*.dmp > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO > TAO_FILE:*.dmp": 1,
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 3,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:rundll32.exe": 1,
+   "TAO_TIEN_TRINH:rundll32.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:rundll32.exe > MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1,
+   "TAO_TIEN_TRINH:rundll32.exe > MO_BO_NHO:lsass.exe:DOC_BO_NHO > TAO_FILE:*.dmp": 1,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:rundll32.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:outflank-dumpert.exe > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "TAO_TIEN_TRINH:outflank-dumpert.exe > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:outflank-dumpert.exe": 1,
+   "TAO_TIEN_TRINH:outflank-dumpert.exe": 1,
+   "TAO_TIEN_TRINH:outflank-dumpert.exe > MO_BO_NHO:lsass.exe:DAY_DU > TAO_FILE:*.dmp": 1,
+   "TAO_TIEN_TRINH:notepad++.exe": 1,
+   "TAO_TIEN_TRINH:notprocdump.exe > SUA_REGISTRY:khac > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "TAO_TIEN_TRINH:notprocdump64.exe > SUA_REGISTRY:khac": 1,
+   "MO_BO_NHO:lsass.exe:DAY_DU > TAO_FILE:*.exe > TAO_TIEN_TRINH:notprocdump64.exe": 1,
+   "TAO_TIEN_TRINH:notprocdump.exe > SUA_REGISTRY:khac": 1,
+   "TAO_TIEN_TRINH:notprocdump64.exe": 1,
+   "TAO_TIEN_TRINH:notprocdump64.exe > SUA_REGISTRY:khac > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "TAO_FILE:*.exe > TAO_TIEN_TRINH:notprocdump64.exe > SUA_REGISTRY:khac": 1,
+   "TAO_TIEN_TRINH:notprocdump.exe": 1,
+   "TAO_FILE:*.exe > TAO_TIEN_TRINH:notprocdump64.exe": 1,
+   "MO_BO_NHO:lsass.exe:TRUY_VAN": 1,
+   "MO_BO_NHO:lsass.exe:TRUY_VAN > MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1,
+   "TAO_TIEN_TRINH:taskmgr.exe > MO_BO_NHO:lsass.exe:TRUY_VAN > MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1,
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO > MO_BO_NHO:lsass.exe:DAY_DU > TAO_FILE:*.dmp": 1,
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO > MO_BO_NHO:lsass.exe:DAY_DU": 2,
+   "TAO_TIEN_TRINH:taskmgr.exe > MO_BO_NHO:lsass.exe:TRUY_VAN": 1,
+   "MO_BO_NHO:lsass.exe:TRUY_VAN > MO_BO_NHO:lsass.exe:DOC_BO_NHO > MO_BO_NHO:lsass.exe:DAY_DU": 1,
+   "TAO_TIEN_TRINH:taskmgr.exe": 1
+  },
+  "T1021.001": {
+   "TAO_FILE:*.bmc": 1,
+   "TAO_TIEN_TRINH:mstsc.exe": 2,
+   "TAO_FILE:*.rdp": 3,
+   "TAO_TIEN_TRINH:notepad++.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe": 2,
+   "SUA_REGISTRY:khac": 2,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_FILE:*.rdp": 1,
+   "TAO_TIEN_TRINH:attrib.exe": 1
+  },
+  "T1053.005": {
+   "TAO_FILE:*(không đuôi) > KET_NOI_MANG:389": 1,
+   "TAO_FILE:*(không đuôi)": 6,
+   "KET_NOI_MANG:389": 1,
+   "KET_NOI_MANG:389 > TAO_FILE:*(không đuôi)": 1,
+   "KET_NOI_MANG:389 > TAO_FILE:*(không đuôi) > KET_NOI_MANG:389": 1,
+   "TAO_TIEN_TRINH:cmd.exe": 3,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:schtasks.exe": 3,
+   "TAO_TIEN_TRINH:schtasks.exe": 8,
+   "TAO_FILE:*.dat > TAO_FILE:*.tst": 2,
+   "TAO_FILE:*.dat": 2,
+   "TAO_FILE:*.tst > TAO_FILE:*(không đuôi)": 1,
+   "TAO_FILE:*.tst": 2,
+   "TAO_FILE:*.dat > TAO_FILE:*.tst > TAO_FILE:*(không đuôi)": 1,
+   "KET_NOI_MANG:49668": 2,
+   "KET_NOI_MANG:135": 1,
+   "KET_NOI_MANG:135 > KET_NOI_MANG:49668": 1,
+   "TAO_TIEN_TRINH:schtasks.exe > KET_NOI_MANG:135 > KET_NOI_MANG:49668": 1,
+   "TAO_TIEN_TRINH:schtasks.exe > KET_NOI_MANG:135": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:schtasks.exe > KET_NOI_MANG:135": 1,
+   "TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:powershell.exe": 1,
+   "KET_NOI_MANG:49680 > TAO_FILE:*(không đuôi)": 1,
+   "KET_NOI_MANG:49680": 1,
+   "KET_NOI_MANG:49668 > TAO_FILE:*(không đuôi) > KET_NOI_MANG:49668": 1,
+   "TAO_FILE:*(không đuôi) > KET_NOI_MANG:49668": 1,
+   "KET_NOI_MANG:49668 > TAO_FILE:*(không đuôi)": 1,
+   "SUA_REGISTRY:Services > TAO_FILE:*.dat": 1,
+   "SUA_REGISTRY:Services > TAO_FILE:*(không đuôi)": 1,
+   "SUA_REGISTRY:Services": 1,
+   "TAO_FILE:*.tst > SUA_REGISTRY:Services > TAO_FILE:*(không đuôi)": 1,
+   "SUA_REGISTRY:Services > TAO_FILE:*.dat > TAO_FILE:*.tst": 1,
+   "TAO_FILE:*.dat > TAO_FILE:*.tst > SUA_REGISTRY:Services": 1,
+   "TAO_FILE:*.tst > SUA_REGISTRY:Services": 1
+  },
+  "T1059.001": {
+   "TAO_TIEN_TRINH:powershell.exe": 46,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe": 12,
+   "TAO_TIEN_TRINH:cmd.exe": 21,
+   "TAO_FILE:*.ps1": 40,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 39,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 12,
+   "KET_NOI_MANG:80": 10,
+   "KET_NOI_MANG:80 > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 3,
+   "KET_NOI_MANG:80 > TAO_TIEN_TRINH:powershell.exe": 3,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:mshta.exe": 4,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:mshta.exe": 1,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:cmd.exe": 5,
+   "TAO_TIEN_TRINH:mshta.exe": 4,
+   "KET_NOI_MANG:443": 19,
+   "TAO_TIEN_TRINH:notepad.exe": 4,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:notepad.exe": 4,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:notepad.exe": 4,
+   "TAO_TIEN_TRINH:cvtres.exe": 17,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll": 6,
+   "TAO_TIEN_TRINH:csc.exe > TAO_TIEN_TRINH:cvtres.exe": 11,
+   "TAO_FILE:*.cmdline": 17,
+   "TAO_FILE:*.cmdline > TAO_TIEN_TRINH:csc.exe > TAO_TIEN_TRINH:cvtres.exe": 11,
+   "TAO_FILE:*.dll > TAO_FILE:*.cmdline > TAO_TIEN_TRINH:csc.exe": 17,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.cmdline": 6,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 3,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll": 15,
+   "TAO_TIEN_TRINH:csc.exe": 17,
+   "TAO_FILE:*.cmdline > TAO_TIEN_TRINH:csc.exe": 17,
+   "TAO_TIEN_TRINH:csc.exe > TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll": 11,
+   "TAO_FILE:*.dll": 17,
+   "TAO_FILE:*.dll > TAO_FILE:*.cmdline": 17,
+   "TAO_FILE:*.cmdline > TAO_TIEN_TRINH:csc.exe > KET_NOI_MANG:80": 2,
+   "TAO_TIEN_TRINH:csc.exe > KET_NOI_MANG:80 > TAO_TIEN_TRINH:cvtres.exe": 2,
+   "KET_NOI_MANG:80 > TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll": 2,
+   "KET_NOI_MANG:80 > TAO_FILE:*.dll > TAO_FILE:*.cmdline": 2,
+   "KET_NOI_MANG:80 > TAO_TIEN_TRINH:cvtres.exe": 2,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:80 > TAO_FILE:*.dll": 2,
+   "KET_NOI_MANG:80 > TAO_FILE:*.dll": 2,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:80": 4,
+   "TAO_TIEN_TRINH:csc.exe > KET_NOI_MANG:80": 2,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > KET_NOI_MANG:80": 4,
+   "KET_NOI_MANG:443 > TAO_FILE:*.ps1": 5,
+   "KET_NOI_MANG:80 > KET_NOI_MANG:443 > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:80 > KET_NOI_MANG:443": 2,
+   "KET_NOI_MANG:80 > KET_NOI_MANG:443": 2,
+   "KET_NOI_MANG:443 > TAO_FILE:*.dll": 5,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443": 10,
+   "KET_NOI_MANG:443 > TAO_FILE:*.dll > TAO_FILE:*.cmdline": 4,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443 > TAO_FILE:*.dll": 4,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > KET_NOI_MANG:443": 10,
+   "TAO_TIEN_TRINH:csc.exe > TAO_FILE:*.dll": 4,
+   "TAO_TIEN_TRINH:csc.exe > TAO_FILE:*.dll > TAO_TIEN_TRINH:cvtres.exe": 4,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll": 2,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:cvtres.exe": 5,
+   "TAO_FILE:*.cmdline > TAO_TIEN_TRINH:csc.exe > TAO_FILE:*.dll": 4,
+   "TAO_TIEN_TRINH:cvtres.exe > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.exe > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.chm": 3,
+   "TAO_FILE:*.vbs > TAO_FILE:*.ps1 > TAO_FILE:*.exe": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.exe > TAO_FILE:*.ps1": 3,
+   "TAO_FILE:*.xlsm > TAO_FILE:*.exe > TAO_FILE:*.dll": 3,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll > TAO_FILE:*.exe": 3,
+   "TAO_FILE:*.bat > TAO_FILE:*.jse": 3,
+   "TAO_FILE:*.csproj > TAO_FILE:*.dll": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.vbs > TAO_FILE:*.ps1": 2,
+   "TAO_TIEN_TRINH:csc.exe > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.bat": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.bat > TAO_FILE:*.exe": 2,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1 > TAO_FILE:*.xlsm": 2,
+   "TAO_FILE:*.csproj > TAO_FILE:*.dll > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.bat > TAO_FILE:*.jse > TAO_FILE:*.vbs": 3,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:cvtres.exe > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.bat": 3,
+   "TAO_FILE:*.bat > TAO_FILE:*.exe > TAO_FILE:*.dll": 2,
+   "TAO_FILE:*.hta > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.hta": 3,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 4,
+   "TAO_FILE:*.bat > TAO_FILE:*.ps1 > TAO_FILE:*.vbs": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.csproj": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.csproj > TAO_FILE:*.dll": 2,
+   "KET_NOI_MANG:443 > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 2,
+   "TAO_FILE:*.jse > TAO_FILE:*.vbs": 3,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.vbs": 2,
+   "TAO_FILE:*.csproj": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.sln": 3,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1": 3,
+   "TAO_FILE:*.vbs > TAO_FILE:*.bat > TAO_FILE:*.exe": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.chm > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.sln > TAO_FILE:*.vcxproj > TAO_FILE:*.dll": 3,
+   "TAO_FILE:*.vbs": 3,
+   "TAO_FILE:*.hta": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.vbs > TAO_FILE:*.bat": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.xlsm > TAO_FILE:*.exe": 2,
+   "KET_NOI_MANG:443 > TAO_FILE:*.dll > TAO_TIEN_TRINH:cvtres.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.ps1": 2,
+   "TAO_TIEN_TRINH:csc.exe > KET_NOI_MANG:443 > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.vbs > TAO_FILE:*.hta": 2,
+   "TAO_FILE:*.dll > TAO_FILE:*.sln > TAO_FILE:*.vcxproj": 3,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.hta > TAO_FILE:*.ps1 > TAO_FILE:*.bat": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.hta > TAO_FILE:*.ps1": 3,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.exe": 2,
+   "TAO_FILE:*.vcxproj > TAO_FILE:*.dll": 3,
+   "TAO_FILE:*.vcxproj": 3,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll > TAO_FILE:*.sln": 3,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll > TAO_FILE:*.ps1": 3,
+   "TAO_FILE:*.bat > TAO_FILE:*.ps1 > TAO_FILE:*.csproj": 2,
+   "TAO_FILE:*.dll > TAO_FILE:*.exe > TAO_FILE:*.bat": 3,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 2,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat > TAO_FILE:*.jse": 3,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1 > TAO_FILE:*.vbs": 3,
+   "TAO_FILE:*.bat > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.chm > TAO_FILE:*.ps1 > TAO_FILE:*.hta": 3,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.chm": 2,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443 > TAO_FILE:*.ps1": 2,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:powershell.exe": 4,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1 > TAO_FILE:*.bat": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.vbs": 3,
+   "TAO_FILE:*.bat > TAO_FILE:*.exe": 2,
+   "TAO_FILE:*.bat > TAO_FILE:*.exe > TAO_FILE:*.bat": 2,
+   "TAO_FILE:*.xlsm": 3,
+   "TAO_FILE:*.sln > TAO_FILE:*.vcxproj": 3,
+   "TAO_FILE:*.vbs > TAO_FILE:*.hta > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.dll > TAO_FILE:*.exe": 3,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.xlsm": 2,
+   "TAO_FILE:*.vbs > TAO_FILE:*.hta": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.chm": 2,
+   "TAO_FILE:*.jse": 3,
+   "TAO_FILE:*.bat > TAO_FILE:*.ps1 > TAO_FILE:*.bat": 2,
+   "TAO_FILE:*.cmdline > TAO_TIEN_TRINH:csc.exe > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.sln": 3,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.bat": 2,
+   "TAO_TIEN_TRINH:cvtres.exe > KET_NOI_MANG:443 > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat > TAO_FILE:*.exe": 2,
+   "TAO_FILE:*.dll > TAO_FILE:*.exe > TAO_FILE:*.dll": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.bat > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.exe": 4,
+   "TAO_FILE:*.dll > TAO_FILE:*.sln": 3,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.exe": 2,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll": 3,
+   "TAO_FILE:*.jse > TAO_FILE:*.vbs > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.hta > TAO_FILE:*.ps1": 3,
+   "TAO_FILE:*.vbs > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.chm > TAO_FILE:*.ps1": 3,
+   "TAO_FILE:*.vbs > TAO_FILE:*.ps1 > TAO_FILE:*.bat": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.exe": 3,
+   "TAO_FILE:*.xlsm > TAO_FILE:*.exe": 3,
+   "TAO_FILE:*.vcxproj > TAO_FILE:*.dll > TAO_FILE:*.ps1": 3,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:powershell.exe": 2,
+   "TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe": 7,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:hostname.exe": 7,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_FILE:*.dll > TAO_FILE:*.cmdline": 7,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe": 7,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_FILE:*.dll": 7,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:hostname.exe": 7,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe > TAO_FILE:*.dll": 7,
+   "TAO_TIEN_TRINH:whoami.exe": 7,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 2,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:hostname.exe": 7,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:powershell.exe": 2,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:cvtres.exe > MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:reg.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:esentutl.exe": 1,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:reg.exe": 1,
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO > TAO_FILE:*.dll > TAO_FILE:*.cmdline": 1,
+   "TAO_TIEN_TRINH:esentutl.exe": 1,
+   "TAO_TIEN_TRINH:reg.exe": 2,
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO > TAO_FILE:*.dll": 1,
+   "TAO_TIEN_TRINH:esentutl.exe > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:reg.exe > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1,
+   "TAO_TIEN_TRINH:esentutl.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll > TAO_FILE:*.cmdline": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > MO_BO_NHO:lsass.exe:DOC_BO_NHO > TAO_FILE:*.dll": 1,
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 3,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:esentutl.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll > TAO_TIEN_TRINH:cmd.exe": 3,
+   "TAO_TIEN_TRINH:reg.exe > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:esentutl.exe": 1,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:cmd.exe": 3,
+   "TAO_TIEN_TRINH:reg.exe > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_FILE:*.ps1 > MO_BO_NHO:lsass.exe:DOC_BO_NHO": 2,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > MO_BO_NHO:lsass.exe:DOC_BO_NHO": 2,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe": 4,
+   "KET_NOI_MANG:443 > KET_NOI_MANG:80 > TAO_TIEN_TRINH:cmd.exe": 1,
+   "KET_NOI_MANG:80 > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:mshta.exe": 1,
+   "KET_NOI_MANG:80 > TAO_TIEN_TRINH:cmd.exe": 1,
+   "KET_NOI_MANG:443 > KET_NOI_MANG:80": 3,
+   "TAO_FILE:*.bat > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.vbs > TAO_FILE:*.exe": 1,
+   "TAO_TIEN_TRINH:adfind.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.vbs": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1 > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:nltest.exe": 1,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_FILE:*.txt > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:nltest.exe > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:reg.exe": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.vbs > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:adfind.exe > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.ps1": 1,
+   "KET_NOI_MANG:443 > TAO_FILE:*.ps1 > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:notepad.exe > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.ps1 > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.xlsm > TAO_FILE:*.exe": 1,
+   "KET_NOI_MANG:443 > TAO_TIEN_TRINH:powershell.exe > KET_NOI_MANG:443": 1,
+   "TAO_TIEN_TRINH:powershell.exe > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt > TAO_FILE:*.vbs": 1,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.txt > TAO_FILE:*.exe": 1,
+   "TAO_TIEN_TRINH:adfind.exe > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt > TAO_FILE:*.chm": 1,
+   "TAO_TIEN_TRINH:adfind.exe > TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.txt > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443 > KET_NOI_MANG:80": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.dll > TAO_FILE:*.exe": 1,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:reg.exe > TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe": 1,
+   "TAO_TIEN_TRINH:dsquery.exe > TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:where.exe": 1,
+   "TAO_TIEN_TRINH:dsquery.exe > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:mshta.exe > TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:adfind.exe > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.txt > TAO_FILE:*.dll": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:nltest.exe > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:dsquery.exe > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 1,
+   "KET_NOI_MANG:443 > KET_NOI_MANG:80 > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.chm": 1,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:reg.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.vbs": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.txt > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_FILE:*.csproj > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:adfind.exe > TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe": 1,
+   "TAO_FILE:*.csproj > TAO_FILE:*.txt > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:adfind.exe": 1,
+   "TAO_TIEN_TRINH:notepad.exe > TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.xlsm": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.vcxproj > TAO_FILE:*.dll > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.xlsm": 1,
+   "TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:mshta.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.hta > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:mshta.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 1,
+   "TAO_TIEN_TRINH:where.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.vbs": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.csproj": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt > TAO_FILE:*.xlsm": 1,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:notepad.exe > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:adfind.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:where.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.bat > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.txt > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe": 1,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.exe > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.chm > TAO_FILE:*.ps1": 1,
+   "KET_NOI_MANG:80 > TAO_FILE:*.ps1 > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:nltest.exe > TAO_FILE:*.txt > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:dsquery.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:adfind.exe > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:reg.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:dsquery.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:mshta.exe": 1,
+   "TAO_TIEN_TRINH:adfind.exe > KET_NOI_MANG:443 > TAO_TIEN_TRINH:powershell.exe": 1,
+   "KET_NOI_MANG:80 > TAO_FILE:*.ps1": 1,
+   "KET_NOI_MANG:443 > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.bat > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:where.exe": 1,
+   "TAO_FILE:*.hta > TAO_FILE:*.dll > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt > TAO_FILE:*.csproj": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.xlsm > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.jse > TAO_FILE:*.vbs > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.bat > TAO_FILE:*.vbs": 1,
+   "KET_NOI_MANG:443 > TAO_FILE:*.txt > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:powershell.exe > KET_NOI_MANG:443 > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.csproj > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.hta > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_TIEN_TRINH:where.exe > TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.vbs": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:nltest.exe": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.ps1 > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:nltest.exe": 1,
+   "TAO_TIEN_TRINH:whoami.exe > TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:whoami.exe": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.txt > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:adfind.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:where.exe": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.exe > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.xlsm > TAO_FILE:*.exe > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.exe > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443 > TAO_FILE:*.txt": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.txt > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.txt > TAO_FILE:*.exe > TAO_FILE:*.xlsm": 1,
+   "TAO_TIEN_TRINH:dsquery.exe": 1,
+   "TAO_TIEN_TRINH:reg.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:adfind.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.vbs > TAO_FILE:*.hta": 1,
+   "TAO_FILE:*.txt > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:mshta.exe > KET_NOI_MANG:443": 1,
+   "TAO_TIEN_TRINH:mshta.exe > KET_NOI_MANG:443": 1,
+   "TAO_TIEN_TRINH:mshta.exe > KET_NOI_MANG:443 > KET_NOI_MANG:80": 1,
+   "TAO_TIEN_TRINH:powershell.exe > KET_NOI_MANG:8444": 1,
+   "TAO_TIEN_TRINH:powershell.exe > KET_NOI_MANG:8444 > TAO_FILE:*.ps1": 1,
+   "KET_NOI_MANG:8444 > TAO_FILE:*.ps1": 1,
+   "KET_NOI_MANG:8444": 1,
+   "TAO_FILE:*.dll > KET_NOI_MANG:443 > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.dll > KET_NOI_MANG:443": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll > KET_NOI_MANG:443": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:cvtres.exe > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:soaphound.exe > TAO_TIEN_TRINH:werfault.exe > SUA_REGISTRY:khac": 1,
+   "TAO_TIEN_TRINH:werfault.exe": 2,
+   "TAO_TIEN_TRINH:soaphound.exe": 3,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:soaphound.exe": 3,
+   "TAO_TIEN_TRINH:werfault.exe > SUA_REGISTRY:khac": 1,
+   "SUA_REGISTRY:khac": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:soaphound.exe > TAO_TIEN_TRINH:werfault.exe": 2,
+   "TAO_TIEN_TRINH:soaphound.exe > TAO_TIEN_TRINH:werfault.exe": 2,
+   "TAO_TIEN_TRINH:conhost.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_TIEN_TRINH:conhost.exe": 1
+  },
+  "T1070.001": {
+   "TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:wevtutil.exe": 1,
+   "TAO_TIEN_TRINH:wevtutil.exe": 2,
+   "TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:powershell.exe": 1
+  },
+  "T1105": {
+   "TAO_FILE:*.txt": 3,
+   "TAO_TIEN_TRINH:certutil.exe > TAO_FILE:*.txt": 2,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:certutil.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe": 6,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:certutil.exe > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:certutil.exe": 4,
+   "TAO_FILE:*.ps1 > TAO_TIEN_TRINH:certutil.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe": 3,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_TIEN_TRINH:certutil.exe": 1,
+   "TAO_FILE:*.ps1": 2,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 2,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:bitsadmin.exe": 1,
+   "TAO_TIEN_TRINH:bitsadmin.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_FILE:*.txt": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:mpcmdrun.exe": 1,
+   "TAO_TIEN_TRINH:mpcmdrun.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:curl.exe": 2,
+   "SUA_REGISTRY:Services > TAO_FILE:*.dll > TAO_TIEN_TRINH:curl.exe": 1,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:curl.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:curl.exe > SUA_REGISTRY:Services": 2,
+   "TAO_TIEN_TRINH:curl.exe > SUA_REGISTRY:Services > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.dll > TAO_TIEN_TRINH:curl.exe > SUA_REGISTRY:Services": 1,
+   "SUA_REGISTRY:Services": 3,
+   "TAO_TIEN_TRINH:curl.exe": 6,
+   "TAO_TIEN_TRINH:curl.exe > SUA_REGISTRY:Services": 3,
+   "SUA_REGISTRY:Services > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.dll": 1,
+   "TAO_TIEN_TRINH:curl.exe > SUA_REGISTRY:Services > TAO_TIEN_TRINH:curl.exe": 1,
+   "SUA_REGISTRY:Services > TAO_TIEN_TRINH:curl.exe > SUA_REGISTRY:Services": 1,
+   "SUA_REGISTRY:Services > TAO_TIEN_TRINH:curl.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:calc.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:powershell.exe > TAO_TIEN_TRINH:hostname.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_TIEN_TRINH:hostname.exe > TAO_TIEN_TRINH:calc.exe": 1,
+   "TAO_TIEN_TRINH:calc.exe": 1,
+   "TAO_TIEN_TRINH:hostname.exe": 1
+  },
+  "T1136.001": {
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:net.exe > TAO_TIEN_TRINH:net1.exe": 2,
+   "TAO_TIEN_TRINH:cmd.exe": 2,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:net.exe": 2,
+   "TAO_TIEN_TRINH:net.exe": 2,
+   "TAO_TIEN_TRINH:net1.exe": 2,
+   "TAO_TIEN_TRINH:net.exe > TAO_TIEN_TRINH:net1.exe": 2,
+   "TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:powershell.exe": 1,
+   "TAO_TIEN_TRINH:net1.exe > TAO_TIEN_TRINH:net.exe > TAO_TIEN_TRINH:net1.exe": 1,
+   "TAO_TIEN_TRINH:net1.exe > TAO_TIEN_TRINH:net.exe": 1,
+   "TAO_TIEN_TRINH:net.exe > TAO_TIEN_TRINH:net1.exe > TAO_TIEN_TRINH:net.exe": 1
+  },
+  "T1547.001": {
+   "TAO_TIEN_TRINH:reg.exe > SUA_REGISTRY:Run": 3,
+   "SUA_REGISTRY:Run": 8,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:reg.exe > SUA_REGISTRY:Run": 2,
+   "TAO_TIEN_TRINH:cmd.exe": 5,
+   "TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:reg.exe": 3,
+   "TAO_TIEN_TRINH:reg.exe": 5,
+   "TAO_TIEN_TRINH:powershell.exe > SUA_REGISTRY:Run": 1,
+   "TAO_TIEN_TRINH:powershell.exe": 7,
+   "SUA_REGISTRY:Run > TAO_TIEN_TRINH:cmd.exe": 1,
+   "SUA_REGISTRY:Run > TAO_TIEN_TRINH:cmd.exe > TAO_TIEN_TRINH:reg.exe": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.cmdline > TAO_TIEN_TRINH:csc.exe": 1,
+   "TAO_FILE:*.dll > KET_NOI_MANG:443 > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.chm": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.exe > TAO_FILE:*.ps1": 1,
+   "KET_NOI_MANG:443 > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.exe > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.xlsm > TAO_FILE:*.exe > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.jse": 1,
+   "TAO_FILE:*.csproj > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.vbs > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:csc.exe > TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.bat": 1,
+   "TAO_TIEN_TRINH:csc.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.bat > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1 > TAO_FILE:*.xlsm": 1,
+   "TAO_FILE:*.csproj > TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.jse > TAO_FILE:*.vbs": 1,
+   "TAO_FILE:*.cmdline": 1,
+   "TAO_FILE:*.bat": 2,
+   "TAO_FILE:*.bat > TAO_FILE:*.exe > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.hta > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1": 6,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.hta": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.ps1 > TAO_FILE:*.vbs": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.csproj": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.csproj > TAO_FILE:*.dll": 1,
+   "KET_NOI_MANG:443 > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.jse > TAO_FILE:*.vbs": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.vbs": 1,
+   "TAO_FILE:*.csproj": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.sln": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.bat > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.chm > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.sln > TAO_FILE:*.vcxproj > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.vbs": 2,
+   "TAO_FILE:*.hta": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.vbs > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.xlsm > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.vbs > TAO_FILE:*.hta": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.sln > TAO_FILE:*.vcxproj": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.hta > TAO_FILE:*.ps1 > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.hta > TAO_FILE:*.ps1": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1": 6,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.vcxproj > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.vcxproj": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll > TAO_FILE:*.sln": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.ps1 > TAO_FILE:*.csproj": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.exe > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.dll": 1,
+   "KET_NOI_MANG:443 > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat > TAO_FILE:*.jse": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1 > TAO_FILE:*.vbs": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.chm > TAO_FILE:*.ps1 > TAO_FILE:*.hta": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1 > TAO_FILE:*.chm": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443 > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.cmdline > TAO_TIEN_TRINH:csc.exe > TAO_TIEN_TRINH:cvtres.exe": 1,
+   "KET_NOI_MANG:443 > TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.ps1 > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.dll > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.vbs": 2,
+   "TAO_FILE:*.bat > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.exe > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.xlsm": 1,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.sln > TAO_FILE:*.vcxproj": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.hta > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.xlsm": 1,
+   "TAO_TIEN_TRINH:csc.exe > TAO_TIEN_TRINH:cvtres.exe": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.hta": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.chm": 1,
+   "TAO_FILE:*.jse": 2,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.cmdline": 1,
+   "TAO_FILE:*.bat > TAO_FILE:*.ps1 > TAO_FILE:*.bat": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.sln": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat": 1,
+   "TAO_TIEN_TRINH:cvtres.exe > TAO_FILE:*.dll > KET_NOI_MANG:443": 1,
+   "TAO_FILE:*.jse > TAO_FILE:*.vbs > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.bat": 2,
+   "TAO_FILE:*.cmdline > TAO_TIEN_TRINH:csc.exe": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.cmdline": 1,
+   "TAO_TIEN_TRINH:cvtres.exe": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.bat > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.exe > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.bat > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.dll > TAO_FILE:*.sln": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.dll > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.exe > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.hta > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.chm > TAO_FILE:*.ps1": 1,
+   "TAO_FILE:*.vbs > TAO_FILE:*.ps1 > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.ps1 > KET_NOI_MANG:443 > TAO_FILE:*.dll": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.xlsm > TAO_FILE:*.exe": 1,
+   "TAO_FILE:*.vcxproj > TAO_FILE:*.dll > TAO_FILE:*.ps1": 1,
+   "SUA_REGISTRY:Run > TAO_TIEN_TRINH:reg.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > SUA_REGISTRY:Run > TAO_TIEN_TRINH:reg.exe": 1,
+   "TAO_TIEN_TRINH:cmd.exe > SUA_REGISTRY:Run": 1,
+   "TAO_FILE:*.ps1 > SUA_REGISTRY:Run": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > SUA_REGISTRY:Run": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.vbs > TAO_TIEN_TRINH:cscript.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_FILE:*.vbs": 1,
+   "TAO_TIEN_TRINH:cscript.exe": 2,
+   "TAO_FILE:*.vbs > TAO_TIEN_TRINH:cscript.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.jse > TAO_TIEN_TRINH:cscript.exe": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.jse": 1,
+   "TAO_FILE:*.jse > TAO_TIEN_TRINH:cscript.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_FILE:*.jse": 1,
+   "TAO_FILE:*.bat > TAO_TIEN_TRINH:cmd.exe": 1,
+   "TAO_TIEN_TRINH:powershell.exe > TAO_FILE:*.ps1 > TAO_FILE:*.bat": 1,
+   "TAO_FILE:*.ps1 > TAO_FILE:*.bat > TAO_TIEN_TRINH:cmd.exe": 1
+  }
+ },
+ "tiep_theo": {
+  "T1003.001": {
+   "TAO_TIEN_TRINH:powershell.exe": {
+    "TAO_FILE:*.ps1": 5
+   },
+   "TAO_FILE:*.ps1": {
+    "KET_NOI_MANG:443": 2,
+    "TAO_TIEN_TRINH:cmd.exe": 1,
+    "TAO_TIEN_TRINH:rundll32.exe": 1
+   },
+   "KET_NOI_MANG:443": {
+    "TAO_FILE:*.exe": 1
+   },
+   "TAO_TIEN_TRINH:cmd.exe": {
+    "TAO_TIEN_TRINH:wce.exe": 1,
+    "TAO_TIEN_TRINH:procdump.exe": 1,
+    "TAO_TIEN_TRINH:outflank-dumpert.exe": 1
+   },
+   "TAO_TIEN_TRINH:wce.exe": {
+    "TAO_FILE:*.exe": 1
+   },
+   "TAO_FILE:*.exe": {
+    "TAO_TIEN_TRINH:644c305e-30f4-470b-b616-d924c3206d1d.exe": 1,
+    "TAO_TIEN_TRINH:procdump64.exe": 1,
+    "TAO_TIEN_TRINH:notprocdump64.exe": 1
+   },
+   "TAO_TIEN_TRINH:644c305e-30f4-470b-b616-d924c3206d1d.exe": {
+    "TAO_FILE:*.dll": 1
+   },
+   "TAO_FILE:*.dll": {
+    "MO_BO_NHO:lsass.exe:DAY_DU": 1
+   },
+   "TAO_TIEN_TRINH:procdump.exe": {
+    "SUA_REGISTRY:khac": 1
+   },
+   "SUA_REGISTRY:khac": {
+    "MO_BO_NHO:lsass.exe:DAY_DU": 4
+   },
+   "MO_BO_NHO:lsass.exe:DAY_DU": {
+    "TAO_FILE:*.exe": 2,
+    "TAO_FILE:*.dmp": 4
+   },
+   "TAO_TIEN_TRINH:procdump64.exe": {
+    "SUA_REGISTRY:khac": 1
+   },
+   "TAO_FILE:*.dmp": {
+    "MO_BO_NHO:lsass.exe:DAY_DU": 5
+   },
+   "TAO_TIEN_TRINH:rundll32.exe": {
+    "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1
+   },
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO": {
+    "TAO_FILE:*.dmp": 1,
+    "MO_BO_NHO:lsass.exe:DAY_DU": 2
+   },
+   "TAO_TIEN_TRINH:outflank-dumpert.exe": {
+    "MO_BO_NHO:lsass.exe:DAY_DU": 1
+   },
+   "TAO_TIEN_TRINH:notprocdump.exe": {
+    "SUA_REGISTRY:khac": 1
+   },
+   "TAO_TIEN_TRINH:notprocdump64.exe": {
+    "SUA_REGISTRY:khac": 1
+   },
+   "TAO_TIEN_TRINH:taskmgr.exe": {
+    "MO_BO_NHO:lsass.exe:TRUY_VAN": 1
+   },
+   "MO_BO_NHO:lsass.exe:TRUY_VAN": {
+    "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1
+   }
+  },
+  "_chung": {
+   "TAO_TIEN_TRINH:powershell.exe": {
+    "TAO_FILE:*.ps1": 87,
+    "KET_NOI_MANG:443": 1,
+    "KET_NOI_MANG:8444": 1,
+    "TAO_TIEN_TRINH:conhost.exe": 1,
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "SUA_REGISTRY:Run": 1
+   },
+   "TAO_FILE:*.ps1": {
+    "KET_NOI_MANG:443": 16,
+    "TAO_TIEN_TRINH:cmd.exe": 3,
+    "TAO_TIEN_TRINH:rundll32.exe": 1,
+    "TAO_TIEN_TRINH:notepad.exe": 4,
+    "TAO_FILE:*.dll": 26,
+    "KET_NOI_MANG:80": 4,
+    "TAO_FILE:*.exe": 7,
+    "TAO_FILE:*.bat": 13,
+    "TAO_FILE:*.vbs": 11,
+    "TAO_FILE:*.csproj": 3,
+    "TAO_FILE:*.chm": 3,
+    "TAO_FILE:*.hta": 4,
+    "TAO_FILE:*.xlsm": 3,
+    "TAO_TIEN_TRINH:hostname.exe": 8,
+    "TAO_TIEN_TRINH:powershell.exe": 12,
+    "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 2,
+    "TAO_FILE:*.txt": 18,
+    "TAO_TIEN_TRINH:reg.exe": 1,
+    "TAO_TIEN_TRINH:certutil.exe": 1,
+    "SUA_REGISTRY:Run": 1,
+    "TAO_FILE:*.jse": 1
+   },
+   "KET_NOI_MANG:443": {
+    "TAO_FILE:*.exe": 1,
+    "TAO_TIEN_TRINH:cmd.exe": 5,
+    "TAO_FILE:*.ps1": 9,
+    "TAO_FILE:*.dll": 6,
+    "TAO_TIEN_TRINH:powershell.exe": 5,
+    "KET_NOI_MANG:80": 3,
+    "TAO_FILE:*.txt": 1
+   },
+   "TAO_TIEN_TRINH:cmd.exe": {
+    "TAO_TIEN_TRINH:wce.exe": 1,
+    "TAO_TIEN_TRINH:procdump.exe": 1,
+    "TAO_TIEN_TRINH:outflank-dumpert.exe": 1,
+    "TAO_FILE:*.rdp": 1,
+    "TAO_TIEN_TRINH:schtasks.exe": 3,
+    "TAO_TIEN_TRINH:powershell.exe": 16,
+    "TAO_TIEN_TRINH:mshta.exe": 4,
+    "TAO_TIEN_TRINH:reg.exe": 4,
+    "TAO_TIEN_TRINH:esentutl.exe": 1,
+    "TAO_TIEN_TRINH:dsquery.exe": 2,
+    "TAO_TIEN_TRINH:nltest.exe": 2,
+    "TAO_TIEN_TRINH:adfind.exe": 4,
+    "TAO_TIEN_TRINH:where.exe": 2,
+    "TAO_TIEN_TRINH:soaphound.exe": 3,
+    "TAO_TIEN_TRINH:wevtutil.exe": 1,
+    "TAO_TIEN_TRINH:certutil.exe": 1,
+    "TAO_TIEN_TRINH:bitsadmin.exe": 1,
+    "TAO_TIEN_TRINH:mpcmdrun.exe": 1,
+    "TAO_TIEN_TRINH:curl.exe": 2,
+    "TAO_TIEN_TRINH:net.exe": 2,
+    "SUA_REGISTRY:Run": 1
+   },
+   "TAO_TIEN_TRINH:wce.exe": {
+    "TAO_FILE:*.exe": 1
+   },
+   "TAO_FILE:*.exe": {
+    "TAO_TIEN_TRINH:644c305e-30f4-470b-b616-d924c3206d1d.exe": 1,
+    "TAO_TIEN_TRINH:procdump64.exe": 1,
+    "TAO_TIEN_TRINH:notprocdump64.exe": 1,
+    "TAO_FILE:*.ps1": 11,
+    "TAO_FILE:*.bat": 11,
+    "TAO_FILE:*.dll": 16,
+    "TAO_FILE:*.xlsm": 1,
+    "TAO_FILE:*.txt": 1
+   },
+   "TAO_TIEN_TRINH:644c305e-30f4-470b-b616-d924c3206d1d.exe": {
+    "TAO_FILE:*.dll": 1
+   },
+   "TAO_FILE:*.dll": {
+    "MO_BO_NHO:lsass.exe:DAY_DU": 1,
+    "TAO_FILE:*.cmdline": 22,
+    "TAO_TIEN_TRINH:cvtres.exe": 6,
+    "TAO_FILE:*.ps1": 25,
+    "TAO_FILE:*.sln": 8,
+    "TAO_FILE:*.exe": 12,
+    "TAO_TIEN_TRINH:powershell.exe": 1,
+    "TAO_TIEN_TRINH:cmd.exe": 3,
+    "TAO_FILE:*.txt": 4,
+    "TAO_FILE:*.vbs": 1,
+    "KET_NOI_MANG:443": 2,
+    "TAO_TIEN_TRINH:curl.exe": 3
+   },
+   "TAO_TIEN_TRINH:procdump.exe": {
+    "SUA_REGISTRY:khac": 1
+   },
+   "SUA_REGISTRY:khac": {
+    "MO_BO_NHO:lsass.exe:DAY_DU": 4
+   },
+   "MO_BO_NHO:lsass.exe:DAY_DU": {
+    "TAO_FILE:*.exe": 2,
+    "TAO_FILE:*.dmp": 4
+   },
+   "TAO_TIEN_TRINH:procdump64.exe": {
+    "SUA_REGISTRY:khac": 1
+   },
+   "TAO_FILE:*.dmp": {
+    "MO_BO_NHO:lsass.exe:DAY_DU": 5
+   },
+   "TAO_TIEN_TRINH:rundll32.exe": {
+    "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1
+   },
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO": {
+    "TAO_FILE:*.dmp": 1,
+    "MO_BO_NHO:lsass.exe:DAY_DU": 2,
+    "TAO_FILE:*.dll": 1
+   },
+   "TAO_TIEN_TRINH:outflank-dumpert.exe": {
+    "MO_BO_NHO:lsass.exe:DAY_DU": 1
+   },
+   "TAO_TIEN_TRINH:notprocdump.exe": {
+    "SUA_REGISTRY:khac": 1
+   },
+   "TAO_TIEN_TRINH:notprocdump64.exe": {
+    "SUA_REGISTRY:khac": 1
+   },
+   "TAO_TIEN_TRINH:taskmgr.exe": {
+    "MO_BO_NHO:lsass.exe:TRUY_VAN": 1
+   },
+   "MO_BO_NHO:lsass.exe:TRUY_VAN": {
+    "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1
+   },
+   "KET_NOI_MANG:389": {
+    "TAO_FILE:*(không đuôi)": 1
+   },
+   "TAO_FILE:*(không đuôi)": {
+    "KET_NOI_MANG:389": 1,
+    "KET_NOI_MANG:49668": 1
+   },
+   "TAO_FILE:*.dat": {
+    "TAO_FILE:*.tst": 2
+   },
+   "TAO_FILE:*.tst": {
+    "TAO_FILE:*(không đuôi)": 1,
+    "SUA_REGISTRY:Services": 1
+   },
+   "TAO_TIEN_TRINH:schtasks.exe": {
+    "KET_NOI_MANG:135": 1
+   },
+   "KET_NOI_MANG:135": {
+    "KET_NOI_MANG:49668": 1
+   },
+   "KET_NOI_MANG:49680": {
+    "TAO_FILE:*(không đuôi)": 1
+   },
+   "KET_NOI_MANG:49668": {
+    "TAO_FILE:*(không đuôi)": 1
+   },
+   "SUA_REGISTRY:Services": {
+    "TAO_FILE:*.dat": 1,
+    "TAO_FILE:*(không đuôi)": 1,
+    "TAO_FILE:*.dll": 4,
+    "TAO_TIEN_TRINH:curl.exe": 1
+   },
+   "KET_NOI_MANG:80": {
+    "TAO_TIEN_TRINH:powershell.exe": 3,
+    "TAO_FILE:*.dll": 2,
+    "TAO_TIEN_TRINH:cvtres.exe": 2,
+    "KET_NOI_MANG:443": 2,
+    "TAO_TIEN_TRINH:cmd.exe": 1,
+    "TAO_FILE:*.ps1": 1
+   },
+   "TAO_FILE:*.cmdline": {
+    "TAO_TIEN_TRINH:csc.exe": 22
+   },
+   "TAO_TIEN_TRINH:csc.exe": {
+    "TAO_TIEN_TRINH:cvtres.exe": 14,
+    "KET_NOI_MANG:80": 2,
+    "TAO_FILE:*.dll": 5,
+    "KET_NOI_MANG:443": 1
+   },
+   "TAO_TIEN_TRINH:cvtres.exe": {
+    "TAO_FILE:*.dll": 18,
+    "KET_NOI_MANG:443": 1,
+    "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1,
+    "TAO_TIEN_TRINH:cmd.exe": 1
+   },
+   "TAO_FILE:*.bat": {
+    "TAO_FILE:*.ps1": 9,
+    "TAO_FILE:*.exe": 12,
+    "TAO_FILE:*.jse": 4,
+    "TAO_FILE:*.txt": 4,
+    "TAO_FILE:*.vbs": 1,
+    "TAO_TIEN_TRINH:cmd.exe": 1
+   },
+   "TAO_FILE:*.vbs": {
+    "TAO_FILE:*.hta": 4,
+    "TAO_FILE:*.bat": 5,
+    "TAO_FILE:*.ps1": 5,
+    "TAO_FILE:*.txt": 1,
+    "TAO_FILE:*.exe": 1,
+    "TAO_FILE:*.dll": 1,
+    "TAO_TIEN_TRINH:cscript.exe": 1
+   },
+   "TAO_FILE:*.hta": {
+    "TAO_FILE:*.ps1": 7,
+    "TAO_FILE:*.dll": 1
+   },
+   "TAO_FILE:*.sln": {
+    "TAO_FILE:*.vcxproj": 8
+   },
+   "TAO_FILE:*.vcxproj": {
+    "TAO_FILE:*.dll": 8
+   },
+   "TAO_FILE:*.csproj": {
+    "TAO_FILE:*.dll": 3,
+    "TAO_FILE:*.txt": 1
+   },
+   "TAO_FILE:*.chm": {
+    "TAO_FILE:*.ps1": 4
+   },
+   "TAO_FILE:*.jse": {
+    "TAO_FILE:*.vbs": 4,
+    "TAO_TIEN_TRINH:cscript.exe": 1
+   },
+   "TAO_FILE:*.xlsm": {
+    "TAO_FILE:*.exe": 5
+   },
+   "TAO_TIEN_TRINH:hostname.exe": {
+    "TAO_TIEN_TRINH:whoami.exe": 13,
+    "TAO_TIEN_TRINH:calc.exe": 1
+   },
+   "TAO_TIEN_TRINH:whoami.exe": {
+    "TAO_FILE:*.dll": 7,
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "TAO_FILE:*.txt": 3,
+    "TAO_TIEN_TRINH:cmd.exe": 2
+   },
+   "TAO_TIEN_TRINH:reg.exe": {
+    "TAO_TIEN_TRINH:cmd.exe": 1,
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "SUA_REGISTRY:Run": 3
+   },
+   "TAO_TIEN_TRINH:esentutl.exe": {
+    "TAO_TIEN_TRINH:powershell.exe": 1
+   },
+   "TAO_FILE:*.txt": {
+    "TAO_FILE:*.ps1": 5,
+    "TAO_FILE:*.exe": 3,
+    "TAO_FILE:*.dll": 2,
+    "TAO_FILE:*.vbs": 1,
+    "TAO_FILE:*.bat": 2,
+    "TAO_FILE:*.csproj": 1,
+    "TAO_FILE:*.chm": 1,
+    "TAO_FILE:*.xlsm": 1,
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "TAO_TIEN_TRINH:cmd.exe": 13,
+    "TAO_TIEN_TRINH:powershell.exe": 9
+   },
+   "TAO_TIEN_TRINH:notepad.exe": {
+    "TAO_FILE:*.txt": 1
+   },
+   "TAO_TIEN_TRINH:mshta.exe": {
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "KET_NOI_MANG:443": 1
+   },
+   "TAO_TIEN_TRINH:dsquery.exe": {
+    "TAO_FILE:*.txt": 2
+   },
+   "TAO_TIEN_TRINH:nltest.exe": {
+    "TAO_FILE:*.txt": 2
+   },
+   "TAO_TIEN_TRINH:adfind.exe": {
+    "TAO_FILE:*.txt": 2,
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "KET_NOI_MANG:443": 1
+   },
+   "TAO_TIEN_TRINH:where.exe": {
+    "TAO_TIEN_TRINH:powershell.exe": 2
+   },
+   "KET_NOI_MANG:8444": {
+    "TAO_FILE:*.ps1": 1
+   },
+   "TAO_TIEN_TRINH:soaphound.exe": {
+    "TAO_TIEN_TRINH:werfault.exe": 2
+   },
+   "TAO_TIEN_TRINH:werfault.exe": {
+    "SUA_REGISTRY:khac": 1
+   },
+   "TAO_TIEN_TRINH:certutil.exe": {
+    "TAO_FILE:*.txt": 2
+   },
+   "TAO_TIEN_TRINH:curl.exe": {
+    "SUA_REGISTRY:Services": 7
+   },
+   "TAO_TIEN_TRINH:net.exe": {
+    "TAO_TIEN_TRINH:net1.exe": 3
+   },
+   "TAO_TIEN_TRINH:net1.exe": {
+    "TAO_TIEN_TRINH:net.exe": 1
+   },
+   "SUA_REGISTRY:Run": {
+    "TAO_TIEN_TRINH:cmd.exe": 1,
+    "TAO_TIEN_TRINH:reg.exe": 1
+   }
+  },
+  "T1021.001": {
+   "TAO_TIEN_TRINH:cmd.exe": {
+    "TAO_FILE:*.rdp": 1
+   }
+  },
+  "T1053.005": {
+   "KET_NOI_MANG:389": {
+    "TAO_FILE:*(không đuôi)": 1
+   },
+   "TAO_FILE:*(không đuôi)": {
+    "KET_NOI_MANG:389": 1,
+    "KET_NOI_MANG:49668": 1
+   },
+   "TAO_TIEN_TRINH:cmd.exe": {
+    "TAO_TIEN_TRINH:schtasks.exe": 3
+   },
+   "TAO_FILE:*.dat": {
+    "TAO_FILE:*.tst": 2
+   },
+   "TAO_FILE:*.tst": {
+    "TAO_FILE:*(không đuôi)": 1,
+    "SUA_REGISTRY:Services": 1
+   },
+   "TAO_TIEN_TRINH:schtasks.exe": {
+    "KET_NOI_MANG:135": 1
+   },
+   "KET_NOI_MANG:135": {
+    "KET_NOI_MANG:49668": 1
+   },
+   "TAO_TIEN_TRINH:powershell.exe": {
+    "TAO_FILE:*.ps1": 1
+   },
+   "KET_NOI_MANG:49680": {
+    "TAO_FILE:*(không đuôi)": 1
+   },
+   "KET_NOI_MANG:49668": {
+    "TAO_FILE:*(không đuôi)": 1
+   },
+   "SUA_REGISTRY:Services": {
+    "TAO_FILE:*.dat": 1,
+    "TAO_FILE:*(không đuôi)": 1
+   }
+  },
+  "T1059.001": {
+   "TAO_TIEN_TRINH:cmd.exe": {
+    "TAO_TIEN_TRINH:powershell.exe": 15,
+    "TAO_TIEN_TRINH:mshta.exe": 4,
+    "TAO_TIEN_TRINH:reg.exe": 1,
+    "TAO_TIEN_TRINH:esentutl.exe": 1,
+    "TAO_TIEN_TRINH:dsquery.exe": 2,
+    "TAO_TIEN_TRINH:nltest.exe": 2,
+    "TAO_TIEN_TRINH:adfind.exe": 4,
+    "TAO_TIEN_TRINH:where.exe": 2,
+    "TAO_TIEN_TRINH:soaphound.exe": 3
+   },
+   "TAO_TIEN_TRINH:powershell.exe": {
+    "TAO_FILE:*.ps1": 71,
+    "KET_NOI_MANG:443": 1,
+    "KET_NOI_MANG:8444": 1,
+    "TAO_TIEN_TRINH:conhost.exe": 1
+   },
+   "KET_NOI_MANG:80": {
+    "TAO_TIEN_TRINH:powershell.exe": 3,
+    "TAO_FILE:*.dll": 2,
+    "TAO_TIEN_TRINH:cvtres.exe": 2,
+    "KET_NOI_MANG:443": 2,
+    "TAO_TIEN_TRINH:cmd.exe": 1,
+    "TAO_FILE:*.ps1": 1
+   },
+   "KET_NOI_MANG:443": {
+    "TAO_TIEN_TRINH:cmd.exe": 5,
+    "TAO_FILE:*.ps1": 7,
+    "TAO_FILE:*.dll": 5,
+    "TAO_TIEN_TRINH:powershell.exe": 5,
+    "KET_NOI_MANG:80": 3,
+    "TAO_FILE:*.txt": 1
+   },
+   "TAO_FILE:*.ps1": {
+    "TAO_TIEN_TRINH:notepad.exe": 4,
+    "TAO_FILE:*.dll": 20,
+    "KET_NOI_MANG:80": 4,
+    "KET_NOI_MANG:443": 12,
+    "TAO_FILE:*.exe": 5,
+    "TAO_FILE:*.bat": 8,
+    "TAO_FILE:*.vbs": 7,
+    "TAO_FILE:*.csproj": 2,
+    "TAO_FILE:*.chm": 2,
+    "TAO_FILE:*.hta": 3,
+    "TAO_FILE:*.xlsm": 2,
+    "TAO_TIEN_TRINH:hostname.exe": 8,
+    "TAO_TIEN_TRINH:powershell.exe": 12,
+    "TAO_TIEN_TRINH:cmd.exe": 2,
+    "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 2,
+    "TAO_FILE:*.txt": 17,
+    "TAO_TIEN_TRINH:reg.exe": 1
+   },
+   "TAO_FILE:*.dll": {
+    "TAO_FILE:*.cmdline": 21,
+    "TAO_TIEN_TRINH:cvtres.exe": 6,
+    "TAO_FILE:*.ps1": 17,
+    "TAO_FILE:*.sln": 6,
+    "TAO_FILE:*.exe": 9,
+    "TAO_TIEN_TRINH:powershell.exe": 1,
+    "TAO_TIEN_TRINH:cmd.exe": 3,
+    "TAO_FILE:*.txt": 4,
+    "TAO_FILE:*.vbs": 1,
+    "KET_NOI_MANG:443": 1
+   },
+   "TAO_FILE:*.cmdline": {
+    "TAO_TIEN_TRINH:csc.exe": 21
+   },
+   "TAO_TIEN_TRINH:csc.exe": {
+    "TAO_TIEN_TRINH:cvtres.exe": 13,
+    "KET_NOI_MANG:80": 2,
+    "TAO_FILE:*.dll": 5,
+    "KET_NOI_MANG:443": 1
+   },
+   "TAO_TIEN_TRINH:cvtres.exe": {
+    "TAO_FILE:*.dll": 17,
+    "KET_NOI_MANG:443": 1,
+    "MO_BO_NHO:lsass.exe:DOC_BO_NHO": 1,
+    "TAO_TIEN_TRINH:cmd.exe": 1
+   },
+   "TAO_FILE:*.exe": {
+    "TAO_FILE:*.ps1": 8,
+    "TAO_FILE:*.bat": 8,
+    "TAO_FILE:*.dll": 12,
+    "TAO_FILE:*.xlsm": 1,
+    "TAO_FILE:*.txt": 1
+   },
+   "TAO_FILE:*.bat": {
+    "TAO_FILE:*.ps1": 6,
+    "TAO_FILE:*.exe": 8,
+    "TAO_FILE:*.jse": 3,
+    "TAO_FILE:*.txt": 4,
+    "TAO_FILE:*.vbs": 1
+   },
+   "TAO_FILE:*.vbs": {
+    "TAO_FILE:*.hta": 3,
+    "TAO_FILE:*.bat": 4,
+    "TAO_FILE:*.ps1": 4,
+    "TAO_FILE:*.txt": 1,
+    "TAO_FILE:*.exe": 1
+   },
+   "TAO_FILE:*.hta": {
+    "TAO_FILE:*.ps1": 5,
+    "TAO_FILE:*.dll": 1
+   },
+   "TAO_FILE:*.sln": {
+    "TAO_FILE:*.vcxproj": 6
+   },
+   "TAO_FILE:*.vcxproj": {
+    "TAO_FILE:*.dll": 6
+   },
+   "TAO_FILE:*.csproj": {
+    "TAO_FILE:*.dll": 2,
+    "TAO_FILE:*.txt": 1
+   },
+   "TAO_FILE:*.chm": {
+    "TAO_FILE:*.ps1": 3
+   },
+   "TAO_FILE:*.jse": {
+    "TAO_FILE:*.vbs": 3
+   },
+   "TAO_FILE:*.xlsm": {
+    "TAO_FILE:*.exe": 4
+   },
+   "TAO_TIEN_TRINH:hostname.exe": {
+    "TAO_TIEN_TRINH:whoami.exe": 13
+   },
+   "TAO_TIEN_TRINH:whoami.exe": {
+    "TAO_FILE:*.dll": 7,
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "TAO_FILE:*.txt": 3,
+    "TAO_TIEN_TRINH:cmd.exe": 2
+   },
+   "TAO_TIEN_TRINH:reg.exe": {
+    "TAO_TIEN_TRINH:cmd.exe": 1,
+    "TAO_TIEN_TRINH:hostname.exe": 1
+   },
+   "TAO_TIEN_TRINH:esentutl.exe": {
+    "TAO_TIEN_TRINH:powershell.exe": 1
+   },
+   "MO_BO_NHO:lsass.exe:DOC_BO_NHO": {
+    "TAO_FILE:*.dll": 1
+   },
+   "TAO_FILE:*.txt": {
+    "TAO_FILE:*.ps1": 5,
+    "TAO_FILE:*.exe": 3,
+    "TAO_FILE:*.dll": 2,
+    "TAO_FILE:*.vbs": 1,
+    "TAO_FILE:*.bat": 2,
+    "TAO_FILE:*.csproj": 1,
+    "TAO_FILE:*.chm": 1,
+    "TAO_FILE:*.xlsm": 1,
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "TAO_TIEN_TRINH:cmd.exe": 13,
+    "TAO_TIEN_TRINH:powershell.exe": 9
+   },
+   "TAO_TIEN_TRINH:notepad.exe": {
+    "TAO_FILE:*.txt": 1
+   },
+   "TAO_TIEN_TRINH:mshta.exe": {
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "KET_NOI_MANG:443": 1
+   },
+   "TAO_TIEN_TRINH:dsquery.exe": {
+    "TAO_FILE:*.txt": 2
+   },
+   "TAO_TIEN_TRINH:nltest.exe": {
+    "TAO_FILE:*.txt": 2
+   },
+   "TAO_TIEN_TRINH:adfind.exe": {
+    "TAO_FILE:*.txt": 2,
+    "TAO_TIEN_TRINH:hostname.exe": 1,
+    "KET_NOI_MANG:443": 1
+   },
+   "TAO_TIEN_TRINH:where.exe": {
+    "TAO_TIEN_TRINH:powershell.exe": 2
+   },
+   "KET_NOI_MANG:8444": {
+    "TAO_FILE:*.ps1": 1
+   },
+   "TAO_TIEN_TRINH:soaphound.exe": {
+    "TAO_TIEN_TRINH:werfault.exe": 2
+   },
+   "TAO_TIEN_TRINH:werfault.exe": {
+    "SUA_REGISTRY:khac": 1
+   }
+  },
+  "T1070.001": {
+   "TAO_TIEN_TRINH:cmd.exe": {
+    "TAO_TIEN_TRINH:wevtutil.exe": 1
+   },
+   "TAO_TIEN_TRINH:powershell.exe": {
+    "TAO_FILE:*.ps1": 1
+   }
+  },
+  "T1105": {
+   "TAO_TIEN_TRINH:cmd.exe": {
+    "TAO_TIEN_TRINH:certutil.exe": 1,
+    "TAO_TIEN_TRINH:bitsadmin.exe": 1,
+    "TAO_TIEN_TRINH:mpcmdrun.exe": 1,
+    "TAO_TIEN_TRINH:curl.exe": 2,
+    "TAO_TIEN_TRINH:powershell.exe": 1
+   },
+   "TAO_TIEN_TRINH:certutil.exe": {
+    "TAO_FILE:*.txt": 2
+   },
+   "TAO_TIEN_TRINH:powershell.exe": {
+    "TAO_FILE:*.ps1": 2,
+    "TAO_TIEN_TRINH:hostname.exe": 1
+   },
+   "TAO_FILE:*.ps1": {
+    "TAO_TIEN_TRINH:certutil.exe": 1,
+    "TAO_FILE:*.txt": 1
+   },
+   "TAO_TIEN_TRINH:curl.exe": {
+    "SUA_REGISTRY:Services": 7
+   },
+   "SUA_REGISTRY:Services": {
+    "TAO_FILE:*.dll": 4,
+    "TAO_TIEN_TRINH:curl.exe": 1
+   },
+   "TAO_FILE:*.dll": {
+    "TAO_TIEN_TRINH:curl.exe": 3
+   },
+   "TAO_TIEN_TRINH:hostname.exe": {
+    "TAO_TIEN_TRINH:calc.exe": 1
+   }
+  },
+  "T1136.001": {
+   "TAO_TIEN_TRINH:cmd.exe": {
+    "TAO_TIEN_TRINH:net.exe": 2
+   },
+   "TAO_TIEN_TRINH:net.exe": {
+    "TAO_TIEN_TRINH:net1.exe": 3
+   },
+   "TAO_TIEN_TRINH:powershell.exe": {
+    "TAO_FILE:*.ps1": 1
+   },
+   "TAO_TIEN_TRINH:net1.exe": {
+    "TAO_TIEN_TRINH:net.exe": 1
+   }
+  },
+  "T1547.001": {
+   "TAO_TIEN_TRINH:cmd.exe": {
+    "TAO_TIEN_TRINH:reg.exe": 3,
+    "SUA_REGISTRY:Run": 1
+   },
+   "TAO_TIEN_TRINH:reg.exe": {
+    "SUA_REGISTRY:Run": 3
+   },
+   "TAO_TIEN_TRINH:powershell.exe": {
+    "SUA_REGISTRY:Run": 1,
+    "TAO_FILE:*.ps1": 6
+   },
+   "SUA_REGISTRY:Run": {
+    "TAO_TIEN_TRINH:cmd.exe": 1,
+    "TAO_TIEN_TRINH:reg.exe": 1
+   },
+   "TAO_FILE:*.ps1": {
+    "KET_NOI_MANG:443": 2,
+    "TAO_FILE:*.dll": 6,
+    "TAO_FILE:*.exe": 2,
+    "TAO_FILE:*.bat": 5,
+    "TAO_FILE:*.vbs": 4,
+    "TAO_FILE:*.csproj": 1,
+    "TAO_FILE:*.chm": 1,
+    "TAO_FILE:*.hta": 1,
+    "TAO_FILE:*.xlsm": 1,
+    "SUA_REGISTRY:Run": 1,
+    "TAO_FILE:*.jse": 1
+   },
+   "KET_NOI_MANG:443": {
+    "TAO_FILE:*.ps1": 2,
+    "TAO_FILE:*.dll": 1
+   },
+   "TAO_FILE:*.dll": {
+    "TAO_FILE:*.cmdline": 1,
+    "KET_NOI_MANG:443": 1,
+    "TAO_FILE:*.ps1": 8,
+    "TAO_FILE:*.sln": 2,
+    "TAO_FILE:*.exe": 3
+   },
+   "TAO_FILE:*.cmdline": {
+    "TAO_TIEN_TRINH:csc.exe": 1
+   },
+   "TAO_TIEN_TRINH:csc.exe": {
+    "TAO_TIEN_TRINH:cvtres.exe": 1
+   },
+   "TAO_TIEN_TRINH:cvtres.exe": {
+    "TAO_FILE:*.dll": 1
+   },
+   "TAO_FILE:*.exe": {
+    "TAO_FILE:*.ps1": 3,
+    "TAO_FILE:*.bat": 3,
+    "TAO_FILE:*.dll": 4
+   },
+   "TAO_FILE:*.bat": {
+    "TAO_FILE:*.ps1": 3,
+    "TAO_FILE:*.exe": 4,
+    "TAO_FILE:*.jse": 1,
+    "TAO_TIEN_TRINH:cmd.exe": 1
+   },
+   "TAO_FILE:*.vbs": {
+    "TAO_FILE:*.hta": 1,
+    "TAO_FILE:*.bat": 1,
+    "TAO_FILE:*.ps1": 1,
+    "TAO_FILE:*.dll": 1,
+    "TAO_TIEN_TRINH:cscript.exe": 1
+   },
+   "TAO_FILE:*.hta": {
+    "TAO_FILE:*.ps1": 2
+   },
+   "TAO_FILE:*.sln": {
+    "TAO_FILE:*.vcxproj": 2
+   },
+   "TAO_FILE:*.vcxproj": {
+    "TAO_FILE:*.dll": 2
+   },
+   "TAO_FILE:*.csproj": {
+    "TAO_FILE:*.dll": 1
+   },
+   "TAO_FILE:*.chm": {
+    "TAO_FILE:*.ps1": 1
+   },
+   "TAO_FILE:*.jse": {
+    "TAO_FILE:*.vbs": 1,
+    "TAO_TIEN_TRINH:cscript.exe": 1
+   },
+   "TAO_FILE:*.xlsm": {
+    "TAO_FILE:*.exe": 1
+   }
+  }
+ }
+}

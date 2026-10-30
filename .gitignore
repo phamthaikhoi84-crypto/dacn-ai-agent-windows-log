@@ -19,3 +19,7 @@ venv/
 .vscode/
 .idea/
 Thumbs.db
+
+output/
+ket_qua_goc/
+ket_qua_moi/
