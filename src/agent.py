@@ -52,18 +52,20 @@ def cua_so_khop_nhat(seq, ma, mh):
 
 
 # ---------------------------------------------------------------- mô hình ngôn ngữ (bước 4)
-def goi_mo_hinh_ngon_ngu(dong_log, ung_vien, dau_vet_ung_vien):
+def goi_mo_hinh_ngon_ngu(dong_log, ung_vien, dau_vet_ung_vien, ban_tam=False):
     """Gọi slm.py của Dũng: chon_ky_thuat(dong_log, ung_vien) -> {"ma_ky_thuat", "bang_chung", "ly_do"}.
-    Nếu chưa có slm.py hoặc gọi lỗi (Ollama chưa chạy...) thì dùng BẢN TẠM và ghi rõ là bản tạm."""
-    try:
-        import slm
-        if hasattr(slm, "chon_ky_thuat"):
-            return slm.chon_ky_thuat(dong_log, ung_vien), "slm.py"
-        loi = "slm.py chưa có hàm chon_ky_thuat"
-    except ImportError:
-        loi = "chưa có slm.py"
-    except Exception as ex:          # lỗi khi gọi Ollama: vẫn chạy tiếp để demo không dừng giữa chừng
-        loi = f"slm.py lỗi: {ex}"
+    Nếu chạy với --ban-tam, chưa có slm.py hoặc gọi lỗi thì dùng BẢN TẠM và ghi rõ là bản tạm."""
+    loi = "chạy với --ban-tam"
+    if not ban_tam:
+        try:
+            import slm
+            if hasattr(slm, "chon_ky_thuat"):
+                return slm.chon_ky_thuat(dong_log, ung_vien), "slm.py"
+            loi = "slm.py chưa có hàm chon_ky_thuat"
+        except ImportError:
+            loi = "chưa có slm.py"
+        except Exception as ex:          # lỗi khi gọi Ollama: vẫn chạy tiếp để demo không dừng giữa chừng
+            loi = f"slm.py lỗi: {ex}"
     co_du = [m for m in ung_vien if dau_vet_ung_vien[m]["du"]]
     chon = co_du[0] if co_du else ung_vien[0]
     bang_chung = [d for _, ds in dau_vet_ung_vien[chon]["bang_chung"] for d in ds]
@@ -133,7 +135,7 @@ def xu_ly_phien(so, may, logon, ds, con, mh, a):
     dong_log = [f"{e['thoi_gian']:%H:%M:%S} {mo_ta(e)}" for e in ds_loc]
     if len(dong_log) > SO_DONG_GUI_SLM:
         dong_log = dong_log[:SO_DONG_GUI_SLM]
-    kq, nguon = goi_mo_hinh_ngon_ngu(dong_log, ung_vien, dv)
+    kq, nguon = goi_mo_hinh_ngon_ngu(dong_log, ung_vien, dv, a.ban_tam)
     print(f"[4] Hỏi mô hình ngôn ngữ ({nguon}), gửi {len(dong_log)} dòng log + ứng viên {ung_vien}")
     print("    trả về: " + json.dumps(kq, ensure_ascii=False)[:600])
 
@@ -165,6 +167,8 @@ def main():
     ap.add_argument("--db", default="output/agent.duckdb")
     ap.add_argument("--phien", type=int, nargs="*", help="chỉ xét các phiên có số thứ tự này")
     ap.add_argument("--chi-tiet", action="store_true", help="in chi tiết cả phiên điểm thấp")
+    ap.add_argument("--ban-tam", action="store_true",
+                help="bỏ qua slm.py, dùng bản tạm ở bước 4 (để đo báo động giả, hoặc dự phòng khi Ollama lỗi)")
     a = ap.parse_args()
 
     mh = nap_mo_hinh(a.mo_hinh)
