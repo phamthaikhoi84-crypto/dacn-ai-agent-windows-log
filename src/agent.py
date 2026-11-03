@@ -110,6 +110,10 @@ def xu_ly_phien(so, may, logon, ds, con, mh, a):
 
     # ---- Bước 3
     print(f"[3] Điểm {cao_nhat:.3f} >= ngưỡng {a.nguong}: tìm dấu vết bắt buộc trong DuckDB")
+    bo = [m for m in ung_vien if diem[m] < a.nguong]
+    ung_vien = [m for m in ung_vien if diem[m] >= a.nguong]   # chỉ ứng viên đạt ngưỡng mới được xét ở bước 3-5
+    if bo:
+        print(f"    bỏ ứng viên dưới ngưỡng: {', '.join(bo)}")
     dv = {m: dau_vet.kiem_tra(con, m, ds) for m in ung_vien}
     for m in ung_vien:
         if dv[m]["du"]:
@@ -156,7 +160,7 @@ def main():
     ap = argparse.ArgumentParser(description="Agent phát hiện kỹ thuật tấn công trong log Sysmon")
     ap.add_argument("duong_dan", nargs="+", help="file log hoặc thư mục")
     ap.add_argument("--mo-hinh", default=os.path.join(GOC_REPO, "models", "mau_chuoi.json"))
-    ap.add_argument("--nguong", type=float, default=0.3, help="điểm khớp tối thiểu để đi tiếp bước 3 (mặc định 0.3)")
+    ap.add_argument("--nguong", type=float, default=0.5, help="điểm khớp tối thiểu để đi tiếp bước 3 (mặc định 0.5, chốt từ bảng báo động giả)")
     ap.add_argument("--so-ung-vien", type=int, default=3)
     ap.add_argument("--db", default="output/agent.duckdb")
     ap.add_argument("--phien", type=int, nargs="*", help="chỉ xét các phiên có số thứ tự này")

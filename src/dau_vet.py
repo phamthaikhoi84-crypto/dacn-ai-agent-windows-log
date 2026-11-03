@@ -27,20 +27,20 @@ if hasattr(sys.stdout, "reconfigure"):
 # Chuỗi SQL của DuckDB không xử lý dấu \ nên đường dẫn Windows viết nguyên dạng (dùng chuỗi r"...").
 DAU_VET = {
     "T1003.001": [
-        ("Đọc bộ nhớ lsass.exe (Event 10 có quyền PROCESS_VM_READ)",
-         r"event_id = 10 AND ends_with(lower(doi_tuong), 'lsass.exe') AND doc_bo_nho"),
+        ("Đọc bộ nhớ lsass.exe (Event 10 có quyền PROCESS_VM_READ, trừ tiến trình hệ thống lúc khởi động)",
+         r"event_id = 10 AND ends_with(lower(doi_tuong), 'lsass.exe') AND doc_bo_nho"
+         r" AND lower(coalesce(image, '')) NOT IN ('c:\windows\system32\wininit.exe', 'c:\windows\system32\csrss.exe')"),
     ],
     "T1021.001": [
-        ("Dấu hiệu RDP: kết nối cổng 3389, chạy mstsc.exe hoặc sửa khóa Terminal Server",
+        ("Dấu hiệu RDP: cổng 3389, mstsc.exe, khóa Terminal Server, file .rdp hoặc cache Terminal Server Client",
          r"(event_id = 3 AND ends_with(doi_tuong, ':3389'))"
          r" OR (event_id = 1 AND ends_with(lower(image), 'mstsc.exe'))"
-         r" OR (event_id IN (12, 13, 14) AND contains(lower(doi_tuong), '\terminal server'))"),
+         r" OR (event_id IN (12, 13, 14) AND contains(lower(doi_tuong), '\terminal server'))"
+         r" OR (event_id = 11 AND (ends_with(lower(doi_tuong), '.rdp') OR contains(lower(doi_tuong), '\terminal server client\')))"),
     ],
     "T1053.005": [
-        ("Tạo tác vụ hẹn giờ: schtasks /create, cmdlet ScheduledTask, file trong System32/Tasks hoặc khóa TaskCache",
-         r"(event_id = 1 AND regexp_matches(command_line, 'schtasks.*/create|register-scheduledtask|new-scheduledtask', 'i'))"
-         r" OR (event_id = 11 AND contains(lower(doi_tuong), '\system32\tasks\'))"
-         r" OR (event_id IN (12, 13, 14) AND contains(lower(doi_tuong), '\schedule\taskcache\'))"),
+        ("Tạo tác vụ hẹn giờ bằng lệnh: schtasks /create, Register-/New-ScheduledTask",
+         r"event_id = 1 AND regexp_matches(command_line, 'schtasks.*/create|register-scheduledtask|new-scheduledtask', 'i')"),
     ],
     "T1059.001": [
         ("PowerShell chạy với tham số ẩn / mã hóa / bỏ qua chính sách / tải và chạy mã",
@@ -55,7 +55,7 @@ DAU_VET = {
     "T1105": [
         ("Tải tệp từ xa: certutil -urlcache, bitsadmin /transfer, curl, wget, Invoke-WebRequest, DownloadFile...",
          r"event_id = 1 AND regexp_matches(command_line, 'certutil.*(urlcache|verifyctl)|bitsadmin.*/transfer"
-         r"|\bcurl(\.exe)?\s|\bwget(\.exe)?\s|invoke-webrequest|\biwr\b|downloadfile|start-bitstransfer', 'i')"),
+         r"|\bcurl(\.exe)?[\x22\s]|\bwget(\.exe)?[\x22\s]|invoke-webrequest|\biwr\b|downloadfile|start-bitstransfer', 'i')"),
     ],
     "T1136.001": [
         ("Tạo tài khoản cục bộ: net user ... /add, New-LocalUser",
