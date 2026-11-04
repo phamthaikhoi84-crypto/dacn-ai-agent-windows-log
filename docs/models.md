@@ -1,83 +1,104 @@
 # Thử nghiệm mô hình ngôn ngữ nhỏ trên Ollama
 
+## 1. Môi trường thử nghiệm
+
 - Máy thử nghiệm: Máy Dũng
 - Hệ điều hành: Windows
 - CPU: Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz
 - RAM hệ thống: 15.84 GB (xấp xỉ 16 GB)
-- Phiên bản Ollama: 0.40.0 (ollama -v)
-- Phương thức suy luận: CPU; không sử dụng GPU để tăng tốc suy luận.
+- Phiên bản Ollama: 0.40.0
+- Phương thức suy luận: CPU, không sử dụng GPU để tăng tốc.
 - Ngày thử nghiệm: 16/10/2026
 - Context: 4096
 
-**- Câu hỏi dùng chung cho cả 4 mô hình:**
+## 2. Câu hỏi thử nghiệm chung
 
-- Explain what PowerShell Script Block Logging is in 3 sentences.
+Cả bốn mô hình sử dụng cùng một câu hỏi:
 
-| Mô hình | Kích thước tải về | Eval rate (tokens/s) | RAM (ollama ps) | Processor | Thời gian tổng | Câu trả lời đúng/sai |
+> Explain what PowerShell Script Block Logging is in 3 sentences.
+
+## 3. Bảng kết quả thử nghiệm
+
+| Mô hình | Dung lượng tải về | Eval rate (tokens/s) | RAM (ollama ps) | Processor | Thời gian tổng | Đánh giá câu trả lời |
 |---|---:|---:|---:|---|---:|---|
-| qwen3:4b-instruct-2507-q4_K_M | 2.5 GB | 7.47 | 3.2 GB | 100% CPU | 15.904 giây | sai một phần |
-| llama3.2:3b | 2.0 GB | 10.15 | 2.6 GB | 100% CPU | 12.502 giây | sai|
-| gemma3:4b | 3.4 GB | 8.08 | 2.9 GB | 100% CPU | 9.180 giây | khá chính xác |
-| phi4-mini | 2.0 GB | 7.54 | 3.1 GB | 100% CPU | 8.853 giây | khá chính xác |
+| qwen3:4b-instruct-2507-q4_K_M | 2.5 GB | 7.47 | 3.2 GB | 100% CPU | 15.904 giây | Sai một phần |
+| llama3.2:3b | 2.0 GB | 10.15 | 2.6 GB | 100% CPU | 12.502 giây | Sai |
+| gemma3:4b | 3.4 GB | 8.08 | 2.9 GB | 100% CPU | 9.180 giây | Khá chính xác |
+| phi4-mini | 2.0 GB | 7.54 | 3.1 GB | 100% CPU | 8.853 giây | Khá chính xác |
 
+Lưu ý:
+- Dung lượng tải về là dung lượng lưu trữ mô hình.
+- RAM từ `ollama ps` là mức bộ nhớ sử dụng khi mô hình đang được nạp.
+- Eval rate là tốc độ đánh giá/sinh token của mô hình, không đồng nghĩa với tổng thời gian hoàn thành.
+- Kết quả thời gian có thể thay đổi theo độ dài đầu ra, tình trạng máy và điều kiện chạy thử.
 
-# Nhận xét
+## 4. Nhận xét kết quả
 
-- Cả 4 mô hình đều chạy thành công trên Ollama bằng CPU. Trong quá trình suy luận, các mô hình sử dụng CPU để xử lý và không sử dụng GPU để tăng tốc.
+### 4.1. Hiệu năng
 
-- Llama 3.2 3B: Có tốc độ sinh token cao nhất trong bốn mô hình, đạt 10.15 tokens/s.
+- Cả bốn mô hình đều chạy thành công trên Ollama bằng CPU.
+- Llama 3.2 3B có tốc độ sinh token cao nhất, đạt 10.15 tokens/s.
+- Phi-4-mini có thời gian tổng thấp nhất trong lần thử nghiệm, đạt 8.853 giây.
+- Gemma 3 4B có thời gian tổng 9.180 giây và tốc độ sinh 8.08 tokens/s.
+- Qwen3 4B có tốc độ sinh thấp nhất, đạt 7.47 tokens/s, đồng thời có thời gian tổng cao nhất, 15.904 giây.
+- Gemma 3 4B có dung lượng tải về lớn nhất, 3.4 GB. Llama 3.2 3B và Phi-4-mini có dung lượng nhỏ nhất, 2.0 GB.
 
-- Phi-4-mini: Có thời gian tổng thấp nhất trong lần thử nghiệm này, khoảng 8.85 giây.
+### 4.2. Độ chính xác câu trả lời
 
-- Gemma 3 4B: Có thời gian tổng khoảng 9.18 giây và tốc độ sinh token đạt 8.08 tokens/s.
-
-- Qwen3 4B: Có tốc độ sinh token thấp nhất, đạt 7.47 tokens/s, đồng thời có thời gian tổng cao nhất, khoảng 15.90 giây.
-
-- Về dung lượng tải về, Gemma 3 4B có dung lượng lớn nhất với 3.4 GB; Llama 3.2 3B và Phi-4-mini có dung lượng nhỏ nhất với 2.0 GB. Các giá trị RAM từ ollama ps thể hiện mức bộ nhớ sử dụng khi mô hình đang chạy, không phải dung lượng lưu trữ của mô hình trên ổ đĩa.
-
-- Kết luận: Trong lần thử nghiệm này, Llama 3.2 3B có tốc độ sinh token cao nhất. Phi-4-mini có thời gian tổng thấp nhất, nhưng thời gian hoàn thành còn phụ 
-thuộc vào số token được sinh ra và các yếu tố xử lý khác. Vì vậy, không thể chỉ dựa vào thời gian tổng để kết luận mô hình nào có tốc độ sinh token cao nhất.
-
-- Đánh giá độ chính xác trong bảng hiện chỉ mang tính sơ bộ, dựa trên câu hỏi kiến thức chung về PowerShell Script Block Logging. Câu hỏi này phù hợp để quan sát tốc độ và mức sử dụng tài nguyên, nhưng chưa đủ để đánh giá khả năng phân tích log của một AI Agent. Việc đánh giá khả năng phân tích log cần được thực hiện ở giai đoạn sau bằng các câu hỏi và dữ liệu log thực tế, theo kế hoạch của đồ án.
-
-## Nhận xét chi tiết câu trả lời
-
-| Mô hình | Đánh giá |
+| Mô hình | Đánh giá chi tiết |
 |---|---|
-| qwen3:4b-instruct-2507-q4_K_M | Sai một phần: giải thích đúng chức năng chính nhưng hướng dẫn bật tính năng chưa đúng |
-| llama3.2:3b | Sai: nhầm lẫn về cơ chế hoạt động và cách bật tính năng |
-| gemma3:4b | Khá chính xác: nắm được chức năng cơ bản nhưng phần kỹ thuật còn thiếu |
-| phi4-mini | Khá chính xác: hiểu mục đích bảo mật nhưng chưa giải thích rõ cơ chế ghi nội dung script |
+| Qwen3 4B | Giải thích được chức năng chính nhưng hướng dẫn bật Script Block Logging chưa chính xác. |
+| Llama 3.2 3B | Nhầm lẫn giữa ghi nội dung Script Block với ghi kết quả đầu ra của script; hướng dẫn bật tính năng không chính xác. |
+| Gemma 3 4B | Nắm được chức năng cơ bản nhưng có nhầm lẫn về nội dung được ghi lại, chưa giải thích rõ cơ chế hoạt động. |
+| Phi-4-mini | Hiểu mục đích giám sát và kiểm toán bảo mật nhưng chưa mô tả đầy đủ cơ chế ghi nội dung Script Block. |
 
-## Kết quả đầu ra của các mô hình (lần chạy 16/10)
+### 4.3. Nhận xét chung
 
+Trong lần thử nghiệm này, Llama 3.2 3B có tốc độ sinh token cao nhất, trong khi Phi-4-mini có thời gian tổng thấp nhất.
 
+Gemma 3 4B và Phi-4-mini có câu trả lời tương đối chính xác hơn trong câu hỏi kiến thức chung. Tuy nhiên, chưa thể kết luận khả năng phân tích log bảo mật của hai mô hình chỉ dựa trên kết quả này.
 
-<details>
-<summary>1. qwen3:4b-instruct-2507-q4_K_M</summary>
+Câu hỏi thử nghiệm chỉ đánh giá kiến thức cơ bản về PowerShell Script Block Logging, chưa đánh giá được khả năng:
+- Phân tích các sự kiện Windows/Sysmon.
+- Nhận diện hành vi đáng ngờ.
+- Đối chiếu bằng chứng với kỹ thuật MITRE ATT&CK.
+- Phân tích quyền GrantedAccess trong Event ID 10.
+- Trả về JSON đúng cấu trúc theo yêu cầu của AI Agent.
 
-PowerShell script block logging is a feature that records the execution of specific script blocks within a PowerShell session, capturing details like the script content, parameters, and execution context. It allows administrators and developers to track what commands are run, when, and under what conditions, aiding in troubleshooting and auditing. This logging is typically enabled using the Start-Transcript and Stop-Transcript cmdlets, or via configuration in PowerShell's logging settings, and can be applied to individual script blocks using the Register-EngineEvent or custom logging functions.
+## 5. Kế hoạch đánh giá mô hình trong đồ án
 
-</details>
+Để lựa chọn mô hình phù hợp cho AI Agent Windows Log, cần thực hiện thêm các thử nghiệm trên dữ liệu log thực tế.
 
+Các tiêu chí đánh giá:
 
+| Tiêu chí | Nội dung kiểm tra |
+|---|---|
+| Nhận diện kỹ thuật | Chọn đúng mã MITRE ATT&CK trong danh sách ứng viên. |
+| Độ chính xác bằng chứng | Trích dẫn đúng nội dung có thật trong log. |
+| Giải thích | Giải thích đúng hành vi, không tự suy diễn. |
+| Phân tích LSASS | Kiểm tra đúng Event ID 10 và quyền GrantedAccess. |
+| Phân biệt bình thường/bất thường | Không cảnh báo sai với log hoạt động bình thường. |
+| Định dạng đầu ra | Trả về JSON hợp lệ với đủ ba trường quy định. |
+| Hiệu năng | Đo thời gian xử lý, tốc độ sinh token và mức sử dụng RAM. |
 
+Các trường hợp kiểm thử dự kiến:
 
-<details>
-<summary>2. Llama 3.2 3B — llama3.2:3b</summary>
+1. Log PowerShell thực hiện hành vi đáng chú ý.
+2. Log truy cập tiến trình LSASS bằng Event ID 10.
+3. Log có GrantedAccess chứa PROCESS_VM_READ.
+4. Log có GrantedAccess không chứa PROCESS_VM_READ.
+5. Log Windows hoạt động bình thường.
+6. Log thiếu bằng chứng để xác nhận kỹ thuật.
 
-PowerShell script block logging is a feature that allows you to capture and save the output of a PowerShell script, including variables, values, and any errors that occur, to a log file. This feature is enabled by default in PowerShell 3 and later versions, and can be accessed by calling the & operator before a script block, followed by the >> operator, which writes the output to a log file. By enabling PowerShell script block logging, you can track the execution of your scripts, diagnose issues, and improve the overall reliability and security of your automation tasks.
+## 6. Kết luận và định hướng lựa chọn mô hình
 
-</details>
+Dựa trên thử nghiệm kiến thức chung ngày 16/10/2026:
 
-<details>
-<summary>3. Gemma 3 4B — gemma3:4b</summary>
+- Phi-4-mini là ứng viên ưu tiên cho giai đoạn kiểm thử tiếp theo vì có thời gian tổng thấp nhất và câu trả lời khá chính xác.
+- Gemma 3 4B là ứng viên dự phòng vì có kết quả trả lời khá chính xác và thời gian tổng gần với Phi-4-mini.
+- Llama 3.2 3B có ưu thế về tốc độ sinh token nhưng cần đánh giá thêm độ chính xác.
+- Qwen3 4B cần được kiểm tra thêm về khả năng giải thích và thời gian xử lý.
 
-PowerShell script block logging records the execution of individual script blocks within a PowerShell script, providing detailed information about each step. It captures data like timestamps, script block names, and the output or errors generated during each block's execution. This logging is crucial for troubleshooting, debugging, and understanding the flow of complex PowerShell scripts.
+**Chưa chốt mô hình chính thức ở giai đoạn thử nghiệm kiến thức chung.** Quyết định cuối cùng sẽ dựa trên kết quả kiểm thử phân tích log Windows/Sysmon thực tế và khả năng tích hợp ổn định vào AI Agent.
 
-</details>
-
-<details>
-<summary>4. Phi-4-mini — phi4-mini</summary>
-PowerShell script block logging is a feature that allows administrators to record details of all PowerShell sessions, such as the commands executed and the outcomes. This logging helps in auditing and monitoring activities for security and compliance purposes. Script block logging captures both successful and unsuccessful script executions to provide a comprehensive view of script activity.
-</details>
+Mô hình được lựa chọn phải đáp ứng đồng thời yêu cầu về độ chính xác, bằng chứng, giải thích, định dạng JSON và hiệu năng trên máy thử nghiệm.
