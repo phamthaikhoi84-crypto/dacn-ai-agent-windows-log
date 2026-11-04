@@ -49,10 +49,14 @@ Lệnh: `python src\chuoi_hanh_vi.py D:\DACN\log --phien <số>`
 3. Ký hiệu `SUA_REGISTRY` quá thô, chưa phân biệt ghi RunMRU với ghi khóa Run (T1547.001).
 4. Bước 4 (so khớp, dự đoán) và vai trò của mô hình ngôn ngữ nhỏ chưa chốt.
 
-## Nội dung buổi báo cáo 24/10/2026 (điền sau buổi)
+## Nội dung buổi báo cáo 24/10/2026
 
 - Câu hỏi / góp ý của thầy:
-- Cách giải quyết:
+  1. Demo cần đầy đủ hơn: cho xem code agent, vòng lặp agent và phần train, không chỉ kết quả gom chuỗi.
+  2. Log bình thường lấy từ 3 máy là quá ít. Thực tế 99,99% log là bình thường, nhóm phải trả lời được agent xử lý lượng log đó thế nào mà không báo động nhầm.
+- Cách giải quyết (chi tiết trong [tuan-3.md](tuan-3.md)):
+  1. Tách code thành module, viết `agent.py` chạy vòng lặp 5 bước và in rõ từng bước; viết `train.py` học chuỗi mẫu từ dữ liệu Splunk có nhãn, đo tỷ lệ đúng bằng cách chia theo file.
+  2. Chạy agent trên toàn bộ log bình thường của Dũng và đếm số phiên báo động nhầm; tạo thêm log bình thường "khó"; tìm bộ log bình thường công khai.
 
 ## Kế hoạch tuần sau (dự kiến, chốt sau buổi báo cáo)
 
