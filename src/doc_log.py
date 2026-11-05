@@ -76,12 +76,50 @@ def liet_ke_file(duong_dan):
     return files
 
 
+
 def nap_log(con, files):
-    """Tạo lại bảng su_kien và nạp các file log vào."""
+    """Tạo lại bảng su_kien và nạp log theo từng lô 1.000 dòng."""
     con.execute(TAO_BANG)
+
+    cau_lenh = (
+        "INSERT INTO su_kien VALUES ("
+        + ", ".join(["?"] * len(COT))
+        + ")"
+    )
+
+    kich_thuoc_lo = 1000
+
     for f in files:
-        con.executemany("INSERT INTO su_kien VALUES (" + ", ".join(["?"] * len(COT)) + ")",
-                        list(doc_log_tu_file(f)))
+        print(f"\nDang nap file: {f}", flush=True)
+
+        dem_file = 0
+        dong_log = iter(doc_log_tu_file(f))
+
+        while True:
+            lo = []
+
+            for _ in range(kich_thuoc_lo):
+                try:
+                    lo.append(next(dong_log))
+                except StopIteration:
+                    break
+
+            if not lo:
+                break
+
+            con.executemany(cau_lenh, lo)
+            dem_file += len(lo)
+
+            if dem_file % 10000 < kich_thuoc_lo:
+                print(
+                    f"Da nap: {dem_file:,} su kien",
+                    flush=True
+                )
+
+        print(
+            f"Hoan tat file: {dem_file:,} su kien",
+            flush=True
+        )
 
 
 # ---- Đọc log XML của Splunk (XmlWinEventLog), ra đúng 14 cột của bảng su_kien ----

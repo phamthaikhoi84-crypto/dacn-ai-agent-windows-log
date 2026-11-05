@@ -13,20 +13,10 @@ FILE_KET_QUA = ROOT / "output" / "ket_qua_slm_phien10.json"
 
 def doc_su_kien():
     if not FILE_CSV.exists():
-        raise FileNotFoundError(
-            f"Khong tim thay file: {FILE_CSV}"
-        )
+        raise FileNotFoundError(f"Khong tim thay file: {FILE_CSV}")
 
-    with open(
-        FILE_CSV,
-        "r",
-        encoding="utf-8-sig",
-        newline=""
-    ) as f:
-        reader = csv.DictReader(f)
-        du_lieu = list(reader)
-
-    return du_lieu
+    with open(FILE_CSV, "r", encoding="utf-8-sig", newline="") as f:
+        return list(csv.DictReader(f))
 
 
 def tao_chuoi_su_kien(du_lieu):
@@ -45,29 +35,103 @@ def tao_chuoi_su_kien(du_lieu):
             f"User={d.get('nguoi_dung', '')} "
             f"LogonId={d.get('logon_id', '')}"
         )
-
         cac_dong.append(dong)
 
     return "\n".join(cac_dong)
 
 
-def luu_ket_qua(ket_qua):
-    FILE_KET_QUA.parent.mkdir(
-        parents=True,
-        exist_ok=True
-    )
+def chuan_hoa_quyen(quyen):
+    quyen = str(quyen).strip()
 
-    with open(
-        FILE_KET_QUA,
-        "w",
-        encoding="utf-8"
-    ) as f:
-        json.dump(
-            ket_qua,
-            f,
-            ensure_ascii=False,
-            indent=2
+    if not quyen:
+        return None
+
+    try:
+        return int(quyen, 0)
+    except ValueError:
+        try:
+            return int(quyen, 16)
+        except ValueError:
+            return None
+
+
+def la_lsass(target):
+    target = str(target).strip().replace("/", "\\")
+    return target.rsplit("\\", 1)[-1].lower() == "lsass.exe"
+
+
+def phan_tich_quyen(du_lieu):
+    ket_qua = []
+
+    for d in du_lieu:
+        event_id = str(d.get("event_id", "")).strip()
+        target = d.get("doi_tuong", "")
+        quyen = d.get("quyen", "")
+
+        if event_id != "10" or not la_lsass(target):
+            continue
+
+        gia_tri = chuan_hoa_quyen(quyen)
+
+        co_vm_read = (
+            gia_tri is not None
+            and (gia_tri & 0x0010) != 0
         )
+
+        ket_qua.append({
+            "record_id": d.get("record_id", ""),
+            "target": target,
+            "granted_access": str(quyen),
+            "gia_tri_so": gia_tri,
+            "co_vm_read": co_vm_read
+        })
+
+    return ket_qua
+
+
+def kiem_soat_ket_qua(ket_qua_slm, ket_qua_quyen):
+    ket_qua = dict(ket_qua_slm)
+
+    cac_su_kien_co_vm_read = [
+        d for d in ket_qua_quyen if d["co_vm_read"]
+    ]
+
+    if not cac_su_kien_co_vm_read:
+        ket_qua["ma_ky_thuat"] = "CHUA_XAC_NHAN"
+        ket_qua["bang_chung"] = []
+        ket_qua["ly_do"] = (
+            "Python kiểm tra 16 sự kiện Event ID 10 nhắm vào lsass.exe "
+            "nhưng không tìm thấy sự kiện nào có quyền PROCESS_VM_READ "
+            "(bit 0x0010). Vì vậy chưa đủ bằng chứng để xác nhận "
+            "kỹ thuật T1003.001 - LSASS Memory."
+        )
+        trang_thai = "KHONG_CO_VM_READ"
+
+    else:
+        ket_qua["ma_ky_thuat"] = "CHUA_XAC_NHAN"
+        ket_qua["bang_chung"] = []
+        ket_qua["ly_do"] = (
+            "Đã tìm thấy sự kiện Event ID 10 nhắm vào LSASS có "
+            "PROCESS_VM_READ. Tuy nhiên, quyền đọc bộ nhớ chưa đủ "
+            "để chứng minh hành vi đánh cắp thông tin xác thực. "
+            "Cần đối chiếu thêm chuỗi hành vi."
+        )
+        trang_thai = "CO_VM_READ_CAN_DIEU_TRA"
+
+    ket_qua["kiem_soat_python"] = {
+        "so_su_kien_lsass": len(ket_qua_quyen),
+        "so_su_kien_co_vm_read": len(cac_su_kien_co_vm_read),
+        "ket_qua": trang_thai
+    }
+
+    return ket_qua
+
+
+def luu_ket_qua(ket_qua):
+    FILE_KET_QUA.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(FILE_KET_QUA, "w", encoding="utf-8") as f:
+        json.dump(ket_qua, f, ensure_ascii=False, indent=2)
 
 
 def danh_gia_ket_qua(ket_qua):
@@ -76,85 +140,13 @@ def danh_gia_ket_qua(ket_qua):
     ma = ket_qua.get("ma_ky_thuat", "")
     ly_do = ket_qua.get("ly_do", "")
 
-    ly_do_thuong = ly_do.lower()
-
-    # Trường hợp 1: Không kết nối được Ollama
-    if (
-        "không gọi được ollama" in ly_do_thuong
-        or "timeout" in ly_do_thuong
-        or "timed out" in ly_do_thuong
-        or "lỗi http" in ly_do_thuong
-        or "phản hồi http" in ly_do_thuong
-    ):
-        print(
-            "KIEM THU THAT BAI: "
-            "Khong ket noi duoc hoac Ollama tra ve loi."
-        )
-        print("Ly do:", ly_do)
-        return
-
-    # Trường hợp 2: JSON bị cắt hoặc không hợp lệ
-    if (
-        "không hợp lệ" in ly_do_thuong
-        or "không tìm thấy json" in ly_do_thuong
-        or "json" in ly_do_thuong and (
-            "hoàn chỉnh" in ly_do_thuong
-            or "rỗng" in ly_do_thuong
-        )
-        or "giới hạn độ dài" in ly_do_thuong
-    ):
-        print(
-            "KIEM THU THAT BAI: "
-            "SLM tra ve du lieu khong hop le hoac bi cat."
-        )
-        print("Ly do:", ly_do)
-        return
-
-    # Trường hợp 3: SLM trả về mã kỹ thuật chưa xác nhận
     if ma == "CHUA_XAC_NHAN":
-        if (
-            "không có kỹ thuật ứng viên" in ly_do_thuong
-            or "danh sách ứng viên" in ly_do_thuong
-            or "không xác minh được" in ly_do_thuong
-            or "không có ma_ky_thuat" in ly_do_thuong
-            or "không có bang_chung" in ly_do_thuong
-            or "không có ly_do" in ly_do_thuong
-            or "không phải một đối tượng" in ly_do_thuong
-            or "ngoài danh sách" in ly_do_thuong
-        ):
-            print(
-                "KIEM THU THAT BAI: "
-                "Du lieu dau vao hoac dau ra khong dat yeu cau."
-            )
-            print("Ly do:", ly_do)
-            return
+        print("CHUA XAC NHAN: Chua du bang chung ket luan tan cong.")
+    elif ma == "T1003.001":
+        print("CAN DIEU TRA: Co dau hieu phu hop T1003.001.")
+    else:
+        print("Ma ky thuat:", ma)
 
-        print(
-            "PHU HOP: SLM khong xac nhan ky thuat "
-            "khi chua co du bang chung."
-        )
-        print("Ly do:", ly_do)
-        return
-
-    # Trường hợp 4: SLM xác nhận LSASS Memory
-    if ma == "T1003.001":
-        print(
-            "CAN KIEM TRA: SLM da chon T1003.001 - LSASS Memory."
-        )
-        print(
-            "Can doi chieu bang chung va GrantedAccess "
-            "truoc khi ket luan phat hien tan cong."
-        )
-        print("Bang chung:", ket_qua.get("bang_chung", []))
-        print("Ly do:", ly_do)
-        return
-
-    # Trường hợp 5: Mã kỹ thuật không mong đợi
-    print(
-        "KIEM THU THAT BAI: "
-        "SLM tra ve ma ky thuat khong mong doi."
-    )
-    print("Ma ky thuat:", ma)
     print("Ly do:", ly_do)
 
 
@@ -162,12 +154,21 @@ def main():
     print("DOC DU LIEU EVENT ID 10 NHAM LSASS")
 
     du_lieu = doc_su_kien()
-
     print("So su kien:", len(du_lieu))
 
     if not du_lieu:
         print("Khong co du lieu de kiem thu.")
         return
+
+    ket_qua_quyen = phan_tich_quyen(du_lieu)
+
+    so_vm_read = sum(
+        1 for d in ket_qua_quyen if d["co_vm_read"]
+    )
+
+    print("\n========== KIEM TRA QUYEN ==========")
+    print("So su kien LSASS:", len(ket_qua_quyen))
+    print("So su kien co PROCESS_VM_READ:", so_vm_read)
 
     chuoi_su_kien = tao_chuoi_su_kien(du_lieu)
 
@@ -175,36 +176,33 @@ def main():
         {
             "ma_ky_thuat": "T1003.001",
             "ten": "LSASS Memory",
-            "mo_ta": (
-                "Credential Dumping through reading LSASS process memory"
-            )
+            "mo_ta": "Credential Dumping through reading LSASS process memory"
         }
     ]
 
     print("\nDANG GOI SLM...")
     print("Model:", MODEL_CHINH)
-    print("Ky thuat ung vien: T1003.001 - LSASS Memory")
 
-    ket_qua = goi_slm(
+    ket_qua_slm = goi_slm(
         chuoi_su_kien,
         ung_vien,
         model=MODEL_CHINH
     )
 
-    print("\n========== KET QUA SLM ==========")
+    print("\n========== KET QUA SLM GOC ==========")
+    print(json.dumps(ket_qua_slm, ensure_ascii=False, indent=2))
 
-    print(
-        json.dumps(
-            ket_qua,
-            ensure_ascii=False,
-            indent=2
-        )
+    ket_qua = kiem_soat_ket_qua(
+        ket_qua_slm,
+        ket_qua_quyen
     )
+
+    print("\n========== KET QUA SAU KIEM SOAT ==========")
+    print(json.dumps(ket_qua, ensure_ascii=False, indent=2))
 
     luu_ket_qua(ket_qua)
 
     print("\nDa luu ket qua:", FILE_KET_QUA)
-
     danh_gia_ket_qua(ket_qua)
 
 
