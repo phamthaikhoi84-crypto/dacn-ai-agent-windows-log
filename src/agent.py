@@ -23,13 +23,29 @@ import dau_vet
 import train
 from doc_log import liet_ke_file, nap_log
 from gom_phien import gom_phien
-from ky_hieu import loc_su_kien, mo_ta, rut_gon_chuoi
+from ky_hieu import loai_quyen, loc_su_kien, mo_ta, rut_gon_chuoi
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 GOC_REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SO_DONG_GUI_SLM = 40     # mô hình ngôn ngữ nhỏ chạy trên laptop: chỉ gửi tối đa chừng này dòng log
+
+Y_NGHIA_QUYEN = {
+    "DAY_DU": "toàn quyền, CÓ quyền đọc bộ nhớ",
+    "DOC_BO_NHO": "CÓ quyền đọc bộ nhớ",
+    "TRUY_VAN": "chỉ truy vấn thông tin, KHÔNG đọc được bộ nhớ",
+    "KHONG_RO": "không rõ quyền",
+}
+
+
+def dong_cho_slm(e):
+    """1 dòng log gửi mô hình ngôn ngữ. Event 10 được ghi sẵn ý nghĩa quyền (tính bằng ky_hieu.loai_quyen),
+    vì mô hình nhỏ không tự tính phép AND bit chính xác được."""
+    d = f"{e['thoi_gian']:%H:%M:%S} {mo_ta(e)}"
+    if e["event_id"] == 10:
+        d += f" -> {Y_NGHIA_QUYEN[loai_quyen(e['quyen'])]}"
+    return d
 
 
 # ---------------------------------------------------------------- nạp mô hình (bước 2)
@@ -132,7 +148,7 @@ def xu_ly_phien(so, may, logon, ds, con, mh, a):
         return "CHUA_XAC_NHAN", ung_vien[0], cao_nhat
 
     # ---- Bước 4
-    dong_log = [f"{e['thoi_gian']:%H:%M:%S} {mo_ta(e)}" for e in ds_loc]
+    dong_log = [dong_cho_slm(e) for e in ds_loc]
     if len(dong_log) > SO_DONG_GUI_SLM:
         dong_log = dong_log[:SO_DONG_GUI_SLM]
     kq, nguon = goi_mo_hinh_ngon_ngu(dong_log, ung_vien, dv, a.ban_tam)
