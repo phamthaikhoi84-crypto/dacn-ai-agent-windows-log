@@ -2,9 +2,15 @@
 Mọi hàm đọc log (EVTX, XML Splunk...) phải trả về tuple đúng thứ tự cột trong COT."""
 import json
 import os
+import sys
 from datetime import datetime
 
 from evtx import PyEvtxParser
+
+
+def _tien_do(*thong_bao, **kw):
+    """In tiến độ nạp log ra stderr: vẫn thấy trên màn hình nhưng không lẫn vào kết quả (stdout)."""
+    print(*thong_bao, file=sys.stderr, **kw)
 
 TAO_BANG = """
 CREATE OR REPLACE TABLE su_kien (
@@ -90,7 +96,7 @@ def nap_log(con, files):
     kich_thuoc_lo = 1000
 
     for f in files:
-        print(f"\nDang nap file: {f}", flush=True)
+        _tien_do(f"\nDang nap file: {f}", flush=True)
 
         dem_file = 0
         dong_log = iter(doc_log_tu_file(f))
@@ -111,12 +117,12 @@ def nap_log(con, files):
             dem_file += len(lo)
 
             if dem_file % 10000 < kich_thuoc_lo:
-                print(
+                _tien_do(
                     f"Da nap: {dem_file:,} su kien",
                     flush=True
                 )
 
-        print(
+        _tien_do(
             f"Hoan tat file: {dem_file:,} su kien",
             flush=True
         )
