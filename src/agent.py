@@ -11,11 +11,16 @@ Cách chạy (PowerShell, đứng ở thư mục gốc repo):
   python src\\agent.py D:\\DoAnChuyenNganh\\log\\<file tấn công>.evtx
   python src\\agent.py <file log bình thường>           (phiên điểm thấp chỉ được đếm, không in chi tiết)
   python src\\agent.py <file> --chi-tiet                 (in cả các phiên điểm thấp)
+  python src\\agent.py <file> --phat-lai [N] [--tre 0.5] (phát lại log theo thời gian, mỗi đợt N sự kiện,
+                                                          chỉ in khi quyết định của một phiên thay đổi)
 """
 import argparse
+import contextlib
+import io
 import json
 import os
 import sys
+import time
 
 import duckdb
 
@@ -174,6 +179,54 @@ def xu_ly_phien(so, may, logon, ds, con, mh, a):
     return "CHUA_XAC_NHAN", chon, cao_nhat
 
 
+# ---------------------------------------------------------------- chế độ phát lại (--phat-lai)
+def ten_ket_qua(kq, ma):
+    return {"BINH_THUONG": "BÌNH THƯỜNG",
+            "CHUA_XAC_NHAN": f"CHƯA XÁC NHẬN ({ma})",
+            "KET_LUAN": f"KẾT LUẬN {ma}"}[kq]
+
+
+def phat_lai(con, mh, a):
+    """Nạp sự kiện vào su_kien theo thứ tự thời gian, mỗi đợt a.phat_lai sự kiện, như log đang đến dần.
+    Sau mỗi đợt, gom phiên lại và chạy vòng lặp 5 bước cho các phiên vừa có sự kiện mới.
+    Chỉ in khi quyết định của một phiên thay đổi. Phiên đã KẾT LUẬN thì giữ nguyên, không xét lại.
+    Trả về danh sách (nhãn phiên, kết quả, mã kỹ thuật, điểm) cho phần tổng kết."""
+    con.execute("CREATE OR REPLACE TABLE tat_ca AS SELECT *, row_number() OVER "
+                "(ORDER BY thoi_gian, nguon, record_id) AS stt FROM su_kien")
+    tong = con.execute("SELECT count(*) FROM tat_ca").fetchone()[0]
+    print(f"PHÁT LẠI {tong} sự kiện theo thời gian, mỗi đợt {a.phat_lai} sự kiện. "
+          f"Chỉ in khi quyết định của một phiên thay đổi.")
+
+    trang_thai = {}   # (máy, LogonId, file, record_id của sự kiện đầu) -> (số sự kiện đã xét, nhãn, kq, mã, điểm)
+    so_lan_doi = 0
+    for den in range(a.phat_lai, tong + a.phat_lai, a.phat_lai):
+        den = min(den, tong)
+        con.execute(f"CREATE OR REPLACE TABLE su_kien AS SELECT * EXCLUDE (stt) FROM tat_ca WHERE stt <= {den}")
+        gio = con.execute(f"SELECT thoi_gian FROM tat_ca WHERE stt = {den}").fetchone()[0]
+        phien_list, _, _ = gom_phien(con)
+        for so, ((may, logon), ds) in enumerate(phien_list, 1):
+            khoa = (may, logon, ds[0]["nguon"], ds[0]["record_id"])   # không đổi khi phiên dài thêm
+            cu = trang_thai.get(khoa)
+            if cu and (cu[0] == len(ds) or cu[2] == "KET_LUAN"):
+                continue                                             # không có gì mới, hoặc đã kết luận
+            bo_dem = io.StringIO()
+            with contextlib.redirect_stdout(bo_dem):                 # giữ lại chi tiết 5 bước, chỉ in khi cần
+                kq, ma, d = xu_ly_phien(so, may, logon, ds, con, mh, a)
+            nhan = f"máy {may} | LogonId {logon}"
+            truoc = (cu[2], cu[3]) if cu else ("BINH_THUONG", None)
+            trang_thai[khoa] = (len(ds), nhan, kq, ma, d)
+            if (kq, ma) != truoc:
+                so_lan_doi += 1
+                print(f"\n>>> [sự kiện {den}/{tong} | {gio}] {nhan} | {len(ds)} sự kiện: "
+                      f"{ten_ket_qua(*truoc)} -> {ten_ket_qua(kq, ma)} (điểm {d:.3f})")
+                if kq != "BINH_THUONG":
+                    print(bo_dem.getvalue().strip("\n"))
+        if a.tre:
+            time.sleep(a.tre)
+    print(f"\nPhát lại xong: {tong} sự kiện, {len(trang_thai)} phiên, {so_lan_doi} lần quyết định thay đổi.")
+    return [(nhan, kq, ma, d) for _, nhan, kq, ma, d in trang_thai.values()]
+
+
 def main():
     ap = argparse.ArgumentParser(description="Agent phát hiện kỹ thuật tấn công trong log Sysmon")
     ap.add_argument("duong_dan", nargs="+", help="file log hoặc thư mục")
@@ -184,7 +237,10 @@ def main():
     ap.add_argument("--phien", type=int, nargs="*", help="chỉ xét các phiên có số thứ tự này")
     ap.add_argument("--chi-tiet", action="store_true", help="in chi tiết cả phiên điểm thấp")
     ap.add_argument("--ban-tam", action="store_true",
-                help="bỏ qua slm.py, dùng bản tạm ở bước 4 (để đo báo động giả, hoặc dự phòng khi Ollama lỗi)")
+                    help="bỏ qua slm.py, dùng bản tạm ở bước 4 (để đo báo động giả, hoặc dự phòng khi Ollama lỗi)")
+    ap.add_argument("--phat-lai", type=int, nargs="?", const=1, default=0, metavar="N",
+                    help="phát lại log theo thời gian, mỗi đợt N sự kiện (mặc định 1); chỉ in khi quyết định thay đổi")
+    ap.add_argument("--tre", type=float, default=0.0, help="số giây nghỉ giữa 2 đợt khi phát lại (để demo dễ theo dõi)")
     a = ap.parse_args()
 
     mh = nap_mo_hinh(a.mo_hinh)
@@ -195,23 +251,26 @@ def main():
     con = duckdb.connect(a.db)
     nap_log(con, liet_ke_file(a.duong_dan))
     tong_su_kien = con.execute("SELECT count(*) FROM su_kien").fetchone()[0]
-    phien_list, _, _ = gom_phien(con)
-    print(f"Đã nạp {tong_su_kien} sự kiện, gom được {len(phien_list)} phiên")
 
-    ket_qua = []
-    for so, ((may, logon), ds) in enumerate(phien_list, 1):
-        if a.phien and so not in a.phien:
-            continue
-        ket_qua.append((so,) + xu_ly_phien(so, may, logon, ds, con, mh, a))
+    if a.phat_lai:
+        ket_qua = phat_lai(con, mh, a)
+    else:
+        phien_list, _, _ = gom_phien(con)
+        print(f"Đã nạp {tong_su_kien} sự kiện, gom được {len(phien_list)} phiên")
+        ket_qua = []
+        for so, ((may, logon), ds) in enumerate(phien_list, 1):
+            if a.phien and so not in a.phien:
+                continue
+            ket_qua.append((f"phiên #{so}",) + xu_ly_phien(so, may, logon, ds, con, mh, a))
     con.close()
 
     dem = {k: sum(1 for r in ket_qua if r[1] == k) for k in ("BINH_THUONG", "CHUA_XAC_NHAN", "KET_LUAN")}
     print("\n" + "=" * 78)
     print(f"TỔNG KẾT: {len(ket_qua)} phiên | bình thường (dừng ở bước 2): {dem['BINH_THUONG']} | "
           f"chưa xác nhận: {dem['CHUA_XAC_NHAN']} | kết luận tấn công: {dem['KET_LUAN']}")
-    for so, kq, ma, d in ket_qua:
+    for nhan, kq, ma, d in ket_qua:
         if kq != "BINH_THUONG":
-            print(f"   phiên #{so}: {'KẾT LUẬN' if kq == 'KET_LUAN' else 'chưa xác nhận'} {ma} (điểm {d:.3f})")
+            print(f"   {nhan}: {'KẾT LUẬN' if kq == 'KET_LUAN' else 'chưa xác nhận'} {ma} (điểm {d:.3f})")
 
 
 if __name__ == "__main__":
