@@ -11,6 +11,18 @@ OLLAMA_URL = "http://localhost:11434/api/chat"
 # Cho phép đổi model bằng biến môi trường SLM_MODEL
 MODEL_CHINH = os.environ.get("SLM_MODEL", "phi4-mini:latest")
 
+# Tên chính thức của 8 kỹ thuật: đưa vào prompt để mô hình không tự đặt tên sai
+TEN_KY_THUAT = {
+    "T1003.001": "OS Credential Dumping: LSASS Memory (đánh cắp thông tin đăng nhập từ bộ nhớ LSASS)",
+    "T1021.001": "Remote Services: Remote Desktop Protocol",
+    "T1053.005": "Scheduled Task/Job: Scheduled Task",
+    "T1059.001": "Command and Scripting Interpreter: PowerShell",
+    "T1070.001": "Indicator Removal: Clear Windows Event Logs",
+    "T1105": "Ingress Tool Transfer",
+    "T1136.001": "Create Account: Local Account",
+    "T1547.001": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+}
+
 
 def _ket_qua_chua_xac_nhan(ly_do):
     return {
@@ -97,11 +109,7 @@ def goi_slm(chuoi_su_kien, danh_sach_ung_vien, model=MODEL_CHINH):
     if isinstance(chuoi_su_kien, str):
         chuoi_text = chuoi_su_kien
     else:
-        chuoi_text = json.dumps(
-            chuoi_su_kien,
-            ensure_ascii=False,
-            default=str
-        )
+        chuoi_text = "\n".join(str(d) for d in chuoi_su_kien)
 
     if not chuoi_text.strip():
         return _ket_qua_chua_xac_nhan("Chuỗi sự kiện đầu vào rỗng.")
@@ -127,151 +135,30 @@ def goi_slm(chuoi_su_kien, danh_sach_ung_vien, model=MODEL_CHINH):
         return _ket_qua_chua_xac_nhan(
             "Danh sách ứng viên không có mã kỹ thuật hợp lệ."
         )
+    ds_ung_vien = "\n".join(f"- {m}: {TEN_KY_THUAT.get(m, 'không rõ tên')}" for m in ma_hop_le)
+    # 3. Prompt phân tích
 
-        # 3. Prompt phân tích
-    ket_qua_lsass = _kiem_tra_lsass_vm_read(chuoi_text)
+    yeu_cau = f"""Bạn là chuyên gia phân tích log Windows/Sysmon và MITRE ATT&CK.
 
-    yeu_cau = f"""
-Bạn là chuyên gia phân tích log Windows/Sysmon và MITRE ATT&CK.
+NHIỆM VỤ: đọc các dòng log dưới đây (mỗi dòng là 1 sự kiện, số trong ngoặc vuông là Event ID)
+và chọn MỘT kỹ thuật phù hợp nhất trong danh sách ứng viên, hoặc CHUA_XAC_NHAN nếu log không cho thấy kỹ thuật nào.
 
-NHIỆM VỤ:
-Phân tích log và chọn kỹ thuật phù hợp nhất trong danh sách ứng viên.
-Chỉ kết luận khi có bằng chứng trực tiếp.
+DANH SÁCH ỨNG VIÊN (mã: tên chính thức):
+{ds_ung_vien}
 
-DANH SÁCH ỨNG VIÊN:
-{json.dumps(danh_sach_ung_vien, ensure_ascii=False, default=str)}
-
-KIỂM TRA LSASS BẰNG PYTHON:
-- Có PROCESS_VM_READ: {ket_qua_lsass}
-- Giá trị True nghĩa là đã tìm thấy ít nhất một Event ID 10 nhắm LSASS
-  có GrantedAccess chứa bit 0x0010.
-- Giá trị False nghĩa là không tìm thấy bằng chứng đó.
-- Đây là kết quả kiểm tra bằng Python, phải được ưu tiên.
-- Không được tự suy diễn ngược lại kết quả này.
-
-LOG WINDOWS/SYSMON:
+LOG:
 {chuoi_text}
 
 QUY TẮC:
-1. Chỉ chọn mã kỹ thuật có trong danh sách ứng viên.
-2. Không tự tạo bằng chứng, RecordID hoặc GrantedAccess.
-3. Với T1003.001:
-   - Nếu kiểm tra LSASS bằng Python là False,
-     bắt buộc chọn CHUA_XAC_NHAN.
-   - bang_chung phải là [].
-   - ly_do phải nói rõ không tìm thấy PROCESS_VM_READ.
-   - Tuyệt đối không nói GrantedAccess có chứa 0x0010.
-4. Nếu thiếu bằng chứng bắt buộc của kỹ thuật khác,
-   chọn CHUA_XAC_NHAN.
-5. Nếu chọn CHUA_XAC_NHAN, bang_chung phải là [].
-6. Chỉ trích nguyên văn bằng chứng thực sự có trong log.
-7. Giải thích bằng tiếng Việt, ngắn gọn, không mâu thuẫn dữ liệu.
+1. Chỉ được chọn mã có trong danh sách ứng viên, hoặc CHUA_XAC_NHAN.
+2. Với Event ID 10, phần sau dấu "->" đã cho biết tiến trình có đọc được bộ nhớ hay không. Dựa vào đó, KHÔNG tự tính bit.
+3. bang_chung: chép NGUYÊN VĂN 1 đến 3 dòng log quan trọng nhất (chép cả dòng, không sửa chữ nào).
+4. Nếu chọn CHUA_XAC_NHAN thì bang_chung là [].
+5. ly_do: tiếng Việt, 1 đến 2 câu, chỉ dựa trên các dòng đã chép.
+6. ma_ky_thuat chỉ ghi MÃ (ví dụ T1003.001), không ghi kèm tên. Nếu nhắc tên kỹ thuật trong ly_do thì dùng đúng tên trong danh sách ứng viên.
 
-CHỈ TRẢ VỀ JSON HỢP LỆ:
-{{
-  "ma_ky_thuat": "mã kỹ thuật hoặc CHUA_XAC_NHAN",
-  "bang_chung": ["đoạn log nguyên văn"],
-  "ly_do": "giải thích ngắn gọn"
-}}
-
-Bạn là chuyên gia phân tích Windows/Sysmon và MITRE ATT&CK.
-
-NHIỆM VỤ:
-Phân tích log, chọn kỹ thuật phù hợp nhất trong danh sách ứng viên.
-Chỉ kết luận khi có bằng chứng trực tiếp trong log.
-
-DANH SÁCH ỨNG VIÊN:
-{json.dumps(danh_sach_ung_vien, ensure_ascii=False, default=str)}
-
-LOG WINDOWS/SYSMON:
-{chuoi_text}
-
-QUY TẮC PHÂN TÍCH:
-
-1. Chỉ được chọn mã kỹ thuật có trong danh sách ứng viên.
-2. Không suy diễn từ tên tiến trình hoặc một sự kiện đơn lẻ.
-3. Nếu thiếu bằng chứng bắt buộc, chọn CHUA_XAC_NHAN.
-
-4. QUAN TRỌNG: Phân tích quyền GrantedAccess trong Event ID 10.
-
-GrantedAccess là giá trị bitmask thể hiện các quyền
-mà tiến trình yêu cầu đối với tiến trình đích.
-
-Các quyền PROCESS_* thường gặp:
-
-- 0x0001: PROCESS_TERMINATE
-- 0x0002: PROCESS_CREATE_THREAD
-- 0x0008: PROCESS_VM_OPERATION
-- 0x0010: PROCESS_VM_READ
-- 0x0020: PROCESS_VM_WRITE
-- 0x0040: PROCESS_DUP_HANDLE
-- 0x0080: PROCESS_CREATE_PROCESS
-- 0x0100: PROCESS_SET_QUOTA
-- 0x0200: PROCESS_SET_INFORMATION
-- 0x0400: PROCESS_QUERY_INFORMATION
-- 0x0800: PROCESS_SUSPEND_RESUME
-- 0x1000: PROCESS_QUERY_LIMITED_INFORMATION
-
-Cách kiểm tra PROCESS_VM_READ:
-
-Sử dụng phép AND bit:
-
-    (GrantedAccess & 0x0010) != 0
-
-Nếu kết quả khác 0 thì giá trị quyền có chứa PROCESS_VM_READ.
-
-Ví dụ:
-
-- GrantedAccess = 0x0010:
-  Có quyền PROCESS_VM_READ.
-
-- GrantedAccess = 0x0410:
-  Có PROCESS_VM_READ và PROCESS_QUERY_INFORMATION.
-
-- GrantedAccess = 0x1ffff:
-  CÓ PROCESS_VM_READ vì giá trị này chứa bit 0x0010.
-  Tuyệt đối không được giải thích rằng giá trị này
-  không có quyền đọc bộ nhớ.
-
-- GrantedAccess = 0x0400:
-  Có PROCESS_QUERY_INFORMATION nhưng không có PROCESS_VM_READ.
-
-Lưu ý:
-GrantedAccess phải được phân tích như giá trị số dạng hex
-hoặc decimal phù hợp, không so sánh chuỗi một cách máy móc.
-
-5. Đối với T1003.001 - LSASS Memory:
-
-- Phải kiểm tra Event ID 10 có tiến trình đích là lsass.exe.
-- Kiểm tra GrantedAccess có chứa PROCESS_VM_READ hay không.
-- Xem xét tiến trình nguồn, ngữ cảnh và các dấu vết liên quan.
-- Chỉ riêng việc truy cập lsass.exe chưa đủ kết luận đánh cắp
-  thông tin xác thực.
-- Nếu thiếu bằng chứng cần thiết, chọn CHUA_XAC_NHAN.
-- Không được phủ nhận quyền đọc bộ nhớ khi bit 0x0010 thực sự tồn tại.
-
-6. BẰNG CHỨNG:
-
-- Chỉ trích 1 đến 3 đoạn ngắn có thật trong LOG.
-- Không tự tạo Event ID, GrantedAccess hoặc tên tiến trình.
-- Trích nguyên văn để hệ thống có thể kiểm tra lại.
-- Nếu CHUA_XAC_NHAN thì bang_chung phải là [].
-
-7. LÝ DO:
-
-- Viết tiếng Việt.
-- Chỉ 1 đến 2 câu ngắn.
-- Nêu rõ bằng chứng quan trọng nhất.
-- Không mâu thuẫn với GrantedAccess và bang_chung.
-- Không khẳng định hành vi tấn công nếu chưa đủ bằng chứng.
-
-CHỈ TRẢ VỀ MỘT JSON HỢP LỆ:
-
-{{
-  "ma_ky_thuat": "mã kỹ thuật hoặc CHUA_XAC_NHAN",
-  "bang_chung": ["đoạn log nguyên văn"],
-  "ly_do": "giải thích 1 đến 2 câu"
-}}
+CHỈ TRẢ VỀ MỘT JSON:
+{{"ma_ky_thuat": "...", "bang_chung": ["..."], "ly_do": "..."}}
 """
 
     payload = {
@@ -294,7 +181,7 @@ CHỈ TRẢ VỀ MỘT JSON HỢP LỆ:
         "format": "json",
         "options": {
             "temperature": 0,
-            "num_ctx": 2048,
+            "num_ctx": 8192,
                 "num_predict": 512
         }
     }
@@ -373,11 +260,14 @@ CHỈ TRẢ VỀ MỘT JSON HỢP LỆ:
 
     ma = ma.strip()
     ly_do = ly_do.strip()
+    tim_ma = re.search(r"T\d{4}(?:\.\d{3})?", ma)
+    if ma != "CHUA_XAC_NHAN" and tim_ma:
+        ma = tim_ma.group(0)   # mô hình có thể trả "T1003.001 - LSASS Memory": chỉ lấy phần mã
 
     # 8. Kiểm tra mã kỹ thuật
     if ma != "CHUA_XAC_NHAN" and ma not in ma_hop_le:
         return _ket_qua_chua_xac_nhan(
-            "Mô hình chọn kỹ thuật ngoài danh sách ứng viên."
+            f"Mô hình chọn kỹ thuật ngoài danh sách ứng viên: {du_lieu.get('ma_ky_thuat')}"
         )
 
     # 9. Kiểm tra bằng chứng nguyên văn
@@ -404,14 +294,6 @@ CHỈ TRẢ VỀ MỘT JSON HỢP LỆ:
             "Không xác minh được bằng chứng nguyên văn trong log."
         )
         # 10. Kiểm soát độc lập kỹ thuật LSASS Memory
-    if ma == "T1003.001":
-        if not _kiem_tra_lsass_vm_read(chuoi_text):
-            return _ket_qua_chua_xac_nhan(
-                "Python kiểm tra log Event ID 10 nhắm vào LSASS "
-                "nhưng không tìm thấy GrantedAccess chứa "
-                "PROCESS_VM_READ (0x0010). "
-                "Chưa đủ bằng chứng xác nhận T1003.001."
-            )
 
     return {
         "ma_ky_thuat": ma,
