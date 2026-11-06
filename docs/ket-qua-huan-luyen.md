@@ -1,6 +1,6 @@
 # Kết quả huấn luyện và đo lường
 
-Phần của Thiên (dữ liệu, nhãn, huấn luyện). Số liệu lấy từ các lần tự chạy `src/train.py`, `src/agent.py` và `src/dau_vet.py`, cập nhật ngày 4/11/2026. Mô hình: `models/mau_chuoi.json` (commit `5c8a3fa`, ký hiệu theo `ky_hieu.py` commit `6defe92`).
+Phần của Thiên (dữ liệu, nhãn, huấn luyện). Số liệu lấy từ các lần tự chạy `src/train.py`, `src/agent.py` và `src/dau_vet.py`, cập nhật ngày 6/11/2026 (có thêm kết quả trên máy Khôi). Mô hình: `models/mau_chuoi.json` (commit `5c8a3fa`, ký hiệu theo `ky_hieu.py` commit `6defe92`).
 
 ## 1. Dữ liệu và nhãn
 
@@ -81,10 +81,15 @@ Số sự kiện khớp dấu vết trong log bình thường máy Thiên (trư�
 | Máy Dũng, trước khi sửa dấu vết | 2.573 | 91 (3,5%) | 46 (1,79%) |
 | Máy Dũng, sau khi sửa | 2.573 | 91 (3,5%) | **10 (0,39%)** |
 | Máy Thiên, log mới 2/11 đến 4/11 | 807 | 12 (1,5%) | **0** |
+| **Máy Khôi, log 2 ngày (cấu hình Sysmon chung, theo Khôi không chạy công cụ tấn công)** | 242 | 20 (8,3%) | **6 (2,5%)** |
 | `demo_nho.evtx` (đoạn nhỏ của Dũng) | 16 | 3 | **0** |
 
 - 10 phiên còn lại trên máy Dũng: 4 T1547.001 (`browser.exe`, `runonce.exe` ghi khóa Run), 4 T1059.001 (PowerShell bộ cài `-ExecutionPolicy Bypass`), 2 T1053.005 (Office `schtasks /Create ... Office Feature Updates`).
-- 0 trên 807 phiên nghĩa là tỉ lệ báo giả khoảng 0 với cận trên 95% khoảng 0,4%.
+- 0 trên 807 phiên nghĩa là tỉ lệ báo giả khoảng 0 với cận trên 95% khoảng 0,4%. Nhưng log này cùng máy với dữ liệu học lớp bình thường.
+- **Máy Khôi (máy lạ, chưa nằm trong dữ liệu học hay chỉnh dấu vết nào):** 6 phiên bị kết luận nhầm trên 242 phiên (2,5%, khoảng tin cậy 95% xấp xỉ 1,1% đến 5,3%). 5 phiên là T1053.005: phần mềm Lenovo chạy dưới SYSTEM sau mỗi lần khởi động, `schtasks /Create /TN "LvfDriverRemoval" /XML C:\Windows\TEMP\...`. 1 phiên là T1547.001: Edge và UniKey ghi khóa Run. Về nguyên nhân gốc chỉ có hai (5 phiên cùng một nguyên nhân).
+- Tỉ lệ phiên qua bước 2 tăng theo độ xa so với dữ liệu học: máy Thiên 1,5%, máy Dũng 3,5%, máy Khôi 8,3%.
+
+Phép thử mô hình ngôn ngữ trên 6 phiên của máy Khôi (phi4-mini, chạy ngày 6/11): 3 phiên mô hình chọn sai T1070.001 và bước 5 chặn, 2 phiên phản hồi bị cắt, 1 phiên Ollama báo lỗi 500. **Không phiên nào được mô hình nhận ra là bình thường**, nên chưa có bằng chứng bước 4 giúp loại báo giả (bước 5 chặn kết luận sai là việc của bước kiểm chứng, không phải của mô hình). Nguyên nhân Khôi nêu: phiên trên máy thật rất dài (phiên 41 hơn 3 giờ, 5.604 sự kiện), bước 4 chỉ gửi 40 dòng đầu nên mô hình không thấy dòng đáng ngờ; và bước 3 tìm dấu vết trong cả phiên nên phiên dài dễ tìm thấy dấu vết không liên quan đoạn khớp ở bước 2. Hướng sửa: chỉ tìm dấu vết gần đoạn khớp (để tuần sau).
 
 Ca tấn công ngoài tập huấn luyện (EVTX-ATTACK-SAMPLES), chạy với `--ban-tam`:
 
@@ -101,8 +106,9 @@ Ca tấn công ngoài tập huấn luyện (EVTX-ATTACK-SAMPLES), chạy với `
 - Ký hiệu không có nội dung dòng lệnh (không phân biệt `net user /add` với `net use`), nên bước 2 chỉ là bộ lọc thô và dấu vết bắt buộc mới quyết định kết luận.
 - Công cụ chưa gặp khi huấn luyện (ví dụ `createdump.exe`) không khớp được vì ký hiệu chứa tên tiến trình.
 - T1070.001 và T1136.001 chỉ có 3 chuỗi.
-- Lớp bình thường học từ một máy (máy Thiên). Log của Dũng đã được dùng để chỉnh dấu vết, nên 0,39% là số trên dữ liệu đã dùng để chỉnh. Log máy Thiên (0 trên 807 phiên) mới nhưng cùng máy với dữ liệu học lớp bình thường. Chưa có log bình thường vừa mới vừa từ máy lạ.
-- Hoạt động hợp lệ tạo đúng dấu vết tấn công (Office, PowerShell bộ cài, ứng dụng ghi khóa Run) vẫn còn báo giả.
+- Lớp bình thường học từ một máy (máy Thiên). Log của Dũng đã được dùng để chỉnh dấu vết, nên 0,39% là số trên dữ liệu đã dùng để chỉnh. Log mới của máy Thiên (0 trên 807 phiên) cùng máy với dữ liệu học. **Chỉ có một log từ máy lạ (máy Khôi, 242 phiên): 6 phiên bị kết luận nhầm (2,5%).** Số này mới có một máy và ít phiên, nên cần đo thêm.
+- Hoạt động hợp lệ tạo đúng dấu vết tấn công (Office, Lenovo, PowerShell bộ cài, ứng dụng ghi khóa Run) vẫn còn báo giả. Đây là điểm yếu chính của hai kỹ thuật T1053.005 và T1547.001: phần mềm hợp lệ làm đúng việc mà kẻ tấn công làm.
+- Phiên rất dài (hàng nghìn sự kiện) làm bước 3 dễ thấy dấu vết ở chỗ không liên quan đoạn khớp ở bước 2, và bước 4 chỉ gửi 40 dòng đầu cho mô hình ngôn ngữ.
 - Hai nhãn đáng nghi: `createdump_windows-sysmon.log` (T1003.001) và `sysmon_soaphound.log` (T1059.001).
 
 ## 8. Trả lời câu hỏi "log bình thường chiếm 99,99%"
@@ -113,4 +119,4 @@ Log bình thường nhiều hơn log tấn công rất nhiều, nên bộ lọc 
 2. **Dấu vết bắt buộc** (bước 3): kỹ thuật chỉ được xét tiếp khi tìm thấy dấu vết thật trong log (ví dụ `schtasks /create`, mở lsass có quyền đọc). Thiếu dấu vết thì "chưa xác nhận".
 3. **Kiểm chứng** (bước 5): kỹ thuật chọn phải nằm trong ứng viên, đủ dấu vết, điểm đạt ngưỡng, và dòng log trích làm bằng chứng phải có thật.
 
-Kết quả: máy Dũng 10 phiên nhầm trên 2.573; máy Thiên (log mới) 0 phiên nhầm trên 807.
+Kết quả: máy Thiên (log mới) 0 phiên nhầm trên 807; máy Dũng 10 phiên nhầm trên 2.573 (0,39%); máy Khôi, máy lạ, 6 phiên nhầm trên 242 (2,5%, khoảng tin cậy 95% xấp xỉ 1,1% đến 5,3%). Tức là tỉ lệ báo giả cuối cùng khoảng 0 đến vài phần trăm số phiên tùy máy, thấp hơn nhiều so với chỉ so khớp chuỗi (3,5% đến 8,3% phiên qua bước 2), nhưng chưa về 0 trên máy lạ. Phần còn lại chủ yếu là phần mềm hợp lệ tạo tác vụ hẹn giờ hay khóa Run.
