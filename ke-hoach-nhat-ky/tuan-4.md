@@ -14,9 +14,9 @@ Không thêm tính năng lớn, tập trung vào 3 việc: (1) số liệu đán
 | Khôi | Sửa ghép nối agent và `slm.py` | Trước khi sửa, cả 3 model đều bỏ sót file Dumpert; sau khi sửa, cả 3 đều kết luận đúng (chi tiết bên dưới) | [src/slm.py](../src/slm.py), [src/agent.py](../src/agent.py) |
 | Khôi | Đo báo nhầm trên máy chưa dùng để train hay chỉnh (máy Khôi) | 7 ngày, 779 phiên, 15 kết luận nhầm (1,9%), 3 nguyên nhân gốc | |
 | Thiên | Bảng tỷ lệ đúng, đo log mới, khoảng tin cậy, kiểm tra `dau_vet.py` trên Splunk | Trung bình 64%; 0/807 phiên trên log mới máy Thiên | [docs/ket-qua-huan-luyen.md](../docs/ket-qua-huan-luyen.md) |
-| Dũng | Thử agent trên CapAttack (dữ liệu chưa dùng khi train) | 429 sự kiện, 21 phiên; phát hiện T1003.001 ở 2 phiên (ProcDump, điểm 0,978); các phiên thiếu dấu vết giữ "chưa xác nhận" | (điền) |
+| Dũng | Thử agent trên CapAttack (dữ liệu chưa dùng khi train) | 429 sự kiện, 21 phiên; phát hiện T1003.001 ở 2 phiên (ProcDump, điểm 0,978); các phiên thiếu dấu vết giữ "chưa xác nhận" | chưa đưa lên repo |
 | Dũng | Câu trả lời 99,99% log bình thường | Xong | [docs/log-binh-thuong.md](../docs/log-binh-thuong.md) |
-| Dũng | So sánh model ở bước 4 | (điền) | [docs/models.md](../docs/models.md) |
+| Dũng | So sánh model ở bước 4 | Chưa xong, chuyển sang tuần sau | [docs/models.md](../docs/models.md) |
 
 ## Sửa ghép nối bước 4 (mô hình ngôn ngữ)
 
@@ -35,7 +35,7 @@ Cách sửa theo một nguyên tắc: **cái gì tính chắc chắn được b�
 | llama3.2:3b | KẾT LUẬN T1003.001 | 3/3 |
 | gemma3:4b | KẾT LUẬN T1003.001 | 1/1 |
 
-![Dumpert với SLM thật](../docs/hinh/tuan4-dumpert-slm.png)
+<!-- ![Dumpert với SLM thật](../docs/hinh/tuan4-dumpert-slm.png) -->
 
 ## Demo phát lại
 
@@ -43,7 +43,7 @@ Lệnh: `python src\agent.py <file Dumpert> --phat-lai --ban-tam --tre 1`
 
 Sự kiện đầu tiên (`Outflank-Dumpert.exe` khởi chạy) cho điểm khớp 0,898 với T1003.001 nhưng chưa có dấu vết đọc bộ nhớ lsass, nên agent ghi "chưa xác nhận" và chờ. Sự kiện thứ hai (mở lsass với quyền 0x1fffff) đủ dấu vết, agent chuyển sang "kết luận" và dự đoán bước tiếp theo là tạo file `.dmp`, đúng với sự kiện tiếp theo trong log.
 
-![Phát lại file Dumpert](../docs/hinh/tuan4-phat-lai.png)
+<!-- ![Phát lại file Dumpert](../docs/hinh/tuan4-phat-lai.png) -->
 
 ## Báo nhầm trên log bình thường
 
@@ -65,7 +65,7 @@ Trên máy Khôi, 735/779 phiên (94%) dừng ngay ở bước 2 vì điểm kh�
 
 Nguồn thứ ba dùng đúng bộ cờ lệnh kẻ tấn công hay dùng để che giấu, nhưng nội dung lệnh vô hại; chỉ dựa vào cờ lệnh thì không phân biệt được. Ngược lại, trình cài driver Realtek chạy `wevtutil um` nhưng agent không báo T1070.001, vì dấu vết bắt buộc chỉ khớp `wevtutil cl`.
 
-![Log máy Khôi 7 ngày](../docs/hinh/tuan4-may-khoi.png)
+<!-- ![Log máy Khôi 7 ngày](../docs/hinh/tuan4-may-khoi.png) -->
 
 Chi tiết câu trả lời cho câu hỏi 99,99% log bình thường: [docs/log-binh-thuong.md](../docs/log-binh-thuong.md).
 
