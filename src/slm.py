@@ -220,15 +220,14 @@ CHỈ TRẢ VỀ MỘT JSON:
     noi_dung = thong_tin.get("content", "")
     ly_do_dung = phan_hoi.get("done_reason", "")
 
-    if phan_hoi.get("done") is False or ly_do_dung == "length":
-        return _ket_qua_chua_xac_nhan(
-            "Phản hồi SLM bị giới hạn độ dài."
-        )
+    bi_cat = phan_hoi.get("done") is False or ly_do_dung == "length"
 
-    # 6. Đọc JSON
+    # 6. Đọc JSON (kể cả khi bị cắt: mô hình có thể đã viết xong JSON rồi mới sinh thêm khoảng trắng thừa)
     try:
         du_lieu = _doc_json(noi_dung)
     except (ValueError, TypeError) as loi:
+        if bi_cat:
+            return _ket_qua_chua_xac_nhan("Phản hồi SLM bị giới hạn độ dài.")
         return _ket_qua_chua_xac_nhan(
             f"Kết quả mô hình không hợp lệ: {loi}"
         )
