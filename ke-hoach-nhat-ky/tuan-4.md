@@ -103,7 +103,15 @@ Trên log máy thật, mô hình ngôn ngữ chưa chứng minh được tác d�
 - Thiên: huấn luyện lớp bình thường từ nhiều máy, đánh giá kiểu "bỏ một máy ra, học trên các máy còn lại, thử trên máy bỏ ra".
 - Dũng: hoàn thiện bảng so sánh model ở bước 4 (Dumpert, CapAttack, các phiên báo nhầm).
 
-## Nội dung buổi báo cáo (điền sau khi thầy phản hồi)
+## Nội dung buổi báo cáo (phản hồi của thầy)
 
 - Câu hỏi / góp ý của thầy:
+  1. Nhóm làm tốt. Từ giờ tập trung trả lời câu hỏi tên đề tài đặt ra: mô hình ngôn ngữ nhỏ có giúp phát hiện tốt hơn so với chỉ dùng luật và dấu vết bắt buộc không.
+  2. Giữ 8 kỹ thuật tầng sâu, không mở rộng thêm.
+  3. Cuối kỳ cần: agent theo dõi log trực tiếp trên máy; bảng so sánh khi có SLM và khi bỏ SLM (phát hiện, báo nhầm, độ sớm); số báo nhầm đo trên máy chưa dùng để huấn luyện; bảng so sánh các SLM.
 - Cách giải quyết:
+  1. Bỏ kế hoạch mở rộng số kỹ thuật.
+  2. Chế độ không SLM chính là luật và dấu vết bắt buộc (bước 4 không gọi mô hình); đổi tên `--ban-tam` thành `--khong-slm`.
+  3. Trước khi đo, cải thiện đầu vào cho SLM (gửi các dòng quanh dấu vết thay vì 40 dòng đầu) để so sánh công bằng; chốt cứng mô hình, luật và dấu vết, không chỉnh theo dữ liệu thử.
+  4. Xây bộ dữ liệu thử cố định và script đo chung cho cả hai chế độ và cho các SLM.
+  5. Làm chế độ theo dõi trực tiếp dựa trên chế độ phát lại.
