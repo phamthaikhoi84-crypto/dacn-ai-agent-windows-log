@@ -1,5 +1,5 @@
 Tep,KyThuat,Phien,Nhan,Nguon,SoPhien,GhiChu
-benign_sysmon_thien_tuan3.evtx,,tat_ca,binh_thuong,may Thien 2/11 den 4/11 (ngoai repo),807,cung may voi du lieu hoc lop binh thuong
-benign_sysmon_thien_tuan4.evtx,,tat_ca,binh_thuong,may Thien 5/11 den 12/11 (ngoai repo),1704,cung may voi du lieu hoc lop binh thuong; 4 ket luan nham (Office/runonce/Roblox/ProtonVPN)
-benign_sysmon_dung.evtx,,tat_ca,binh_thuong,may Dung (ngoai repo),2573,da dung de chinh dau vet nen khong tinh la chua thay
-log-may-khoi-7-ngay.evtx,,tat_ca,binh_thuong,may Khoi 7 ngay (ngoai repo),779,may la; 15 ket luan nham (Lenovo 9 / Edge-UniKey 4 / VS Code 2)
+benign_sysmon_thien_tuan3.evtx,,tat_ca,binh_thuong,may Thien 2/11 den 4/11 (ngoai repo),807,cung may voi log hoc lop binh thuong nhung khong trung thoi gian (log hoc la 17/10 den 27/10)
+benign_sysmon_thien_tuan4.evtx,,tat_ca,binh_thuong,may Thien 5/11 den 12/11 (ngoai repo),1704,cung may nhung khong trung thoi gian voi log hoc; 4 ket luan nham (Office/runonce/Roblox/ProtonVPN)
+benign_sysmon_dung.evtx,,tat_ca,binh_thuong,may Dung (ngoai repo),2573,da dung de chinh dau vet nen khong tinh la may chua thay
+log-may-khoi-7-ngay.evtx,,tat_ca,binh_thuong,may Khoi 7 ngay (ngoai repo),779,may la; so do truoc khi sua buoc 4; 15 ket luan nham (Lenovo 9 / Edge-UniKey 4 / VS Code 2)
