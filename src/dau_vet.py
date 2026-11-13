@@ -85,22 +85,26 @@ def _chuan_bi(con, ds):
 
 def dong_log(r):
     """Rút gọn 1 dòng kết quả thành 1 dòng log đọc được (làm bằng chứng)."""
-    tg, eid, image, cmd, dt, quyen = r
+    tg, eid, image, cmd, dt, quyen = r[:6]
     chi_tiet = cmd if eid == 1 else (f"{dt} (quyền {quyen})" if eid == 10 else dt)
     return f"{str(tg)[11:23]} [{eid}] {ten_ngan(image)}: {chi_tiet}"[:200]
 
 
 def kiem_tra(con, ma, ds, so_dong=3):
     """Kiểm tra dấu vết bắt buộc của kỹ thuật `ma` trong phiên `ds` (list sự kiện từ gom_phien).
-    Trả về {"ma", "du": bool, "thieu": [tên dấu vết], "bang_chung": [(tên dấu vết, [dòng log, ...])]}."""
+    Trả về {"ma", "du": bool, "thieu": [tên dấu vết], "bang_chung": [(tên dấu vết, [dòng log, ...])],
+            "su_kien": [(nguon, record_id), ...]}.
+    "su_kien" là khóa của các sự kiện làm bằng chứng: agent dùng để lấy các dòng log quanh đó gửi mô hình ngôn ngữ.
+    Điều kiện dấu vết không đổi."""
     _chuan_bi(con, ds)
-    kq = {"ma": ma, "du": True, "thieu": [], "bang_chung": []}
+    kq = {"ma": ma, "du": True, "thieu": [], "bang_chung": [], "su_kien": []}
     for ten, dieu_kien in DAU_VET[ma]:
         rows = con.execute(
-            "SELECT thoi_gian, event_id, image, command_line, doi_tuong, quyen FROM phien "
+            "SELECT thoi_gian, event_id, image, command_line, doi_tuong, quyen, nguon, record_id FROM phien "
             f"WHERE ({dieu_kien}) ORDER BY thoi_gian LIMIT {so_dong}").fetchall()
         if rows:
             kq["bang_chung"].append((ten, [dong_log(r) for r in rows]))
+            kq["su_kien"] += [(r[6], r[7]) for r in rows]
         else:
             kq["du"] = False
             kq["thieu"].append(ten)

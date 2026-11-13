@@ -2,11 +2,15 @@
 import json
 import os
 import re
+import time
 import urllib.request
 import urllib.error
 
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
+
+# Khi SLM lỗi (bị cắt, JSON hỏng), lưu prompt và câu trả lời thô vào đây để xem lại
+FILE_LOI = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "output", "slm_loi_cuoi.txt")
 
 # Cho phép đổi model bằng biến môi trường SLM_MODEL
 MODEL_CHINH = os.environ.get("SLM_MODEL", "phi4-mini:latest")
@@ -30,6 +34,27 @@ def _ket_qua_chua_xac_nhan(ly_do):
         "bang_chung": [],
         "ly_do": ly_do
     }
+
+
+def _luu_loi(ly_do, yeu_cau, noi_dung):
+    """Ghi đè file output/slm_loi_cuoi.txt: lý do lỗi, prompt đã gửi, câu trả lời thô của mô hình."""
+    try:
+        os.makedirs(os.path.dirname(FILE_LOI), exist_ok=True)
+        with open(FILE_LOI, "w", encoding="utf-8") as f:
+            f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} | model {MODEL_CHINH} | {ly_do}\n\n"
+                    f"===== PROMPT =====\n{yeu_cau}\n\n===== MÔ HÌNH TRẢ VỀ =====\n{noi_dung}\n")
+    except OSError:
+        pass
+
+
+def _ket_qua_loi(ly_do):
+    """Lỗi kỹ thuật (Ollama không trả lời, lỗi HTTP, JSON bị cắt hoặc sai cấu trúc).
+    Có thêm "loi": True để agent tách riêng loại "SLM lỗi", không gộp vào "chưa xác nhận".
+    Khác với trường hợp mô hình trả lời bình thường nhưng chọn CHUA_XAC_NHAN, chọn mã ngoài danh sách
+    hoặc bịa bằng chứng: các trường hợp đó là câu trả lời của mô hình, không phải lỗi."""
+    kq = _ket_qua_chua_xac_nhan(ly_do)
+    kq["loi"] = True
+    return kq
 def _kiem_tra_lsass_vm_read(chuoi_text):
     """
     Kiểm tra log có Event ID 10 nhắm vào LSASS
@@ -107,9 +132,14 @@ def goi_slm(chuoi_su_kien, danh_sach_ung_vien, model=MODEL_CHINH):
 
     # 1. Chuẩn hóa đầu vào
     if isinstance(chuoi_su_kien, str):
-        chuoi_text = chuoi_su_kien
+        cac_dong = chuoi_su_kien.splitlines()
     else:
-        chuoi_text = "\n".join(str(d) for d in chuoi_su_kien)
+        cac_dong = [str(d) for d in chuoi_su_kien]
+    cac_dong = [d for d in cac_dong if d.strip()]
+    chuoi_text = "\n".join(cac_dong)
+    # Đánh số dòng (L1, L2, ...): mô hình chỉ cần trả số dòng làm bằng chứng, không phải chép lại cả dòng.
+    # Chép lại dòng dài (đường dẫn đầy đủ, tiếng Việt) làm mô hình nhỏ viết quá giới hạn token và JSON bị cắt.
+    log_danh_so = "\n".join(f"L{i}: {d}" for i, d in enumerate(cac_dong, 1))
 
     if not chuoi_text.strip():
         return _ket_qua_chua_xac_nhan("Chuỗi sự kiện đầu vào rỗng.")
@@ -140,25 +170,25 @@ def goi_slm(chuoi_su_kien, danh_sach_ung_vien, model=MODEL_CHINH):
 
     yeu_cau = f"""Bạn là chuyên gia phân tích log Windows/Sysmon và MITRE ATT&CK.
 
-NHIỆM VỤ: đọc các dòng log dưới đây (mỗi dòng là 1 sự kiện, số trong ngoặc vuông là Event ID)
+NHIỆM VỤ: đọc các dòng log dưới đây (mỗi dòng là 1 sự kiện, bắt đầu bằng số dòng L1, L2...; số trong ngoặc vuông là Event ID)
 và chọn MỘT kỹ thuật phù hợp nhất trong danh sách ứng viên, hoặc CHUA_XAC_NHAN nếu log không cho thấy kỹ thuật nào.
 
 DANH SÁCH ỨNG VIÊN (mã: tên chính thức):
 {ds_ung_vien}
 
 LOG:
-{chuoi_text}
+{log_danh_so}
 
 QUY TẮC:
 1. Chỉ được chọn mã có trong danh sách ứng viên, hoặc CHUA_XAC_NHAN.
 2. Với Event ID 10, phần sau dấu "->" đã cho biết tiến trình có đọc được bộ nhớ hay không. Dựa vào đó, KHÔNG tự tính bit.
-3. bang_chung: chép NGUYÊN VĂN 1 đến 3 dòng log quan trọng nhất (chép cả dòng, không sửa chữ nào).
+3. bang_chung: ghi SỐ DÒNG của 1 đến 3 dòng log quan trọng nhất, ví dụ [2, 3]. KHÔNG chép lại nội dung dòng.
 4. Nếu chọn CHUA_XAC_NHAN thì bang_chung là [].
-5. ly_do: tiếng Việt, 1 đến 2 câu, chỉ dựa trên các dòng đã chép.
+5. ly_do: tiếng Việt, 1 câu ngắn, chỉ dựa trên các dòng đã chọn.
 6. ma_ky_thuat chỉ ghi MÃ (ví dụ T1003.001), không ghi kèm tên. Nếu nhắc tên kỹ thuật trong ly_do thì dùng đúng tên trong danh sách ứng viên.
 
 CHỈ TRẢ VỀ MỘT JSON:
-{{"ma_ky_thuat": "...", "bang_chung": ["..."], "ly_do": "..."}}
+{{"ma_ky_thuat": "...", "bang_chung": [2], "ly_do": "..."}}
 """
 
     payload = {
@@ -182,7 +212,7 @@ CHỈ TRẢ VỀ MỘT JSON:
         "options": {
             "temperature": 0,
             "num_ctx": 8192,
-                "num_predict": 1024
+            "num_predict": 1024
         }
     }
 
@@ -201,17 +231,22 @@ CHỈ TRẢ VỀ MỘT JSON:
         phan_hoi = json.loads(noi_dung_phan_hoi)
 
     except urllib.error.HTTPError as loi:
-        return _ket_qua_chua_xac_nhan(
+        return _ket_qua_loi(
             f"Ollama lỗi HTTP {loi.code}: {loi.reason}"
         )
 
     except (urllib.error.URLError, TimeoutError) as loi:
-        return _ket_qua_chua_xac_nhan(
+        return _ket_qua_loi(
             f"Không gọi được Ollama: {loi}"
         )
 
+    except OSError as loi:              # vd ConnectionResetError khi Ollama bị tắt giữa chừng
+        return _ket_qua_loi(
+            f"Mất kết nối với Ollama: {loi}"
+        )
+
     except (json.JSONDecodeError, UnicodeDecodeError) as loi:
-        return _ket_qua_chua_xac_nhan(
+        return _ket_qua_loi(
             f"Phản hồi Ollama không hợp lệ: {loi}"
         )
 
@@ -226,14 +261,15 @@ CHỈ TRẢ VỀ MỘT JSON:
     try:
         du_lieu = _doc_json(noi_dung)
     except (ValueError, TypeError) as loi:
+        _luu_loi("bị cắt" if bi_cat else f"JSON hỏng: {loi}", yeu_cau, noi_dung)
         if bi_cat:
-            return _ket_qua_chua_xac_nhan("Phản hồi SLM bị giới hạn độ dài.")
-        return _ket_qua_chua_xac_nhan(
+            return _ket_qua_loi("Phản hồi SLM bị giới hạn độ dài.")
+        return _ket_qua_loi(
             f"Kết quả mô hình không hợp lệ: {loi}"
         )
 
     if not isinstance(du_lieu, dict):
-        return _ket_qua_chua_xac_nhan(
+        return _ket_qua_loi(
             "JSON SLM không phải một đối tượng."
         )
 
@@ -243,17 +279,17 @@ CHỈ TRẢ VỀ MỘT JSON:
 
     # 7. Kiểm tra cấu trúc
     if not isinstance(ma, str):
-        return _ket_qua_chua_xac_nhan(
+        return _ket_qua_loi(
             "JSON không có ma_ky_thuat dạng chuỗi."
         )
 
     if not isinstance(bang_chung, list):
-        return _ket_qua_chua_xac_nhan(
+        return _ket_qua_loi(
             "JSON không có bang_chung dạng danh sách."
         )
 
     if not isinstance(ly_do, str):
-        return _ket_qua_chua_xac_nhan(
+        return _ket_qua_loi(
             "JSON không có ly_do dạng chuỗi."
         )
 
@@ -272,14 +308,21 @@ CHỈ TRẢ VỀ MỘT JSON:
     # 9. Kiểm tra bằng chứng nguyên văn
     bang_chung_hop_le = []
 
-    for dong in bang_chung:
-        if not isinstance(dong, str):
-            continue
-
-        dong = dong.strip()
-
-        if dong and dong in chuoi_text:
-            bang_chung_hop_le.append(dong)
+    for muc in bang_chung:
+        so = None
+        if isinstance(muc, int) and not isinstance(muc, bool):
+            so = muc
+        elif isinstance(muc, str):
+            tim = re.fullmatch(r"\s*L?(\d+)\s*", muc, re.IGNORECASE)
+            if tim:
+                so = int(tim.group(1))
+            else:                                   # mô hình vẫn chép nguyên dòng: chấp nhận nếu có thật trong log
+                dong = re.sub(r"^\s*L\d+:\s*", "", muc).strip()
+                if dong and dong in chuoi_text:
+                    bang_chung_hop_le.append(dong)
+                continue
+        if so is not None and 1 <= so <= len(cac_dong) and cac_dong[so - 1] not in bang_chung_hop_le:
+            bang_chung_hop_le.append(cac_dong[so - 1])   # số dòng ngoài phạm vi thì bỏ (coi như bịa)
 
     if ma == "CHUA_XAC_NHAN":
         return {
@@ -292,7 +335,6 @@ CHỈ TRẢ VỀ MỘT JSON:
         return _ket_qua_chua_xac_nhan(
             "Không xác minh được bằng chứng nguyên văn trong log."
         )
-        # 10. Kiểm soát độc lập kỹ thuật LSASS Memory
 
     return {
         "ma_ky_thuat": ma,
