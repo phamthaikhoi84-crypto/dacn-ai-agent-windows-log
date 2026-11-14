@@ -2,13 +2,15 @@
 Trả lời câu hỏi của thầy: mô hình ngôn ngữ nhỏ có giúp gì không.
 
 Bộ thử (data/bo-thu.csv, Thiên giữ), mỗi dòng:
-  Tep      tên file log (chỉ tên file, script tự tìm trong --thu-muc)
+  Tep      tên file log, có thể kèm thư mục con (vd evtx-samples/Persistence/x.evtx); script tìm trong --thu-muc
   KyThuat  mã kỹ thuật (để trống với log bình thường)
   Phien    số thứ tự các phiên chứa kỹ thuật, theo cách agent đánh số khi chạy RIÊNG file đó (vd "3;5"),
            hoặc "tat_ca" với log bình thường
   Nhan     tan_cong | binh_thuong
   SoPhien  số phiên của file khi Thiên gán nhãn. Gom phiên ra số khác -> số thứ tự đã lệch -> BỎ file, không đo sai
-  GhiChu   có chữ "can kiem tra" thì dòng đó chưa được tính
+  GhiChu   có chữ "can kiem tra" (ở GhiChu hoặc Phien) thì dòng đó chưa được tính;
+           có "da dung ... chinh" (vd "da dung de chinh dau vet") thì file đó đã dùng để chỉnh agent:
+           vẫn đo nhưng KHÔNG đưa vào bảng chính, chỉ ghi riêng để tham khảo
 
 Cách tính:
   - Phiên tấn công: phát hiện đúng = KẾT LUẬN đúng mã. KẾT LUẬN sai mã đếm riêng.
@@ -77,7 +79,7 @@ def doc_bo_thu(duong):
         d = {k: (v or "").strip() for k, v in d.items() if k}
         if not d["Tep"]:
             continue
-        if "can kiem tra" in bo_dau(d["GhiChu"]):
+        if "can kiem tra" in bo_dau(d["GhiChu"]) or "can kiem tra" in bo_dau(d["Phien"]):
             bo_qua.append((i, d["Tep"], d["KyThuat"], "còn ghi 'can kiem tra'"))
             continue
         nhan = d["Nhan"].lower()
@@ -88,8 +90,10 @@ def doc_bo_thu(duong):
             bo_qua.append((i, d["Tep"], d["KyThuat"], "thiếu SoPhien"))
             continue
         t = tep.setdefault(d["Tep"], {"tep": d["Tep"], "loai": nhan, "so_phien": int(d["SoPhien"]),
-                                      "ghi_chu": d["GhiChu"], "nhan": {}, "dong": []})
+                                      "ghi_chu": d["GhiChu"], "nhan": {}, "dong": [], "da_chinh": False})
         t["dong"].append(i)
+        if re.search(r"da dung\b.*\bchinh", bo_dau(d["GhiChu"])):
+            t["da_chinh"] = True
         if t["loai"] != nhan or t["so_phien"] != int(d["SoPhien"]):
             sys.exit(f"LỖI dòng {i}: file {d['Tep']} có các dòng khác nhau về Nhan hoặc SoPhien")
         if nhan == "tan_cong":
@@ -104,13 +108,27 @@ def doc_bo_thu(duong):
 
 
 def tim_file(ten, thu_muc):
-    """Tìm file theo tên trong các thư mục (kể cả thư mục con). Không phân biệt hoa thường."""
+    """Tìm file của bộ thử trong các thư mục (kể cả thư mục con), không phân biệt hoa thường.
+    Tep có kèm thư mục (vd evtx-samples/Persistence/x.evtx): ưu tiên file có đường dẫn kết thúc đúng như vậy;
+    không có thì lấy file trùng tên (phần cuối)."""
+    duoi = os.path.normcase(os.path.normpath(ten.replace("/", os.sep).replace("\\", os.sep)))
+    ten_file = os.path.basename(duoi)
+    trung_ten = None
     for g in thu_muc:
         for goc, _, cac_file in os.walk(g):
             for f in cac_file:
-                if f.lower() == ten.lower():
-                    return os.path.join(goc, f)
-    return None
+                if os.path.normcase(f) != ten_file:
+                    continue
+                p = os.path.join(goc, f)
+                if os.path.normcase(os.path.normpath(p)).endswith(os.sep + duoi) or duoi == ten_file:
+                    return p
+                trung_ten = trung_ten or p
+    return trung_ten
+
+
+def ten_an_toan(tep):
+    """Tên file chi tiết: thay / \\ : ... bằng _ để không tạo thư mục con."""
+    return re.sub(r'[\\/:*?"<>|]+', "_", tep)
 
 
 # ---------------------------------------------------------------- đếm lần gọi SLM
@@ -188,7 +206,7 @@ def do_file(t, duong, che_do, mh, a, dem, thu_muc_ra):
 
     os.makedirs(os.path.join(thu_muc_ra, che_do), exist_ok=True)
     hang = []
-    with open(os.path.join(thu_muc_ra, che_do, t["tep"] + ".txt"), "w", encoding="utf-8") as chi_tiet:
+    with open(os.path.join(thu_muc_ra, che_do, ten_an_toan(t["tep"]) + ".txt"), "w", encoding="utf-8") as chi_tiet:
         for so, (khoa, ds) in enumerate(phien_list, 1):
             if t["loai"] == "binh_thuong":
                 loai, dung = "binh_thuong", set()
@@ -202,7 +220,7 @@ def do_file(t, duong, che_do, mh, a, dem, thu_muc_ra):
             if chu.strip():
                 chi_tiet.write(f"##### nhãn thật: {loai} {','.join(sorted(dung))}\n{chu}\n")
                 chi_tiet.flush()
-            h = {"tep": t["tep"], "phien": so, "may": khoa[0], "logon_id": khoa[1], "so_su_kien": len(ds),
+            h = {"tep": t["tep"], "da_chinh": int(t["da_chinh"]), "phien": so, "may": khoa[0], "logon_id": khoa[1], "so_su_kien": len(ds),
                  "loai": loai, "nhan_that": ";".join(sorted(dung)), "che_do": che_do, "ket_qua": kq,
                  "ma": ma or "", "diem": round(d, 3), "dung": "", "do_som_su_kien": "", "do_som_giay": "",
                  "buoc_do_som": "", "so_lan_hoi_slm": (dem.so_lan - lan_truoc) if dem else 0,
@@ -253,8 +271,10 @@ def viet_bang(hang, cac_che_do, thong_tin, bo_qua, loi_file, thoi_gian):
           "| Chế độ | Phát hiện đúng (phiên tấn công) | KẾT LUẬN sai mã | Bỏ sót: dừng bước 2 / chưa xác nhận / SLM lỗi "
           "| Báo nhầm trên log bình thường | Độ sớm (trung vị, sự kiện) | SLM lỗi (mọi phiên) | Số lần hỏi SLM, tổng giây | Thời gian chạy |",
           "|---|---|---|---|---|---|---|---|---|"]
+    o.insert(len(o) - 3, "Chỉ tính các file CHƯA dùng để chỉnh agent. File đã dùng để chỉnh ghi riêng ở mục Tham khảo.")
+    o.insert(len(o) - 3, "")
     for cd in cac_che_do:
-        t = tong_hop([h for h in hang if h["che_do"] == cd])
+        t = tong_hop([h for h in hang if h["che_do"] == cd and not h["da_chinh"]])
         som = f"{t['som']:g} ({t['so_som']} phiên)" if t["som"] is not None else "-"
         slm = f"{t['lan_slm']} lần, {t['giay_slm']:.0f} giây" if cd == "co-slm" else "-"
         o.append(f"| {CHE_DO[cd]} | {ti_le(t['dung'], t['tc'])} | {t['sai_ma']} | {t['sot_bt']} / {t['sot_cxn']} / {t['sot_loi']} "
@@ -283,7 +303,8 @@ def viet_bang(hang, cac_che_do, thong_tin, bo_qua, loi_file, thoi_gian):
     for m in ma_ky:
         cot, n = [], 0
         for cd in cac_che_do:
-            ds = [h for h in hang if h["che_do"] == cd and h["loai"] == "tan_cong" and m in h["nhan_that"].split(";")]
+            ds = [h for h in hang if h["che_do"] == cd and h["loai"] == "tan_cong" and not h["da_chinh"]
+                  and m in h["nhan_that"].split(";")]
             n = len(ds)
             cot.append(ti_le(sum(h["dung"] == 1 for h in ds), len(ds)))
         o.append(f"| {m} | {n} | " + " | ".join(cot) + " |")
@@ -291,9 +312,16 @@ def viet_bang(hang, cac_che_do, thong_tin, bo_qua, loi_file, thoi_gian):
 
     o += ["## Tham khảo (không dùng làm kết quả chính thức)", ""]
     for cd in cac_che_do:
-        t = tong_hop([h for h in hang if h["che_do"] == cd])
+        t = tong_hop([h for h in hang if h["che_do"] == cd and not h["da_chinh"]])
         o.append(f"- {CHE_DO[cd]}: KẾT LUẬN trên phần còn lại của file tấn công (phiên không được đánh dấu): "
                  f"{t['nham_cl']}/{t['cl']} phiên")
+    da = sorted({h["tep"] for h in hang if h["da_chinh"]})
+    if da:
+        o.append(f"- File đã dùng để chỉnh agent (không tính vào bảng chính): {', '.join(da)}")
+        for cd in cac_che_do:
+            t = tong_hop([h for h in hang if h["che_do"] == cd and h["da_chinh"]])
+            o.append(f"  - {CHE_DO[cd]}: phát hiện đúng {ti_le(t['dung'], t['tc'])}, "
+                     f"KẾT LUẬN trên log bình thường {t['nham']}/{t['bt']} phiên, SLM lỗi {t['loi']}")
     o.append("")
 
     if loi_file or bo_qua:
