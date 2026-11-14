@@ -1,6 +1,6 @@
 # Kết quả huấn luyện và đo lường
 
-Phần của Thiên (dữ liệu, nhãn, huấn luyện). Số liệu lấy từ các lần tự chạy `src/train.py`, `src/agent.py` và `src/dau_vet.py`, cập nhật ngày 6/11/2026 (có thêm kết quả trên máy Khôi). Mô hình: `models/mau_chuoi.json` (commit `5c8a3fa`, ký hiệu theo `ky_hieu.py` commit `6defe92`).
+Phần của Thiên (dữ liệu, nhãn, huấn luyện). Số liệu lấy từ các lần tự chạy `src/train.py`, `src/agent.py` và `src/dau_vet.py`, cập nhật ngày 14/11/2026 (có thêm log tuần 4 và kết quả trên bộ thử cố định). Mô hình: `models/mau_chuoi.json` (commit `5c8a3fa`, ký hiệu theo `ky_hieu.py` commit `6defe92`).
 
 ## 1. Dữ liệu và nhãn
 
@@ -82,9 +82,11 @@ Số sự kiện khớp dấu vết trong log bình thường máy Thiên (trư�
 | Máy Dũng, sau khi sửa | 2.573 | 91 (3,5%) | **10 (0,39%)** |
 | Máy Thiên, log mới 2/11 đến 4/11 | 807 | 12 (1,5%) | **0** |
 | **Máy Khôi, log 7 ngày (cấu hình Sysmon chung, theo Khôi không chạy công cụ tấn công)** | 779 | 44 (5,6%) | **15 (1,9%)** |
+| Máy Thiên, log tuần 4 (5/11 đến 12/11, không trùng thời gian với log học) | 1.704 | 31 (1,8%) | **4 (0,23%)** |
 | `demo_nho.evtx` (đoạn nhỏ của Dũng) | 16 | 3 | **0** |
 
 - 10 phiên còn lại trên máy Dũng: 4 T1547.001 (`browser.exe`, `runonce.exe` ghi khóa Run), 4 T1059.001 (PowerShell bộ cài `-ExecutionPolicy Bypass`), 2 T1053.005 (Office `schtasks /Create ... Office Feature Updates`).
+- Log tuần 4 máy Thiên: 4 phiên bị kết luận nhầm trên 1.704 (0,23%): Office, `runonce`, Roblox, ProtonVPN, đều là phần mềm hợp lệ. Cùng máy với dữ liệu học nhưng không trùng thời gian.
 - 0 trên 807 phiên nghĩa là tỉ lệ báo giả khoảng 0 với cận trên 95% khoảng 0,4%. Nhưng log này cùng máy với dữ liệu học lớp bình thường.
 - **Máy Khôi (máy lạ, chưa nằm trong dữ liệu học hay chỉnh dấu vết nào):** 15 phiên bị kết luận nhầm trên 779 phiên (1,9%, khoảng tin cậy 95% xấp xỉ 1,2% đến 3,2%). Khôi đã kiểm tra từng phiên trong 15 phiên; ba nguyên nhân gốc, đều là phần mềm hợp lệ: (1) **Lenovo, 9 phiên**: `schtasks /Create /TN "LvfDriverRemoval"` chạy dưới SYSTEM mỗi lần khởi động máy một lần (T1053.005); (2) **Edge và UniKey, 4 phiên**: ghi khóa Run (T1547.001); (3) **PowerShell ẩn kiểm tra VS Code, 2 phiên**: `-WindowStyle Hidden -ExecutionPolicy Bypass ... Get-AppxPackage -Name 'Microsoft.VisualStudioCode'` (T1059.001). Lần đo đầu trên 2 ngày đầu của log này (6/242, 2,5%) nằm trong 779 phiên này (log 7 ngày xuất lại toàn bộ), nên không cộng dồn.
 - Tỉ lệ phiên qua bước 2 tăng theo độ xa so với dữ liệu học: máy Thiên 1,5%, máy Dũng 3,5%, máy Khôi 5,6% (lần đo 2 ngày đầu là 8,3%).
@@ -101,14 +103,37 @@ Ca tấn công ngoài tập huấn luyện (EVTX-ATTACK-SAMPLES), chạy với `
 | `CA_sysmon_hashdump_cmd_meterpreter` (chạy 30/10) | T1003.001, 0,760, đúng (chỉ 1 sự kiện lsass) |
 | `CA_teamviewer-dumper_sysmon_10` (chạy 30/10), `sideloading_..._run_key` (chạy 30/10) | bỏ sót, log quá ngắn (1 và 7 sự kiện) |
 
+## 6b. Bộ thử cố định `data/bo-thu.csv` (đo đầu-cuối trên tấn công ngoài tập huấn luyện)
+
+Bộ thử gồm 21 file tấn công chấm điểm lấy từ EVTX-ATTACK-SAMPLES (cộng 1 file chờ quyết định, không tính) và 4 log bình thường. Nhãn lấy bằng cách **đọc lệnh và sự kiện thật** trong từng file, không lấy từ agent hay `dau_vet.py`. Chạy `agent.py` (bản `--ban-tam`, chưa có mô hình ngôn ngữ), tính "đúng" khi agent kết luận đúng kỹ thuật ở ít nhất một phiên có nhãn.
+
+| Kỹ thuật | File | Agent kết luận đúng |
+|---|---|---|
+| T1003.001 | 6 | 5 |
+| T1021.001 | 3 | 0 |
+| T1053.005 | 2 | 2 |
+| T1059.001 | 1 | 0 |
+| T1105 | 3 | 0 |
+| T1136.001 | 2 | 0 |
+| T1547.001 | 4 | 0 |
+| T1070.001 | 0 | không có file |
+| **Tổng** | **21** | **7 (33%, khoảng tin cậy 95% xấp xỉ 17% đến 55%)** |
+
+- Bỏ các file từng dùng khi phát triển/demo (04 và 07): 6/19 (32%). Bỏ thêm file 15 (nhãn đổi, xem dưới): 5/18 (28%).
+- So với 64% ở phép thử bỏ lần lượt từng file: đó là đoán kỹ thuật chỉ bằng so khớp chuỗi trên dữ liệu Splunk, còn đây là cả 5 bước (cần dấu vết bắt buộc và điểm đạt ngưỡng) trên log từ nguồn khác. Hai con số đo hai việc khác nhau, và con số 33% mới là số nên dùng khi nói agent làm được gì trên log lạ.
+- Các file bị bỏ sót phần lớn rất ngắn (1 đến 4 sự kiện) hoặc chỉ là sửa registry (T1136.001, T1547.001), nên chuỗi ký hiệu quá ngắn để khớp.
+- File `rdrleakdiag` (T1003.001): agent đoán đúng chuỗi với điểm 0,978 nhưng bước 3 báo thiếu dấu vết, vì tiến trình `rdrleakdiag` tự dump lsass nên log không có Event 10 vào lsass. `dau_vet.py` đòi Event 10 nên bỏ sót thật một ca đúng.
+- File SharpRDP (T1021.001): agent đoán nhầm phiên 2 là T1059.001 (0,583) vì sự kiện kết nối 3389 nằm ở phiên 1, bước gom phiên đã tách hai phần của cùng một cuộc tấn công.
+
 ## 7. Hạn chế
 
 - Ký hiệu không có nội dung dòng lệnh (không phân biệt `net user /add` với `net use`), nên bước 2 chỉ là bộ lọc thô và dấu vết bắt buộc mới quyết định kết luận.
 - Công cụ chưa gặp khi huấn luyện (ví dụ `createdump.exe`) không khớp được vì ký hiệu chứa tên tiến trình.
-- T1070.001 và T1136.001 chỉ có 3 chuỗi.
+- T1070.001 và T1136.001 chỉ có 3 chuỗi. Trên bộ thử, T1070.001 không có file nào, T1059.001 chỉ 1 file, T1136.001 chỉ 2 file, nên số đo ba kỹ thuật này chưa đáng tin.
 - Lớp bình thường học từ một máy (máy Thiên). Log của Dũng đã được dùng để chỉnh dấu vết, nên 0,39% là số trên dữ liệu đã dùng để chỉnh. Log mới của máy Thiên (0 trên 807 phiên) cùng máy với dữ liệu học. **Chỉ có một log từ máy lạ (máy Khôi, 779 phiên trong 7 ngày): 15 phiên bị kết luận nhầm (1,9%).** Số này mới có một máy, nên chưa nói được tỉ lệ trên máy bất kỳ.
 - Hoạt động hợp lệ tạo đúng dấu vết tấn công (Office, Lenovo, PowerShell bộ cài, ứng dụng ghi khóa Run) vẫn còn báo giả. Đây là điểm yếu chính của hai kỹ thuật T1053.005 và T1547.001: phần mềm hợp lệ làm đúng việc mà kẻ tấn công làm.
 - Phiên rất dài (hàng nghìn sự kiện) làm bước 3 dễ thấy dấu vết ở chỗ không liên quan đoạn khớp ở bước 2, và bước 4 chỉ gửi 40 dòng đầu cho mô hình ngôn ngữ.
+- Bộ thử: file `babyshark_mimikatz_powershell` ban đầu xếp T1059.001, được **đổi sang T1003.001 sau khi xem kết quả agent** (lệnh trong file là Mimikatz); file 04 và 07 từng dùng để phát triển/demo; hai file `remote_file_copy` và `smbmap` có độ chắc nhãn trung bình.
 - Hai nhãn đáng nghi: `createdump_windows-sysmon.log` (T1003.001) và `sysmon_soaphound.log` (T1059.001).
 
 ## 8. Trả lời câu hỏi "log bình thường chiếm 99,99%"
@@ -119,4 +144,6 @@ Log bình thường nhiều hơn log tấn công rất nhiều, nên bộ lọc 
 2. **Dấu vết bắt buộc** (bước 3): kỹ thuật chỉ được xét tiếp khi tìm thấy dấu vết thật trong log (ví dụ `schtasks /create`, mở lsass có quyền đọc). Thiếu dấu vết thì "chưa xác nhận".
 3. **Kiểm chứng** (bước 5): kỹ thuật chọn phải nằm trong ứng viên, đủ dấu vết, điểm đạt ngưỡng, và dòng log trích làm bằng chứng phải có thật.
 
-Kết quả: máy Thiên (log mới) 0 phiên nhầm trên 807; máy Dũng 10 phiên nhầm trên 2.573 (0,39%); máy Khôi, máy lạ, 15 phiên nhầm trên 779 (1,9%, khoảng tin cậy 95% xấp xỉ 1,2% đến 3,2%, ba nguyên nhân gốc). Tức là tỉ lệ báo giả cuối cùng khoảng 0 đến vài phần trăm số phiên tùy máy, thấp hơn nhiều so với chỉ so khớp chuỗi (1,5% đến 5,6% phiên qua bước 2), nhưng chưa về 0 trên máy lạ. Phần còn lại chủ yếu là phần mềm hợp lệ tạo tác vụ hẹn giờ hay khóa Run.
+Kết quả: máy Thiên (log mới) 0 phiên nhầm trên 807 và 4 trên 1.704 ở tuần 4; máy Dũng 10 phiên nhầm trên 2.573 (0,39%); máy Khôi, máy lạ, 15 phiên nhầm trên 779 (1,9%, khoảng tin cậy 95% xấp xỉ 1,2% đến 3,2%, ba nguyên nhân gốc). Tức là tỉ lệ báo giả cuối cùng khoảng 0 đến vài phần trăm số phiên tùy máy, thấp hơn nhiều so với chỉ so khớp chuỗi (1,5% đến 5,6% phiên qua bước 2), nhưng chưa về 0 trên máy lạ. Phần còn lại chủ yếu là phần mềm hợp lệ tạo tác vụ hẹn giờ hay khóa Run.
+
+Mặt còn lại: trên tấn công ngoài tập huấn luyện (bộ thử cố định, mục 6b) agent chỉ kết luận đúng kỹ thuật ở 7/21 file (33%). Báo giả thấp nhờ agent thận trọng, nhưng cái giá là bỏ sót nhiều ca ngắn hoặc chỉ sửa registry.
