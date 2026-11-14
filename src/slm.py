@@ -2,6 +2,7 @@
 import json
 import os
 import re
+import socket
 import time
 import urllib.request
 import urllib.error
@@ -9,8 +10,10 @@ import urllib.error
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
 
-# Khi SLM lỗi (bị cắt, JSON hỏng), lưu prompt và câu trả lời thô vào đây để xem lại
-FILE_LOI = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "output", "slm_loi_cuoi.txt")
+# Mỗi lần SLM lỗi (bị cắt, JSON sai cấu trúc, Ollama lỗi HTTP), GHI THÊM prompt và câu trả lời thô vào đây
+FILE_LOI = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "output", "slm_loi.txt")
+THOI_GIAN_CHO = 600     # giây; laptop chạy Ollama 100% CPU, prompt 40 dòng có lần mất trên 240 giây
+SO_LAN_THU = 2          # Ollama lỗi 500 hoặc mất kết nối thì thử lại 1 lần (không thử lại khi hết thời gian chờ)
 
 # Cho phép đổi model bằng biến môi trường SLM_MODEL
 MODEL_CHINH = os.environ.get("SLM_MODEL", "phi4-mini:latest")
@@ -37,14 +40,37 @@ def _ket_qua_chua_xac_nhan(ly_do):
 
 
 def _luu_loi(ly_do, yeu_cau, noi_dung):
-    """Ghi đè file output/slm_loi_cuoi.txt: lý do lỗi, prompt đã gửi, câu trả lời thô của mô hình."""
+    """Ghi THÊM vào output/slm_loi.txt: lý do lỗi, prompt đã gửi, câu trả lời thô của mô hình."""
     try:
         os.makedirs(os.path.dirname(FILE_LOI), exist_ok=True)
-        with open(FILE_LOI, "w", encoding="utf-8") as f:
-            f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} | model {MODEL_CHINH} | {ly_do}\n\n"
+        with open(FILE_LOI, "a", encoding="utf-8") as f:
+            f.write(f"\n{'#' * 78}\n{time.strftime('%Y-%m-%d %H:%M:%S')} | model {MODEL_CHINH} | {ly_do}\n\n"
                     f"===== PROMPT =====\n{yeu_cau}\n\n===== MÔ HÌNH TRẢ VỀ =====\n{noi_dung}\n")
     except OSError:
         pass
+
+
+def _loi(ly_do, yeu_cau, noi_dung=""):
+    """Ghi lại rồi trả về kết quả SLM lỗi."""
+    _luu_loi(ly_do, yeu_cau, noi_dung)
+    return _ket_qua_loi(ly_do)
+
+
+def _khuon_json(ma_hop_le):
+    """Khuôn JSON (JSON schema) gửi cho Ollama qua tham số "format".
+    Ollama ép mô hình chỉ sinh đúng khuôn này: đủ 3 trường, đúng kiểu, mã kỹ thuật chỉ là một trong các ứng viên
+    hoặc CHUA_XAC_NHAN. Khuôn chỉ ép HÌNH THỨC câu trả lời, không gợi ý nên chọn mã nào.
+    Lý do: lần đo 14/11 trên máy Khôi (phi4-mini, "format": "json"), 8/13 lần hỏi bị lỗi
+    (JSON thiếu trường hoặc sai kiểu, câu trả lời dài quá 1024 token, Ollama lỗi 500)."""
+    return {
+        "type": "object",
+        "properties": {
+            "ma_ky_thuat": {"type": "string", "enum": list(ma_hop_le) + ["CHUA_XAC_NHAN"]},
+            "bang_chung": {"type": "array", "items": {"type": "integer"}, "maxItems": 3},
+            "ly_do": {"type": "string", "maxLength": 300},
+        },
+        "required": ["ma_ky_thuat", "bang_chung", "ly_do"],
+    }
 
 
 def _ket_qua_loi(ly_do):
@@ -208,7 +234,7 @@ CHỈ TRẢ VỀ MỘT JSON:
             }
         ],
         "stream": False,
-        "format": "json",
+        "format": _khuon_json(ma_hop_le),
         "options": {
             "temperature": 0,
             "num_ctx": 8192,
@@ -223,32 +249,33 @@ CHỈ TRẢ VỀ MỘT JSON:
         method="POST"
     )
 
-    # 4. Gọi Ollama
-    try:
-        with urllib.request.urlopen(request, timeout=300) as response:
-            noi_dung_phan_hoi = response.read().decode("utf-8")
-
-        phan_hoi = json.loads(noi_dung_phan_hoi)
-
-    except urllib.error.HTTPError as loi:
-        return _ket_qua_loi(
-            f"Ollama lỗi HTTP {loi.code}: {loi.reason}"
-        )
-
-    except (urllib.error.URLError, TimeoutError) as loi:
-        return _ket_qua_loi(
-            f"Không gọi được Ollama: {loi}"
-        )
-
-    except OSError as loi:              # vd ConnectionResetError khi Ollama bị tắt giữa chừng
-        return _ket_qua_loi(
-            f"Mất kết nối với Ollama: {loi}"
-        )
-
-    except (json.JSONDecodeError, UnicodeDecodeError) as loi:
-        return _ket_qua_loi(
-            f"Phản hồi Ollama không hợp lệ: {loi}"
-        )
+    # 4. Gọi Ollama (lỗi 500 / mất kết nối thì thử lại 1 lần)
+    phan_hoi = None
+    for lan in range(1, SO_LAN_THU + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=THOI_GIAN_CHO) as response:
+                noi_dung_phan_hoi = response.read().decode("utf-8")
+            phan_hoi = json.loads(noi_dung_phan_hoi)
+            break
+        except urllib.error.HTTPError as loi:
+            try:
+                than = loi.read().decode("utf-8", "replace")[:500]
+            except Exception:
+                than = ""
+            if loi.code >= 500 and lan < SO_LAN_THU:
+                _luu_loi(f"Ollama lỗi HTTP {loi.code} lần {lan}, thử lại", yeu_cau, than)
+                time.sleep(5)
+                continue
+            return _loi(f"Ollama lỗi HTTP {loi.code}: {loi.reason} {than}".strip(), yeu_cau, than)
+        except (TimeoutError, socket.timeout) as loi:
+            return _loi(f"Ollama không trả lời sau {THOI_GIAN_CHO} giây: {loi}", yeu_cau)
+        except (urllib.error.URLError, OSError) as loi:
+            if lan < SO_LAN_THU:
+                time.sleep(5)
+                continue
+            return _loi(f"Không gọi được Ollama: {loi}", yeu_cau)
+        except (json.JSONDecodeError, UnicodeDecodeError) as loi:
+            return _loi(f"Phản hồi Ollama không hợp lệ: {loi}", yeu_cau)
 
     # 5. Kiểm tra phản hồi
     thong_tin = phan_hoi.get("message", {})
@@ -261,17 +288,12 @@ CHỈ TRẢ VỀ MỘT JSON:
     try:
         du_lieu = _doc_json(noi_dung)
     except (ValueError, TypeError) as loi:
-        _luu_loi("bị cắt" if bi_cat else f"JSON hỏng: {loi}", yeu_cau, noi_dung)
         if bi_cat:
-            return _ket_qua_loi("Phản hồi SLM bị giới hạn độ dài.")
-        return _ket_qua_loi(
-            f"Kết quả mô hình không hợp lệ: {loi}"
-        )
+            return _loi("Phản hồi SLM bị giới hạn độ dài.", yeu_cau, noi_dung)
+        return _loi(f"Kết quả mô hình không hợp lệ: {loi}", yeu_cau, noi_dung)
 
     if not isinstance(du_lieu, dict):
-        return _ket_qua_loi(
-            "JSON SLM không phải một đối tượng."
-        )
+        return _loi("JSON SLM không phải một đối tượng.", yeu_cau, noi_dung)
 
     ma = du_lieu.get("ma_ky_thuat")
     bang_chung = du_lieu.get("bang_chung")
@@ -279,19 +301,13 @@ CHỈ TRẢ VỀ MỘT JSON:
 
     # 7. Kiểm tra cấu trúc
     if not isinstance(ma, str):
-        return _ket_qua_loi(
-            "JSON không có ma_ky_thuat dạng chuỗi."
-        )
+        return _loi("JSON không có ma_ky_thuat dạng chuỗi.", yeu_cau, noi_dung)
 
     if not isinstance(bang_chung, list):
-        return _ket_qua_loi(
-            "JSON không có bang_chung dạng danh sách."
-        )
+        return _loi("JSON không có bang_chung dạng danh sách.", yeu_cau, noi_dung)
 
     if not isinstance(ly_do, str):
-        return _ket_qua_loi(
-            "JSON không có ly_do dạng chuỗi."
-        )
+        return _loi("JSON không có ly_do dạng chuỗi.", yeu_cau, noi_dung)
 
     ma = ma.strip()
     ly_do = ly_do.strip()
