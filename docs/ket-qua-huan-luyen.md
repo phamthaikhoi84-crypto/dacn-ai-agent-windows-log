@@ -81,7 +81,8 @@ Số sự kiện khớp dấu vết trong log bình thường máy Thiên (trư�
 | Máy Dũng, trước khi sửa dấu vết | 2.573 | 91 (3,5%) | 46 (1,79%) |
 | Máy Dũng, sau khi sửa | 2.573 | 91 (3,5%) | **10 (0,39%)** |
 | Máy Thiên, log mới 2/11 đến 4/11 | 807 | 12 (1,5%) | **0** |
-| **Máy Khôi, log 7 ngày (cấu hình Sysmon chung, theo Khôi không chạy công cụ tấn công)** | 779 | 44 (5,6%) | **15 (1,9%)** |
+| **Máy Khôi, log 7 ngày, không SLM (cấu hình Sysmon chung, theo Khôi không chạy công cụ tấn công)** | 779 | 44 (5,6%) | **15 (1,9%)** |
+| **Máy Khôi, log 7 ngày, có SLM (phi4-mini, sau khi sửa bước 4; lần chạy 14/11 của Khôi)** | 779 | 44 (5,6%) | **6 (0,8%)**, khoảng tin cậy 95% xấp xỉ 0,4% đến 1,7% |
 | Máy Thiên, log tuần 4 (5/11 đến 12/11, không trùng thời gian với log học) | 1.704 | 31 (1,8%) | **4 (0,23%)** |
 | `demo_nho.evtx` (đoạn nhỏ của Dũng) | 16 | 3 | **0** |
 
@@ -93,6 +94,8 @@ Số sự kiện khớp dấu vết trong log bình thường máy Thiên (trư�
 
 Phép thử mô hình ngôn ngữ trên 6 phiên của máy Khôi (phi4-mini, chạy ngày 6/11): 3 phiên mô hình chọn sai T1070.001 và bước 5 chặn, 2 phiên phản hồi bị cắt, 1 phiên Ollama báo lỗi 500. **Không phiên nào được mô hình nhận ra là bình thường**, nên chưa có bằng chứng bước 4 giúp loại báo giả (bước 5 chặn kết luận sai là việc của bước kiểm chứng, không phải của mô hình). Nguyên nhân Khôi nêu: phiên trên máy thật rất dài (phiên 41 hơn 3 giờ, 5.604 sự kiện), bước 4 chỉ gửi 40 dòng đầu nên mô hình không thấy dòng đáng ngờ; và bước 3 tìm dấu vết trong cả phiên nên phiên dài dễ tìm thấy dấu vết không liên quan đoạn khớp ở bước 2. Hướng sửa: chỉ tìm dấu vết gần đoạn khớp (để tuần sau).
 
+**Cập nhật 14/11 (lần chạy của Khôi sau khi sửa bước 4 để gửi các dòng quanh dấu vết):** có SLM (phi4-mini) bước 4 chặn lại **9 trong 15** phiên báo giả của máy Khôi, còn 6/779 (0,8%); không có lỗi SLM, chỉ hỏi SLM 15 lần (1.194 giây). Như vậy sau khi sửa, bước 4 có giúp loại báo giả trên máy lạ, thay cho nhận định ở đoạn trên (đoạn trên là lần đo trước khi sửa). Chưa đo SLM trên bộ thử tấn công, nên chưa biết SLM có làm mất phát hiện đúng hay không.
+
 Ca tấn công ngoài tập huấn luyện (EVTX-ATTACK-SAMPLES), chạy với `--ban-tam`:
 
 | File | Kết luận |
@@ -103,27 +106,34 @@ Ca tấn công ngoài tập huấn luyện (EVTX-ATTACK-SAMPLES), chạy với `
 | `CA_sysmon_hashdump_cmd_meterpreter` (chạy 30/10) | T1003.001, 0,760, đúng (chỉ 1 sự kiện lsass) |
 | `CA_teamviewer-dumper_sysmon_10` (chạy 30/10), `sideloading_..._run_key` (chạy 30/10) | bỏ sót, log quá ngắn (1 và 7 sự kiện) |
 
-## 6b. Bộ thử cố định `data/bo-thu.csv` (đo đầu-cuối trên tấn công ngoài tập huấn luyện)
+## 6b. Bộ thử cố định `data/bo-thu.csv` (số chính thức từ `src/danh_gia.py`)
 
-Bộ thử gồm 21 file tấn công chấm điểm lấy từ EVTX-ATTACK-SAMPLES (cộng 1 file chờ quyết định, không tính) và 4 log bình thường. Nhãn lấy bằng cách **đọc lệnh và sự kiện thật** trong từng file, không lấy từ agent hay `dau_vet.py`. Chạy `agent.py` (bản `--ban-tam`, chưa có mô hình ngôn ngữ), tính "đúng" khi agent kết luận đúng kỹ thuật ở ít nhất một phiên có nhãn.
+Chạy ngày 15/11/2026 (commit `8c43445`, mô hình `mau_chuoi.json` sha256 `4255be121581`, ngưỡng 0,5, **không SLM**), mất 2.961 giây. Bộ thử gồm 21 file tấn công chấm điểm từ EVTX-ATTACK-SAMPLES và 3 log bình thường (máy Thiên tuần 3 và tuần 4, máy Dũng). Nhãn lấy bằng cách **đọc lệnh và sự kiện thật** trong từng file, không lấy từ agent hay `dau_vet.py`. Đơn vị đếm của `danh_gia.py` là **phiên** tấn công (cột `Phien` của `bo-thu.csv`), không phải file.
 
-| Kỹ thuật | File | Agent kết luận đúng |
+| Chế độ | Phát hiện đúng (phiên tấn công) | Kết luận sai mã | Bỏ sót: dừng bước 2 / chưa xác nhận | Báo nhầm trên log bình thường | Độ sớm (trung vị) |
+|---|---|---|---|---|---|
+| Không SLM | **7/31 (23%, khoảng tin cậy 95% xấp xỉ 11% đến 40%)** | 0 | 18 / 6 | **4/2.511 (0,16%)** | **2 sự kiện** (7 phiên) |
+
+Bảng chính chỉ tính file chưa dùng để chỉnh agent: file Dumpert (`sysmon_10_11_outlfank_dumpert...`, đúng 1/1) và log máy Dũng (10/2.573) ghi riêng. Báo nhầm 4/2.511 là tuần 3 (0/807) cộng tuần 4 (4/1.704).
+
+| Kỹ thuật | Phiên tấn công | Đúng |
 |---|---|---|
-| T1003.001 | 6 | 5 |
-| T1021.001 | 3 | 0 |
-| T1053.005 | 2 | 2 |
+| T1003.001 | 6 | 5 (83%) |
+| T1021.001 | 5 | 0 |
+| T1053.005 | 4 | 2 (50%) |
 | T1059.001 | 1 | 0 |
-| T1105 | 3 | 0 |
-| T1136.001 | 2 | 0 |
+| T1105 | 4 | 0 |
+| T1136.001 | 7 | 0 |
 | T1547.001 | 4 | 0 |
 | T1070.001 | 0 | không có file |
-| **Tổng** | **21** | **7 (33%, khoảng tin cậy 95% xấp xỉ 17% đến 55%)** |
 
-- Bỏ các file từng dùng khi phát triển/demo (04 và 07): 6/19 (32%). Bỏ thêm file 15 (nhãn đổi, xem dưới): 5/18 (28%).
-- So với 64% ở phép thử bỏ lần lượt từng file: đó là đoán kỹ thuật chỉ bằng so khớp chuỗi trên dữ liệu Splunk, còn đây là cả 5 bước (cần dấu vết bắt buộc và điểm đạt ngưỡng) trên log từ nguồn khác. Hai con số đo hai việc khác nhau, và con số 33% mới là số nên dùng khi nói agent làm được gì trên log lạ.
-- Các file bị bỏ sót phần lớn rất ngắn (1 đến 4 sự kiện) hoặc chỉ là sửa registry (T1136.001, T1547.001), nên chuỗi ký hiệu quá ngắn để khớp.
+- Tính theo file (ít nhất một phiên có nhãn được kết luận đúng): 7/21 (33%) gồm cả file Dumpert, 6/20 không tính file Dumpert. Số theo phiên (23%) thấp hơn vì file `sysmon_local_account_creation...` (T1136.001) có 6 phiên đều bị bỏ sót và nhãn từng phiên chưa đối chiếu; bỏ file này thì 7/25 (28%).
+- Bỏ sót chủ yếu ở bước 2 (18 phiên): đoạn khớp không đạt ngưỡng hoặc không có ký hiệu, vì phần lớn file chỉ 1 đến 4 sự kiện hoặc chỉ sửa registry. 6 phiên còn lại dừng ở bước 3 (thiếu dấu vết).
+- Độ sớm trung vị là 2 sự kiện, nhưng các phiên đúng đều rất ngắn (1 đến 15 sự kiện) nên con số này chưa nói được độ sớm trên tấn công thật dài.
+- So với 64% ở phép thử bỏ lần lượt từng file: đó là đoán kỹ thuật chỉ bằng so khớp chuỗi trên dữ liệu Splunk, còn đây là cả các bước (cần dấu vết bắt buộc và điểm đạt ngưỡng) trên log từ nguồn khác. Hai con số đo hai việc khác nhau; 23% theo phiên (hoặc 33% theo file) mới là số nên dùng khi nói agent làm được gì trên log lạ.
 - File `rdrleakdiag` (T1003.001): agent đoán đúng chuỗi với điểm 0,978 nhưng bước 3 báo thiếu dấu vết, vì tiến trình `rdrleakdiag` tự dump lsass nên log không có Event 10 vào lsass. `dau_vet.py` đòi Event 10 nên bỏ sót thật một ca đúng.
 - File SharpRDP (T1021.001): agent đoán nhầm phiên 2 là T1059.001 (0,583) vì sự kiện kết nối 3389 nằm ở phiên 1, bước gom phiên đã tách hai phần của cùng một cuộc tấn công.
+- Máy Khôi không có trong lần chạy này (file không nằm trên máy Thiên); số máy Khôi lấy từ lần chạy của Khôi (`docs/ket-qua/tuan5-lan2-bang.md`).
 
 ## 7. Hạn chế
 
@@ -146,4 +156,4 @@ Log bình thường nhiều hơn log tấn công rất nhiều, nên bộ lọc 
 
 Kết quả: máy Thiên (log mới) 0 phiên nhầm trên 807 và 4 trên 1.704 ở tuần 4; máy Dũng 10 phiên nhầm trên 2.573 (0,39%); máy Khôi, máy lạ, 15 phiên nhầm trên 779 (1,9%, khoảng tin cậy 95% xấp xỉ 1,2% đến 3,2%, ba nguyên nhân gốc). Tức là tỉ lệ báo giả cuối cùng khoảng 0 đến vài phần trăm số phiên tùy máy, thấp hơn nhiều so với chỉ so khớp chuỗi (1,5% đến 5,6% phiên qua bước 2), nhưng chưa về 0 trên máy lạ. Phần còn lại chủ yếu là phần mềm hợp lệ tạo tác vụ hẹn giờ hay khóa Run.
 
-Mặt còn lại: trên tấn công ngoài tập huấn luyện (bộ thử cố định, mục 6b) agent chỉ kết luận đúng kỹ thuật ở 7/21 file (33%). Báo giả thấp nhờ agent thận trọng, nhưng cái giá là bỏ sót nhiều ca ngắn hoặc chỉ sửa registry.
+Mặt còn lại: trên tấn công ngoài tập huấn luyện (bộ thử cố định, mục 6b) agent chỉ kết luận đúng kỹ thuật ở 7/31 phiên (23%; 7/21 file, 33%), và báo nhầm trên log bình thường là 4/2.511 (0,16%). Báo giả thấp nhờ agent thận trọng, nhưng cái giá là bỏ sót nhiều ca ngắn hoặc chỉ sửa registry.
