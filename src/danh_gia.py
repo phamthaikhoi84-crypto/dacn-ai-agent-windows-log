@@ -25,10 +25,12 @@ Cách chạy (PowerShell, ở thư mục gốc repo, mở Ollama trước nếu 
   python src\\danh_gia.py --thu-muc D:\\DoAnChuyenNganh\\log
   python src\\danh_gia.py --thu-muc D:\\DoAnChuyenNganh\\log --che-do khong-slm      (chạy nhanh, không cần Ollama)
   python src\\danh_gia.py --thu-muc D:\\DoAnChuyenNganh\\log --khong-do-som          (bỏ phần đo độ sớm)
+  python src\\danh_gia.py --thu-muc D:\\DoAnChuyenNganh\\log --chi-tan-cong          (chỉ file tấn công: đo phát hiện + độ sớm)
 Kết quả:
   output\\danh_gia\\bang.md              bảng để chép vào tuan-5.md / docs/models.md
   output\\danh_gia\\ket_qua_phien.csv    từng phiên, từng chế độ
   output\\danh_gia\\<che-do>\\<file>.txt   chi tiết 5 bước của các phiên có đi qua bước 3
+  output\\danh_gia\\cache\\              log đã nạp vào DuckDB, dùng lại ở lần chạy sau (xóa đi thì tự nạp lại)
 """
 import argparse
 import contextlib
@@ -187,13 +189,32 @@ def do_som(so, khoa, ds, con, mh, a, dung, dem, toi_da_slm):
 
 
 # ---------------------------------------------------------------- đo 1 file ở 1 chế độ
+def mo_csdl(duong, thu_muc_ra):
+    """Mở DuckDB đã nạp sẵn file log. Lần đầu đọc .evtx rồi lưu vào output/danh_gia/cache/,
+    các lần sau (chế độ khác, lần chạy sau) dùng lại, không phải đọc .evtx nữa.
+    Tên bộ nhớ đệm có kích thước + thời điểm sửa của file log: file log đổi thì tự nạp lại."""
+    tt = os.stat(duong)
+    thu_muc = os.path.join(thu_muc_ra, "cache")
+    os.makedirs(thu_muc, exist_ok=True)
+    dich = os.path.join(thu_muc, f"{ten_an_toan(os.path.basename(duong))}_{tt.st_size}_{int(tt.st_mtime)}.duckdb")
+    if not os.path.exists(dich):
+        tam = dich + ".dang_nap"
+        if os.path.exists(tam):
+            os.remove(tam)
+        con = duckdb.connect(tam)
+        nap_log(con, [duong])
+        con.close()
+        os.replace(tam, dich)            # chỉ thành bộ nhớ đệm khi nạp xong trọn vẹn
+    else:
+        print(f"     dùng dữ liệu đã nạp: {os.path.basename(dich)}", flush=True)
+    return duckdb.connect(dich)
+
+
 def do_file(t, duong, che_do, mh, a, dem, thu_muc_ra):
     a.khong_slm = che_do == "khong-slm"
-    duong_db = os.path.join(thu_muc_ra, "danh_gia.duckdb")
-    if os.path.exists(duong_db):
-        os.remove(duong_db)
-    con = duckdb.connect(duong_db)
-    nap_log(con, [duong])
+    bat_dau = time.perf_counter()
+    con = mo_csdl(duong, thu_muc_ra)
+    giay_nap = time.perf_counter() - bat_dau
     phien_list, _, _ = gom_phien(con)
     if len(phien_list) != t["so_phien"]:
         con.close()
@@ -234,6 +255,7 @@ def do_file(t, duong, che_do, mh, a, dem, thu_muc_ra):
                     h["buoc_do_som"] = buoc
             hang.append(h)
     con.close()
+    print(f"     nạp {giay_nap:.0f} giây, chạy agent {time.perf_counter() - bat_dau - giay_nap:.0f} giây", flush=True)
     return hang, None
 
 
@@ -364,11 +386,15 @@ def main():
     ap.add_argument("--khong-do-som", action="store_true", help="bỏ phần đo độ sớm (chạy nhanh hơn)")
     ap.add_argument("--toi-da-slm-do-som", type=int, default=10,
                     help="khi đo độ sớm ở chế độ có SLM, hỏi mô hình tối đa chừng này lần mỗi phiên (mặc định 10)")
+    ap.add_argument("--chi-tan-cong", action="store_true",
+                    help="chỉ chạy các file tấn công (bỏ log bình thường), dùng khi chỉ cần đo phát hiện và độ sớm")
     ap.add_argument("--ra", default=os.path.join(GOC_REPO, "output", "danh_gia"))
     a = ap.parse_args()
     a.chi_tiet, a.in_dong_slm = False, False
 
     cac_tep, bo_qua = doc_bo_thu(a.bo_thu)
+    if a.chi_tan_cong:
+        cac_tep = [t for t in cac_tep if t["loai"] == "tan_cong"]
     for t in cac_tep:
         thong_tin_ghi_chu[t["tep"]] = t["ghi_chu"]
     mh = agent.nap_mo_hinh(a.mo_hinh)
