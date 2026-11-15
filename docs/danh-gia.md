@@ -27,36 +27,36 @@ Phần của Thiên. Số liệu chi tiết ở `docs/ket-qua-huan-luyen.md`; b�
 
 ## 4. Kết quả
 
-Số chính thức do `src/danh_gia.py` ra (15/11/2026, commit `8c43445`, không SLM, 2.961 giây). Đơn vị là phiên theo cột `Phien`. Bảng chính loại file đã dùng để chỉnh agent (Dumpert, log máy Dũng); các file này ghi riêng.
+Số chính thức do `src/danh_gia.py` ra (15/11/2026, commit `0c96ba2`, `phi4-mini` trên CPU; bảng gốc `docs/ket-qua/tuan5-lan4-hai-che-do.md` và `tuan5-lan5-do-som.md`). Đơn vị là phiên theo cột `Phien`. Bảng chính loại file đã dùng để chỉnh agent (Dumpert, log máy Dũng); các file này ghi riêng.
 
-| Việc đo | Kết quả |
-|---|---|
-| Đúng kỹ thuật, theo phiên | **7/31 (23%, khoảng tin cậy xấp xỉ 11% đến 40%)** |
-| Đúng kỹ thuật, theo file | 7/21 (33%) gồm Dumpert; 6/20 không tính Dumpert |
-| Bỏ file `sysmon_local_account_creation` (6 phiên, nhãn từng phiên chưa đối chiếu) | 7/25 (28%) |
-| Kết luận sai mã | 0 |
-| Bỏ sót | 18 phiên dừng ở bước 2, 6 phiên chưa xác nhận (bước 3) |
-| Báo giả, máy Thiên tuần 3 | 0/807 |
-| Báo giả, máy Thiên tuần 4 | 4/1.704 (0,23%) |
-| Báo giả, hai tuần máy Thiên gộp | 4/2.511 (0,16%; khoảng tin cậy xấp xỉ 0,08% đến 0,4%) |
-| Báo giả, máy Dũng (đã dùng để chỉnh dấu vết, ghi riêng) | 10/2.573 (0,39%) |
-| Báo giả, máy Khôi, không SLM (máy lạ) | 15/779 (1,9%; khoảng tin cậy xấp xỉ 1,2% đến 3,2%) |
-| Báo giả, máy Khôi, có SLM phi4-mini (sau khi sửa bước 4) | 6/779 (0,8%; khoảng tin cậy xấp xỉ 0,4% đến 1,7%); SLM chặn 9 phiên, 0 lỗi |
-| Độ sớm (trung vị, phiên đúng) | 2 sự kiện (7 phiên) |
+| Việc đo | Không SLM | Có SLM |
+|---|---|---|
+| Đúng kỹ thuật, theo phiên (31 phiên) | **7 (23%)**, khoảng tin cậy xấp xỉ 11% đến 40% | **6 (19%)**, xấp xỉ 9% đến 36% |
+| Kết luận sai mã | 0 | 0 |
+| Bỏ sót (dừng bước 2 / chưa xác nhận) | 18 / 6 | 18 / 7 |
+| Báo nhầm, 3 log chưa dùng chỉnh (3.290 phiên) | **19 (0,58%)**, xấp xỉ 0,37% đến 0,90% | **8 (0,24%)**, xấp xỉ 0,12% đến 0,48% |
+| Báo nhầm, máy Thiên tuần 3 | 0/807 | 0/807 |
+| Báo nhầm, máy Thiên tuần 4 | 4/1.704 (0,23%) | 2/1.704 |
+| Báo nhầm, máy Khôi (máy lạ) | 15/779 (1,9%), xấp xỉ 1,2% đến 3,2% | 6/779 (0,8%) |
+| Báo nhầm, máy Dũng (đã dùng chỉnh dấu vết, ghi riêng) | 10/2.573 (0,39%) | chưa đo |
+| Độ sớm (trung vị, phiên đúng) | 2 sự kiện (7 phiên) | 2 sự kiện (6 phiên) |
+| SLM lỗi | - | 0 |
 
-Theo kỹ thuật (phiên tấn công): T1003.001 5/6, T1053.005 2/4, T1021.001 0/5, T1059.001 0/1, T1105 0/4, T1136.001 0/7, T1547.001 0/4, T1070.001 không có file.
+Theo kỹ thuật (phiên tấn công, không SLM / có SLM): T1003.001 5/6 và 4/6, T1053.005 2/4 và 2/4, T1021.001 0/5, T1059.001 0/1, T1105 0/4, T1136.001 0/7, T1547.001 0/4 (cả hai chế độ), T1070.001 không có file.
 
-Số máy Khôi lấy từ lần chạy của Khôi (`docs/ket-qua/tuan5-lan2-bang.md`, commit `a118d22`); `danh_gia.py` ở máy Thiên không có file log của Khôi. Chưa chạy chế độ có SLM trên bộ thử tấn công.
+Theo file (không SLM): 7/21 (33%). Bỏ file `sysmon_local_account_creation` (6 phiên, nhãn từng phiên chưa đối chiếu): 7/25 (28%). Nếu tách thêm file SharpRDP (xem mục 5): 7/29 (24%).
+
+**SLM chưa giúp.** Không lần nào SLM chọn "chưa xác nhận" (không lần nào nói hoạt động bình thường). Báo nhầm giảm từ 19 xuống 8 vì SLM chọn nhầm sang kỹ thuật thiếu dấu vết rồi bước kiểm chứng gạt đi (11 phiên bị chặn: 9 máy Khôi, 2 máy Thiên tuần 4); cùng cơ chế đó làm mất 1 phát hiện thật (`babyshark_mimikatz_powershell`), nên phát hiện đúng giảm từ 7 xuống 6. Chi tiết: `ke-hoach-nhat-ky/tuan-5.md`.
 
 ## 5. Hạn chế
 
 - **Cỡ mẫu nhỏ:** 21 file (31 phiên), khoảng tin cậy rộng. T1070.001 không có file nào (không có mẫu Sysmon xóa log), T1059.001 chỉ 1 file, T1136.001 chỉ 2 file; ba kỹ thuật này chưa đủ để kết luận.
 - **Nhãn do chúng tôi gán:** bằng cách đọc lệnh, chưa có người ngoài kiểm. Hai file `remote_file_copy` và `smbmap` (T1105) và file `sysmon_local_account_creation...` (T1136.001, 6 phiên chưa đối chiếu từng phiên) có độ chắc trung bình.
 - **Đổi nhãn sau khi xem kết quả:** `babyshark_mimikatz_powershell` ban đầu xếp T1059.001, đổi sang T1003.001 sau khi xem kết quả agent. Vì vậy báo cả kết quả khi bỏ file này (28%).
-- **File đã dùng khi phát triển/demo:** 04 (Dumpert, được `danh_gia.py` loại khỏi bảng chính, đúng 1/1) và 07 (SharpRDP, vẫn tính, đúng 0/2).
+- **File đã dùng khi phát triển/demo:** 04 (Dumpert, được `danh_gia.py` loại khỏi bảng chính, đúng 1/1) và 07 (SharpRDP, từng có trong ví dụ demo; chưa xác nhận có dùng khi thiết kế `ky_hieu.py`; vẫn tính, đúng 0/2).
 - **File rất ngắn:** nhiều file chỉ 1 đến 4 sự kiện hoặc chỉ sửa registry, chuỗi ký hiệu quá ngắn để khớp. Đây là một phần lớn lý do bỏ sót, và cũng là giới hạn của dữ liệu mẫu chứ không hẳn của mô hình.
 - **Hai lỗi của thiết kế:** (1) `dau_vet.py` đòi Event 10 vào lsass nên bỏ sót ca `rdrleakdiag` (tiến trình tự dump); (2) gom phiên theo máy + LogonId + cây tiến trình có thể tách đôi một cuộc tấn công (ca SharpRDP: kết nối 3389 ở phiên khác với lệnh chạy).
 - **Hai số đo khác nhau:** 64% (bỏ lần lượt từng file, chỉ so khớp chuỗi, dữ liệu Splunk) và 23% theo phiên (33% theo file; cả các bước, nguồn khác). Chỉ số thứ hai phản ánh agent trên log lạ.
-- **Báo giả chỉ có một máy lạ** (máy Khôi); máy Dũng đã dùng để chỉnh dấu vết; máy Thiên cùng máy với dữ liệu học lớp bình thường (log tuần 3 và 4 không trùng thời gian với log học).
-- **Chưa đo SLM trên tấn công:** số tấn công ở trên là chế độ không SLM. SLM chỉ mới đo trên log bình thường của máy Khôi (giảm báo giả từ 15 xuống 6 trên 779 phiên); chưa biết SLM có làm mất phát hiện đúng hay không.
+- **Báo giả chỉ có một máy lạ** (máy Khôi; máy Thiên cùng máy với dữ liệu học lớp bình thường); máy Dũng đã dùng để chỉnh dấu vết; máy Thiên cùng máy với dữ liệu học lớp bình thường (log tuần 3 và 4 không trùng thời gian với log học).
+- **SLM:** chỉ thử `phi4-mini` với một cách hỏi; kết luận "chưa giúp" áp dụng cho cách hỏi này, chưa phải cho mọi SLM hay cách hỏi (tuần 6: cho SLM biết kết quả bước 3 và cho phép trả lời bình thường). Máy Dũng chưa đo ở chế độ có SLM.
 - **Một số file chạy bị antivirus chặn:** tên `Invoke-Mimikatz` bị chặn trên máy Thiên; phải chạy qua bản sao đổi tên. Nếu `danh_gia.py` lỗi Access denied ở dòng này thì bỏ dòng đó.
