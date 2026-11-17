@@ -4,6 +4,13 @@
 
 Dựng xong nền móng để trả lời câu hỏi của thầy: **mô hình ngôn ngữ nhỏ (SLM) có giúp agent phát hiện tốt hơn so với chỉ dùng luật + dấu vết bắt buộc không?** Cụ thể: một bộ thử cố định có nhãn từng phiên, một chế độ chạy không SLM để so sánh, và một script đo ra bảng hai dòng (có SLM / không SLM) gồm phát hiện, báo nhầm và độ sớm.
 
+## Nội dung ghi phiếu tiến độ
+
+- Sửa bước 4: gửi log quanh dấu vết cho SLM
+- Tách lỗi SLM, thêm chế độ không SLM
+- Xây bộ thử cố định: 21 file tấn công
+- Đo có / không SLM: phát hiện, báo nhầm, độ sớm
+
 ## Phân công và kết quả
 
 | Người | Việc | Kết quả |
@@ -14,7 +21,7 @@ Dựng xong nền móng để trả lời câu hỏi của thầy: **mô hình n
 | Khôi | K4: `src/danh_gia.py` đo có/không SLM trên bộ thử | Xong, đã đo trên 24 file |
 | Thiên | `data/bo-thu.csv`: 21 file tấn công (nhãn từng phiên, đọc từ lệnh thật) + log bình thường | Xong, 1 dòng (comsvcs) loại ra |
 | Thiên | Gửi log bình thường máy Thiên tuần 3, tuần 4 | Xong |
-| Dũng | Đo lại 4 SLM sau khi sửa bước 4 | Đang đo lại với `slm.py` mới (xem mục Lần đo 1–2) |
+| Dũng | Đo lại 4 SLM sau khi sửa bước 4 | Chưa xong: chạy bằng CPU quá lâu. Chuyển sang đo bằng `danh_gia.py` trên cùng bộ thử, bảng so sánh 4 SLM làm ở tuần 6 |
 | Dũng | Gửi log bình thường máy Dũng | Chưa có, chưa đưa vào bảng |
 
 ## Những gì đã sửa trong agent
@@ -107,16 +114,16 @@ Laptop chạy Ollama hoàn toàn bằng CPU. Đo trên toàn bộ bộ thử: kh
 | Lần | Dữ liệu | Thay đổi | Kết quả |
 |---|---|---|---|
 | 1 | Máy Khôi | `slm.py` dùng `"format": "json"` | 13 lần hỏi (dừng giữa chừng): 3 kết luận, 2 chưa xác nhận, **8 SLM lỗi** (4 JSON sai cấu trúc, 2 bị cắt, 2 Ollama lỗi 500) |
-| 2 | Máy Khôi | Thêm khuôn JSON + thử lại khi lỗi 500 | 15 lần hỏi, **0 lỗi**, báo nhầm 15 → 6 |
+| 2 | Máy Khôi | Thêm khuôn JSON + thử lại khi lỗi 500 | 15 lần hỏi, **0 lỗi**, báo nhầm từ 15 xuống 6 |
 | 3 | Máy Khôi + Thiên, không SLM | – | Báo nhầm 19/3290; khớp số Thiên ghi (4 trên máy Thiên tuần 4) |
 | 4 | Toàn bộ bộ thử, hai chế độ | – | Bảng chính ở trên |
 | 5 | File tấn công, hai chế độ | Đo độ sớm | Trung vị 2 sự kiện ở cả hai chế độ |
 
-Giữa lần 1 và lần 2 chỉ sửa **định dạng đầu ra** của SLM (lỗi kỹ thuật), không sửa prompt hay cách chọn. Lần 2 và lần 4 cho cùng kết quả trên máy Khôi (15 → 6), vì SLM chạy temperature 0.
+Giữa lần 1 và lần 2 chỉ sửa **định dạng đầu ra** của SLM (lỗi kỹ thuật), không sửa prompt hay cách chọn. Lần 2 và lần 4 cho cùng kết quả trên máy Khôi (từ 15 xuống 6 báo nhầm), vì SLM chạy temperature 0.
 
 ## Kết luận tạm
 
-- Với `phi4-mini` và cách hỏi hiện tại, SLM **chưa giúp được** theo nghĩa thầy hỏi. Báo nhầm giảm 19 → 8 là nhờ bước kiểm chứng gạt bỏ lựa chọn sai của SLM, và chính cơ chế đó làm mất 1/7 phát hiện thật.
+- Với `phi4-mini` và cách hỏi hiện tại, SLM **chưa giúp được** theo nghĩa thầy hỏi. Báo nhầm giảm từ 19 xuống 8 là nhờ bước kiểm chứng gạt bỏ lựa chọn sai của SLM, và chính cơ chế đó làm mất 1/7 phát hiện thật.
 - Phần đóng góp chính đang nằm ở **luật + dấu vết bắt buộc + bước kiểm chứng**. Bước kiểm chứng cũng là thứ giữ cho SLM không làm agent kết luận bừa.
 - Bộ thử còn nhỏ (31 phiên tấn công, 1 phiên T1059.001) nên các tỉ lệ theo kỹ thuật chỉ mang tính tham khảo.
 
@@ -128,11 +135,13 @@ Giữa lần 1 và lần 2 chỉ sửa **định dạng đầu ra** của SLM (l
 
 ## Việc tuần 6
 
-1. **Bước 2 (quan trọng nhất):** tìm vì sao 18 phiên dừng ở bước 2, nhất là các file 1–4 sự kiện. Mọi chỉnh sửa phải làm trên dữ liệu khác (Splunk Attack Data, OTRF), **không chỉnh theo bộ thử này**, rồi mới đo lại trên bộ thử.
-2. **SLM:** thử cho SLM biết kết quả bước 3 (ứng viên nào thiếu dấu vết) và cho phép trả lời "hoạt động bình thường". Chỉnh trên log máy Dũng, đo trên bộ thử.
-3. Dũng: bảng so sánh 4 SLM với `slm.py` mới, gồm số lần SLM lỗi, số lần chọn `CHUA_XAC_NHAN`, thời gian mỗi lần hỏi.
-4. Thiên: bổ sung phiên tấn công cho các kỹ thuật ít mẫu (T1059.001 mới có 1 phiên), từ nguồn chưa dùng.
-5. Độ sớm ở chế độ phát lại (agent xem log dần theo thời gian), để đúng với yêu cầu "nhận ra sớm từ vài sự kiện đầu".
+Chi tiết trong `ke-hoach-nhat-ky/tuan-6.md`. Tóm tắt:
+
+1. Theo dõi trực tiếp: agent đọc sự kiện mới từ Sysmon trên máy đang chạy (Khôi).
+2. Bảng so sánh 4 SLM trên cùng bộ thử (Dũng, Khôi chạy hỗ trợ).
+3. Tìm nguyên nhân 18 phiên dừng ở bước 2 và thử sửa trên bộ phát triển, **không chỉnh theo bộ thử này** (Thiên).
+4. Cách hỏi mới cho SLM: cho biết kết quả bước 3 và cho phép trả lời "bình thường", chỉnh trên log máy Dũng (Dũng).
+5. Cài Sysmon máy lạ thứ hai (Khôi).
 
 ## Dùng AI
 
