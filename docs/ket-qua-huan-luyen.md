@@ -145,6 +145,27 @@ Theo lần đo của Khôi (`ke-hoach-nhat-ky/tuan-5.md`): **chưa**. Trong 27 l
 - Ví dụ phiên 46 máy Khôi: Lenovo tạo 3 tác vụ hẹn giờ bằng `schtasks /Create /XML` cùng lúc Windows Defender gọi `wevtutil.exe`; SLM bỏ qua `schtasks`, bám vào chữ `wevtutil` và chọn T1070.001 dù không có lệnh xóa nhật ký (ảnh `docs/hinh/tuan5-phien46-slm-chon-t1070.png`). SLM đang nhận diện theo từ khóa.
 - Thời gian: khoảng 70 giây mỗi lần hỏi với phiên dài trên máy thật (CPU).
 
+## 6c. Vì sao 17 phiên tấn công dừng ở bước 2 (T1 tuần 6)
+
+Phân loại 17 phiên tấn công có nhãn mà agent (không SLM) dừng ở bước 2, không tính Dumpert và SharpRDP (đã dùng chỉnh). Chỉ đọc và phân loại, **chưa sửa gì**. Dữ liệu: `ket_qua_phien.csv` của `danh_gia.py` (số sự kiện, điểm) ghép với chuỗi ký hiệu từng phiên và từ vựng 87 ký hiệu của `mau_chuoi.json` (script đọc, không lưu trong repo).
+
+| Nhóm nguyên nhân | Phiên | Điểm bước 2 | Ví dụ |
+|---|---|---|---|
+| A. Ngắn (1 đến 4 sự kiện), ký hiệu đã học nhưng chỉ là ký hiệu chung | 11 | 0,015 đến 0,165 | `SUA_REGISTRY:khac` (8 phiên: T1136.001 7 phiên, startup folder 1), `TAO_FILE:*.exe` (2), `SUA_REGISTRY:Run` (1) |
+| B. Ngắn và có ký hiệu chưa từng học | 5 | 0 đến 0,025 | `KET_NOI_MANG:3389`, `KET_NOI_MANG:445`, `TAO_TIEN_TRINH:sharprdp.exe`, `TAO_TIEN_TRINH:desktopimgdownldr.exe`, `TAO_FILE:*.7z` |
+| C. Dài hơn (7 sự kiện), có ký hiệu chưa từng học | 1 | 0 | phiên 2 của `tsclient_SharpRdp`: `rdpclip.exe`, `SUA_REGISTRY:RunMRU`, `a.exe` |
+| D. Đủ dài, đủ ký hiệu đã học, điểm vẫn thấp | **0** | - | - |
+
+Theo kỹ thuật: T1136.001 7 phiên (đều nhóm A), T1547.001 4 phiên (A 3, B 1), T1021.001 3 phiên (B 2, C 1), T1105 3 phiên (A 1, B 2).
+
+Nhận xét:
+- **16/17 phiên chỉ có 1 đến 4 sự kiện**, và không phiên nào thuộc nhóm D. Nghĩa là không có bằng chứng mô hình "hiểu sai" chuỗi: vấn đề là phiên quá ngắn hoặc ký hiệu quá thô.
+- Nhóm A: ký hiệu `SUA_REGISTRY:khac` gộp mọi khóa registry khác nên không phân biệt được việc ghi khóa SAM (tạo tài khoản) với việc ghi registry thông thường. Phiên chỉ có ký hiệu này xuất hiện rất nhiều trong log bình thường, nên nâng điểm cho chúng sẽ làm tăng báo nhầm.
+- Nhóm B và C: ký hiệu chứa tên tiến trình, cổng hoặc đuôi tệp cụ thể, nên công cụ chưa gặp khi học (`sharprdp.exe`, `desktopimgdownldr.exe`) hay cổng 3389/445 cho điểm 0. Đây là hạn chế đã ghi ở mục 7, nay có số cụ thể: 6/17 phiên.
+- Các file EVTX-ATTACK-SAMPLES là mẫu tối thiểu (thường 1 đến 10 sự kiện), còn dữ liệu huấn luyện (Splunk) là phiên dài. Con số 24% có thể thấp hơn hiệu năng trên tấn công thật dài; điều này **chưa kiểm chứng** vì chưa có dữ liệu thật dài.
+
+Hướng thử trong tuần 6 (làm trên bộ phát triển, không chỉnh theo bộ thử): (1) khái quát hóa ký hiệu: cổng về nhóm (RDP, SMB, web...), tên tiến trình chưa biết về nhóm theo loại hoặc thư mục, đuôi tệp về nhóm; (2) chia nhỏ `SUA_REGISTRY:khac` theo khóa (ví dụ SAM, Startup). Cả hai sửa `ky_hieu.py` nên phải huấn luyện lại `mau_chuoi.json` và đo lại ba thứ: tỉ lệ bỏ lần lượt từng file (64%), báo nhầm trên log bình thường (Thiên tuần 3 và 4, Dũng), và kết quả trên bộ phát triển. **Lưu ý trung thực:** hướng thử này rút ra từ việc đọc phiên của bộ thử, nên bộ thử không còn hoàn toàn "mù" với các ca này; số cuối cùng trên bộ thử phải ghi kèm lưu ý đó.
+
 ## 7. Hạn chế
 
 - Ký hiệu không có nội dung dòng lệnh (không phân biệt `net user /add` với `net use`), nên bước 2 chỉ là bộ lọc thô và dấu vết bắt buộc mới quyết định kết luận.
