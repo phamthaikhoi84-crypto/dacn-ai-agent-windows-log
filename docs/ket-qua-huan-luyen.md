@@ -147,24 +147,58 @@ Theo lần đo của Khôi (`ke-hoach-nhat-ky/tuan-5.md`): **chưa**. Trong 27 l
 
 ## 6c. Vì sao 17 phiên tấn công dừng ở bước 2 (T1 tuần 6)
 
-Phân loại 17 phiên tấn công có nhãn mà agent (không SLM) dừng ở bước 2, không tính Dumpert và SharpRDP (đã dùng chỉnh). Chỉ đọc và phân loại, **chưa sửa gì**. Dữ liệu: `ket_qua_phien.csv` của `danh_gia.py` (số sự kiện, điểm) ghép với chuỗi ký hiệu từng phiên và từ vựng 87 ký hiệu của `mau_chuoi.json` (script đọc, không lưu trong repo).
+Phân loại 17 phiên tấn công có nhãn mà agent (không SLM) dừng ở bước 2, không tính Dumpert và SharpRDP (đã dùng chỉnh). Chỉ đọc và phân loại, **chưa sửa gì**. Dữ liệu: `ket_qua_phien.csv` của `danh_gia.py` (số sự kiện, điểm) ghép với chuỗi ký hiệu từng phiên và từ vựng 87 ký hiệu của `mau_chuoi.json`. Khôi kiểm thêm ngày 18/11: nếu bước 2 đưa đúng kỹ thuật lên làm ứng viên thì bước 3 có đủ dấu vết không (cột cuối).
 
-| Nhóm nguyên nhân | Phiên | Điểm bước 2 | Ví dụ |
-|---|---|---|---|
-| A. Ngắn (1 đến 4 sự kiện), ký hiệu đã học nhưng chỉ là ký hiệu chung | 11 | 0,015 đến 0,165 | `SUA_REGISTRY:khac` (8 phiên: T1136.001 7 phiên, startup folder 1), `TAO_FILE:*.exe` (2), `SUA_REGISTRY:Run` (1) |
-| B. Ngắn và có ký hiệu chưa từng học | 5 | 0 đến 0,025 | `KET_NOI_MANG:3389`, `KET_NOI_MANG:445`, `TAO_TIEN_TRINH:sharprdp.exe`, `TAO_TIEN_TRINH:desktopimgdownldr.exe`, `TAO_FILE:*.7z` |
-| C. Dài hơn (7 sự kiện), có ký hiệu chưa từng học | 1 | 0 | phiên 2 của `tsclient_SharpRdp`: `rdpclip.exe`, `SUA_REGISTRY:RunMRU`, `a.exe` |
-| D. Đủ dài, đủ ký hiệu đã học, điểm vẫn thấp | **0** | - | - |
+| Nhóm nguyên nhân | Phiên | Điểm bước 2 | Ví dụ | Đủ dấu vết ở bước 3 nếu bước 2 đúng |
+|---|---|---|---|---|
+| A. Ngắn (1 đến 4 sự kiện), ký hiệu đã học nhưng chỉ là ký hiệu chung | 11 | 0,015 đến 0,165 | `SUA_REGISTRY:khac` (8 phiên: T1136.001 7 phiên, startup folder 1), `TAO_FILE:*.exe` (2), `SUA_REGISTRY:Run` (1) | 2/11 (khóa Run, file vào Startup) |
+| B. Ngắn và có ký hiệu chưa từng học | 5 | 0 đến 0,025 | `KET_NOI_MANG:3389`, `KET_NOI_MANG:445`, `TAO_TIEN_TRINH:sharprdp.exe`, `TAO_TIEN_TRINH:desktopimgdownldr.exe`, `TAO_FILE:*.7z` | 2/5 (kết nối 3389, file vào Startup) |
+| C. Dài hơn (7 sự kiện), có ký hiệu chưa từng học | 1 | 0 | phiên 2 của `tsclient_SharpRdp`: `rdpclip.exe`, `SUA_REGISTRY:RunMRU`, `a.exe` | 0/1 |
+| D. Đủ dài, đủ ký hiệu đã học, điểm vẫn thấp | **0** | - | - | - |
+| **Tổng** | **17** | | | **4/17** |
 
 Theo kỹ thuật: T1136.001 7 phiên (đều nhóm A), T1547.001 4 phiên (A 3, B 1), T1021.001 3 phiên (B 2, C 1), T1105 3 phiên (A 1, B 2).
 
 Nhận xét:
-- **16/17 phiên chỉ có 1 đến 4 sự kiện**, và không phiên nào thuộc nhóm D. Nghĩa là không có bằng chứng mô hình "hiểu sai" chuỗi: vấn đề là phiên quá ngắn hoặc ký hiệu quá thô.
-- Nhóm A: ký hiệu `SUA_REGISTRY:khac` gộp mọi khóa registry khác nên không phân biệt được việc ghi khóa SAM (tạo tài khoản) với việc ghi registry thông thường. Phiên chỉ có ký hiệu này xuất hiện rất nhiều trong log bình thường, nên nâng điểm cho chúng sẽ làm tăng báo nhầm.
-- Nhóm B và C: ký hiệu chứa tên tiến trình, cổng hoặc đuôi tệp cụ thể, nên công cụ chưa gặp khi học (`sharprdp.exe`, `desktopimgdownldr.exe`) hay cổng 3389/445 cho điểm 0. Đây là hạn chế đã ghi ở mục 7, nay có số cụ thể: 6/17 phiên.
-- Các file EVTX-ATTACK-SAMPLES là mẫu tối thiểu (thường 1 đến 10 sự kiện), còn dữ liệu huấn luyện (Splunk) là phiên dài. Con số 24% có thể thấp hơn hiệu năng trên tấn công thật dài; điều này **chưa kiểm chứng** vì chưa có dữ liệu thật dài.
+- **16/17 phiên chỉ có 1 đến 4 sự kiện**, và không phiên nào thuộc nhóm D. Không có bằng chứng mô hình "hiểu sai" chuỗi: vấn đề là phiên quá ngắn hoặc ký hiệu quá thô.
+- **Dù bước 2 đúng thì bước 3 cũng chặn 13/17 phiên.** 7 phiên T1136.001 chỉ có lsass ghi khóa SAM, không có lệnh `net user /add`; `desktopimgdownldr` và `sharprdp.exe` không khớp mẫu lệnh của T1105 và T1021.001. Chỉ 4 phiên đủ dấu vết (kết nối 3389 của `tsclient` phiên 1, khóa Run, hai phiên file vào Startup). Nên sửa bước 2 thì tối đa cứu được 4/17 phiên.
+- **Dữ liệu huấn luyện lệch so với mẫu thử.** Trong `mau_chuoi.json`, dữ liệu T1136.001 không có ký hiệu `SUA_REGISTRY` nào và T1021.001 không có `KET_NOI_MANG` nào. Dữ liệu huấn luyện là phiên dài có lệnh (Event 1); mẫu thử tối thiểu chỉ có tác dụng phụ (registry, file, mạng). Vì vậy dù chia nhỏ `SUA_REGISTRY:khac` thành khóa SAM hay gom cổng thành nhóm RDP, sau khi huấn luyện lại hai kỹ thuật này vẫn được 0 điểm vì không có chuỗi nào để khớp. Điểm nghẽn là dữ liệu huấn luyện, không chỉ ký hiệu.
+- Ký hiệu `SUA_REGISTRY:khac` gộp mọi khóa registry khác và phiên chỉ có ký hiệu này xuất hiện rất nhiều trong log bình thường, nên nâng điểm cho chúng sẽ làm tăng báo nhầm.
+- Các file EVTX-ATTACK-SAMPLES là mẫu tối thiểu (thường 1 đến 10 sự kiện), còn dữ liệu huấn luyện (Splunk) là phiên dài. Con số 24% có thể thấp hơn hiệu năng trên tấn công thật dài; điều này **chưa kiểm chứng**.
 
-Hướng thử trong tuần 6 (làm trên bộ phát triển, không chỉnh theo bộ thử): (1) khái quát hóa ký hiệu: cổng về nhóm (RDP, SMB, web...), tên tiến trình chưa biết về nhóm theo loại hoặc thư mục, đuôi tệp về nhóm; (2) chia nhỏ `SUA_REGISTRY:khac` theo khóa (ví dụ SAM, Startup). Cả hai sửa `ky_hieu.py` nên phải huấn luyện lại `mau_chuoi.json` và đo lại ba thứ: tỉ lệ bỏ lần lượt từng file (64%), báo nhầm trên log bình thường (Thiên tuần 3 và 4, Dũng), và kết quả trên bộ phát triển. **Lưu ý trung thực:** hướng thử này rút ra từ việc đọc phiên của bộ thử, nên bộ thử không còn hoàn toàn "mù" với các ca này; số cuối cùng trên bộ thử phải ghi kèm lưu ý đó.
+**Quyết định tuần 6:** chưa sửa `ky_hieu.py` (hai hướng chia nhỏ ký hiệu và gom cổng gần như không cứu được phiên nào). Thử một thay đổi trên bộ phát triển: phiên ngắn (không quá 4 sự kiện) mà có dấu vết mạnh (file vào Startup, kết nối 3389) thì đi thẳng bước 3. Đo báo nhầm trên log máy Dũng và 402 phiên cuối của tuần 2 (không dùng để học); nếu báo nhầm tăng rõ thì bỏ. Không dùng log Thiên tuần 3, tuần 4 và máy Khôi để chỉnh, và không sửa `dau_vet.py` theo ca của bộ thử. **Lưu ý trung thực:** hướng thử này rút ra từ việc đọc phiên của bộ thử, nên bộ thử không còn hoàn toàn "mù" với các ca này; số cuối cùng trên bộ thử phải ghi kèm lưu ý đó.
+
+## 6d. Bộ phát triển `data/bo-phat-trien.csv` (T2 tuần 6)
+
+**Mục đích:** có tập tấn công riêng để thử thay đổi ở bước 2 mà không chạm vào bộ thử cố định. Bộ này dùng để chỉnh, nên không dùng để báo cáo hiệu năng cuối.
+
+**Cách tạo.** Máy ảo VMware `DACN-LAB` (Windows 11 Enterprise LTSC Evaluation, build 26100), cài Sysmon 15.22 với đúng `config/sysmonconfig-dacn.xml` (SHA256 `E0FA639540BB87FB195B528CE51974B3DF32EC8EDB60FBA7A6179CF13FF3E209`, trùng bản trong repo, Sysmon tự ghi lại cùng mã băm trong Event ID 16), bật ghi ScriptBlock của PowerShell. Máy ảo không dùng thư mục chia sẻ, chỉ chạy qua mạng NAT, có snapshot Windows sạch (`sach`) trước khi cài công cụ. Test lấy từ Atomic Red Team (Invoke-AtomicRedTeam, cài ngày 19/11/2026), mỗi lần một test, ghi số test, GUID và giờ bắt đầu/kết thúc vào `atomic-log.csv`. Log Sysmon xuất theo khung giờ của từng test thành một file `.evtx`, rồi mới chạy bước dọn dẹp. Nhãn kỹ thuật lấy từ chính test đã chạy, không lấy từ kết quả của agent. Gói dữ liệu: `bo-phat-trien.zip` v1 (SHA256 `6F6B9926A5D8B1D33F33A480361F30A3046C70D8AD2713D12F1288F668719E34`, **không dùng**) và v2 (`bo-phat-trien-v2.zip`, SHA256 `126A3E670E5EBE5DF6F48D234288E4A1873606D0138019821F3698DE706583E9`).
+
+**Lần chạy đầu (v1) bị nhiễm do cách chạy test.** Script mở mỗi test bằng một tiến trình con `powershell -NoProfile -Command Import-Module ...`. Dòng lệnh này nằm ở đầu mọi phiên tấn công, làm chuỗi ký hiệu luôn khớp T1059.001 (điểm 0,945) và bước 3 coi `-NoProfile` là tham số ẩn nên luôn đủ dấu vết. Kết quả: 15 trên 27 file bị kết luận nhầm thành T1059.001 dù test thuộc kỹ thuật khác. Đây không phải lỗi của agent mà do cách chạy test, nên v1 chỉ giữ để đối chiếu. **Bài học:** cách tạo dữ liệu thử có thể làm thay đổi kết quả của agent.
+
+**Lần chạy v2.** Chạy `Invoke-AtomicTest` trực tiếp trong cửa sổ PowerShell Admin (không tạo tiến trình con).
+- **6 test bị Windows Defender chặn lúc khởi chạy** (`Access is denied`): T1547.001-4, T1053.005-7, T1059.001-10, T1105-7, T1105-10, T1105-29. Bản LTSC này không có ứng dụng Windows Security nên không tắt được Tamper Protection; Defender vẫn bật, chỉ loại trừ vài thư mục và tiến trình. File log của 6 test này không có lệnh tấn công, nên ghi `can kiem tra` trong CSV và `danh_gia.py` bỏ qua.
+- **21 test hợp lệ** (T1136.001 ×4, T1547.001 ×5, T1053.005 ×5, T1059.001 ×4, T1105 ×3), mỗi test một file, phiên tấn công là phiên 1.
+
+**Kết quả của agent (không SLM, ngưỡng 0,5) trên bộ phát triển v2:**
+
+| Kỹ thuật | Số phiên | Đúng |
+|---|---|---|
+| T1059.001 | 4 | 4/4 |
+| T1105 | 3 | 2/3 |
+| T1547.001 | 5 | 3/5 |
+| T1136.001 | 4 | 2/4 |
+| T1053.005 | 5 | 2/5 |
+| **Tổng** | **21** | **13/21 (62%, khoảng tin cậy 95% xấp xỉ 41% đến 79%)** |
+
+- 3 phiên kết luận sai mã (T1136.001-5, T1136.001-9, T1547.001-3: cả ba bị kết luận T1059.001, đều là lệnh PowerShell nên có thể coi là đúng một phần, nhưng nhãn giữ theo test).
+- 5 phiên "chưa xác nhận": T1053.005 số 4, 6, 8 (tạo task bằng cmdlet PowerShell, không có `schtasks.exe`), T1547.001-7 (shortcut `.lnk` trong Startup), T1105-25 (`certreq`).
+- **0 phiên dừng ở bước 2.** Độ sớm trung vị 4 sự kiện (13 phiên). 0 trên 32 phiên còn lại (không gán nhãn) trong các file này bị kết luận tấn công.
+- 62% là số trên bộ phát triển (dùng để chỉnh, mẫu 21, cách tạo khác bộ thử), **không so được trực tiếp với 24% của bộ thử**.
+
+**Điều bộ này không đo được.** Mọi phiên tấn công trong v2 bắt đầu bằng `hostname.exe > whoami.exe` do Invoke-AtomicTest sinh ra (nghi là phần ghi nhật ký thực thi, **chưa kiểm chứng**). Tiền tố này đưa điểm bước 2 lên 0,945 đến 0,989, nên không phiên nào dừng ở bước 2, trong khi 17/31 phiên của bộ thử dừng ở đó. Mô hình có vẻ đã học một phần dấu hiệu của bộ công cụ chạy test. Vì vậy bộ v2 **không thể kiểm tra** quy tắc "phiên ngắn có dấu vết mạnh thì đi thẳng bước 3" ở phía phát hiện. Cần thêm đợt chạy từng lệnh đơn lẻ, gõ trực tiếp, không qua Atomic (làm tiếp trong T3).
+
+**T3 mục 2, phía báo nhầm (đã đo, chưa đo phía phát hiện).** Quy tắc thử: phiên có không quá 4 sự kiện, điểm bước 2 dưới 0,5, và có tạo file trong thư mục Startup (Event 11) hoặc kết nối cổng 3389 (Event 3) thì đi thẳng bước 3. Trên log bình thường: máy Dũng 0/2.573 phiên và Thiên tuần 1 0/526 phiên, tổng **0/3.099** (1.961 và 323 phiên là phiên ngắn), đạt tiêu chí đặt trước (không quá 3 phiên trên 2.573). Quy tắc ba cho cận trên khoảng 0,1% (độ tin cậy 95%). Cả khóa Run cũng ra 0 trong phiên ngắn, chưa đưa vào quy tắc vì chưa đo trên máy lạ. Script đo đã thử trên hai file tấn công đã biết (dùng để kiểm tra script, không tính là bằng chứng).
 
 ## 7. Hạn chế
 
@@ -175,6 +209,7 @@ Hướng thử trong tuần 6 (làm trên bộ phát triển, không chỉnh the
 - Hoạt động hợp lệ tạo đúng dấu vết tấn công (Office, Lenovo, PowerShell bộ cài, ứng dụng ghi khóa Run) vẫn còn báo giả. Đây là điểm yếu chính của hai kỹ thuật T1053.005 và T1547.001: phần mềm hợp lệ làm đúng việc mà kẻ tấn công làm.
 - Phiên rất dài (hàng nghìn sự kiện) làm bước 3 dễ thấy dấu vết ở chỗ không liên quan đoạn khớp ở bước 2, và bước 4 chỉ gửi 40 dòng đầu cho mô hình ngôn ngữ.
 - Bộ thử: file `babyshark_mimikatz_powershell` ban đầu xếp T1059.001, được **đổi sang T1003.001 sau khi xem kết quả agent** (lệnh trong file là Mimikatz); file 04 và 07 từng dùng để phát triển/demo; hai file `remote_file_copy` và `smbmap` có độ chắc nhãn trung bình.
+- Bộ phát triển (mục 6d) dựng bằng Atomic Red Team: 6/27 test bị Defender chặn; phiên tấn công có tiền tố `hostname > whoami` của Invoke-AtomicTest; lần chạy đầu bị nhiễm bởi dòng lệnh bao ngoài. Không dùng bộ này để báo cáo hiệu năng cuối.
 - Hai nhãn đáng nghi: `createdump_windows-sysmon.log` (T1003.001) và `sysmon_soaphound.log` (T1059.001).
 
 ## 8. Trả lời câu hỏi "log bình thường chiếm 99,99%"
