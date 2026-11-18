@@ -108,12 +108,12 @@ Ca tấn công ngoài tập huấn luyện (EVTX-ATTACK-SAMPLES), chạy với `
 
 ## 6b. Bộ thử cố định `data/bo-thu.csv` (số chính thức từ `src/danh_gia.py`, lần đo 4 của Khôi)
 
-Chạy ngày 15/11/2026 (commit `0c96ba2`, mô hình `mau_chuoi.json` sha256 `4255be121581`, ngưỡng 0,5, SLM `phi4-mini` chạy Ollama trên CPU). Bảng gốc: `docs/ket-qua/tuan5-lan4-hai-che-do.md` (hai chế độ) và `tuan5-lan5-do-som.md` (độ sớm). Bộ thử gồm 21 file tấn công chấm điểm từ EVTX-ATTACK-SAMPLES (31 phiên có nhãn) và 3 log bình thường chưa dùng chỉnh (máy Thiên tuần 3, tuần 4, máy Khôi; tổng 3.290 phiên). Nhãn lấy bằng cách **đọc lệnh và sự kiện thật** trong từng file, không lấy từ agent hay `dau_vet.py`. Đơn vị đếm là **phiên** (cột `Phien`).
+Chạy ngày 15/11/2026 (commit `0c96ba2`, mô hình `mau_chuoi.json` sha256 `4255be121581`, ngưỡng 0,5, SLM `phi4-mini` chạy Ollama trên CPU). Bảng gốc: `docs/ket-qua/tuan5-lan4-hai-che-do.md` (hai chế độ) và `tuan5-lan5-do-som.md` (độ sớm). Bộ thử gồm 21 file tấn công chấm điểm từ EVTX-ATTACK-SAMPLES (31 phiên có nhãn; sau khi tách SharpRDP còn 29) và 3 log bình thường chưa dùng chỉnh (máy Thiên tuần 3, tuần 4, máy Khôi; tổng 3.290 phiên). Nhãn lấy bằng cách **đọc lệnh và sự kiện thật** trong từng file, không lấy từ agent hay `dau_vet.py`. Đơn vị đếm là **phiên** (cột `Phien`).
 
-| Chế độ | Phát hiện đúng (31 phiên) | Kết luận sai mã | Bỏ sót: dừng bước 2 / chưa xác nhận | Báo nhầm (3.290 phiên bình thường) | Độ sớm (trung vị) | SLM lỗi |
+| Chế độ | Phát hiện đúng (29 phiên, đã tách Dumpert và SharpRDP) | Kết luận sai mã | Bỏ sót: dừng bước 2 / chưa xác nhận | Báo nhầm (3.290 phiên bình thường) | Độ sớm (trung vị) | SLM lỗi |
 |---|---|---|---|---|---|---|
-| Không SLM | **7 (23%)**, khoảng tin cậy 95% xấp xỉ 11% đến 40% | 0 | 18 / 6 | **19 (0,58%)**, khoảng tin cậy xấp xỉ 0,37% đến 0,90% | 2 sự kiện (7 phiên) | - |
-| Có SLM | **6 (19%)**, xấp xỉ 9% đến 36% | 0 | 18 / 7 | **8 (0,24%)**, xấp xỉ 0,12% đến 0,48% | 2 sự kiện (6 phiên) | 0 |
+| Không SLM | **7 (24%)**, khoảng tin cậy 95% xấp xỉ 12% đến 42% | 0 | tổng 22 (lần đo 15/11: 18 / 6 trên 31 phiên) | **19 (0,58%)**, khoảng tin cậy xấp xỉ 0,37% đến 0,90% | 2 sự kiện (7 phiên) | - |
+| Có SLM | **6 (21%)**, xấp xỉ 10% đến 38% | 0 | tổng 23 (lần đo 15/11: 18 / 7 trên 31 phiên) | **8 (0,24%)**, xấp xỉ 0,12% đến 0,48% | 2 sự kiện (6 phiên) | 0 |
 
 Báo nhầm theo máy: Thiên tuần 3 0/807 (cả hai chế độ); Thiên tuần 4 4/1.704 không SLM, 2 có SLM; Khôi 15/779 không SLM, 6 có SLM. Log máy Dũng (10/2.573 không SLM) để riêng vì đã dùng chỉnh dấu vết. File Dumpert (đúng 1/1 ở cả hai chế độ) cũng ghi riêng vì đã dùng để chạy thử và sửa code.
 
@@ -121,18 +121,18 @@ Báo nhầm theo máy: Thiên tuần 3 0/807 (cả hai chế độ); Thiên tu�
 |---|---|---|---|
 | T1003.001 | 6 | 5 | 4 |
 | T1053.005 | 4 | 2 | 2 |
-| T1021.001 | 5 | 0 | 0 |
+| T1021.001 | 3 | 0 | 0 |
 | T1105 | 4 | 0 | 0 |
 | T1136.001 | 7 | 0 | 0 |
 | T1547.001 | 4 | 0 | 0 |
 | T1059.001 | 1 | 0 | 0 |
 | T1070.001 | 0 | không có file | không có file |
 
-- Tính theo file (ít nhất một phiên có nhãn được kết luận đúng) không SLM: 7/21 (33%). Số theo phiên thấp hơn vì file `sysmon_local_account_creation...` (T1136.001) có 6 phiên đều bị bỏ sót và nhãn từng phiên chưa đối chiếu; bỏ file này thì 7/25 (28%).
-- File `LM_sysmon_3_12_13_1_SharpRDP` từng xuất hiện trong ví dụ demo (`docs/phuong-phap.md`, `tuan-3.md`); chưa xác nhận có dùng khi thiết kế `ky_hieu.py` hay không. File này đúng 0/2 nên nếu tách ra như Dumpert thì còn 7/29 (24%) không SLM.
+- Tính theo file (ít nhất một phiên có nhãn được kết luận đúng) không SLM: 6/19 (32%) khi không tính Dumpert và SharpRDP. Số theo phiên thấp hơn vì file `sysmon_local_account_creation...` (T1136.001) có 6 phiên đều bị bỏ sót và nhãn từng phiên chưa đối chiếu; bỏ file này thì 7/23 phiên (30%).
+- File `LM_sysmon_3_12_13_1_SharpRDP` **đã dùng khi phát triển** (ký hiệu `RunMRU` thêm ở commit `05161fb` ngày 28/10, `tuan-3.md` ghi "phiên SharpRDP ra `SUA_REGISTRY:RunMRU`"), nên được tách khỏi bảng chính như Dumpert. Lần đo 15/11 của Khôi chưa tách (31 phiên); số trong bảng trên là số đã tách tính tay (hai phiên SharpRDP đều bị bỏ sót), sẽ đo lại chính thức. Hai file cùng họ (`tsclient_SharpRdp`, `mstscax.dll`) vẫn tính nhưng không hoàn toàn độc lập.
 - Bỏ sót chủ yếu ở bước 2 (18 phiên): đoạn khớp không đạt ngưỡng, vì phần lớn file chỉ 1 đến 4 sự kiện hoặc chỉ sửa registry. 6 phiên còn lại dừng ở bước 3 (thiếu dấu vết).
 - Độ sớm trung vị là 2 sự kiện, nhưng các phiên đúng đều rất ngắn (1 đến 15 sự kiện) nên con số này chưa nói được độ sớm trên tấn công dài, và chưa phải đo ở chế độ phát lại.
-- So với 64% ở phép thử bỏ lần lượt từng file: đó là đoán kỹ thuật chỉ bằng so khớp chuỗi trên dữ liệu Splunk, còn đây là cả các bước trên log từ nguồn khác. Hai con số đo hai việc khác nhau; 23% theo phiên mới là số nên dùng khi nói agent làm được gì trên log lạ.
+- So với 64% ở phép thử bỏ lần lượt từng file: đó là đoán kỹ thuật chỉ bằng so khớp chuỗi trên dữ liệu Splunk, còn đây là cả các bước trên log từ nguồn khác. Hai con số đo hai việc khác nhau; 24% theo phiên mới là số nên dùng khi nói agent làm được gì trên log lạ.
 - File `rdrleakdiag` (T1003.001): agent đoán đúng chuỗi với điểm 0,978 nhưng bước 3 báo thiếu dấu vết, vì tiến trình `rdrleakdiag` tự dump lsass nên log không có Event 10 vào lsass. `dau_vet.py` đòi Event 10 nên bỏ sót thật một ca đúng.
 - File SharpRDP (T1021.001): agent đoán nhầm phiên 2 là T1059.001 (0,583) vì sự kiện kết nối 3389 nằm ở phiên 1, bước gom phiên đã tách hai phần của cùng một cuộc tấn công.
 
@@ -166,4 +166,4 @@ Log bình thường nhiều hơn log tấn công rất nhiều, nên bộ lọc 
 
 Kết quả: máy Thiên (log mới) 0 phiên nhầm trên 807 và 4 trên 1.704 ở tuần 4; máy Dũng 10 phiên nhầm trên 2.573 (0,39%); máy Khôi, máy lạ, 15 phiên nhầm trên 779 (1,9%, khoảng tin cậy 95% xấp xỉ 1,2% đến 3,2%, ba nguyên nhân gốc). Tức là tỉ lệ báo giả cuối cùng khoảng 0 đến vài phần trăm số phiên tùy máy, thấp hơn nhiều so với chỉ so khớp chuỗi (1,5% đến 5,6% phiên qua bước 2), nhưng chưa về 0 trên máy lạ. Phần còn lại chủ yếu là phần mềm hợp lệ tạo tác vụ hẹn giờ hay khóa Run.
 
-Mặt còn lại: trên tấn công ngoài tập huấn luyện (bộ thử cố định, mục 6b) agent chỉ kết luận đúng kỹ thuật ở 7/31 phiên (23%; 7/21 file, 33%) khi không dùng SLM, và 6/31 (19%) khi dùng SLM. Báo nhầm trên 3.290 phiên bình thường chưa dùng chỉnh: 19 (0,58%) không SLM, 8 (0,24%) có SLM. SLM `phi4-mini` chưa giúp: phần giảm báo giả là do bước kiểm chứng, và SLM làm mất 1 phát hiện thật. Báo giả thấp nhờ agent thận trọng, nhưng cái giá là bỏ sót nhiều ca ngắn hoặc chỉ sửa registry.
+Mặt còn lại: trên tấn công ngoài tập huấn luyện (bộ thử cố định, mục 6b) agent chỉ kết luận đúng kỹ thuật ở 7/29 phiên (24%) khi không dùng SLM, và 6/29 (21%) khi dùng SLM (đã tách file Dumpert và SharpRDP dùng để phát triển). Báo nhầm trên 3.290 phiên bình thường chưa dùng chỉnh: 19 (0,58%) không SLM, 8 (0,24%) có SLM. SLM `phi4-mini` chưa giúp: phần giảm báo giả là do bước kiểm chứng, và SLM làm mất 1 phát hiện thật. Báo giả thấp nhờ agent thận trọng, nhưng cái giá là bỏ sót nhiều ca ngắn hoặc chỉ sửa registry.
