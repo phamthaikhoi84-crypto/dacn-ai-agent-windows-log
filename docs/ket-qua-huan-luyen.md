@@ -200,6 +200,31 @@ Nhận xét:
 
 **T3 mục 2, phía báo nhầm (đã đo, chưa đo phía phát hiện).** Quy tắc thử: phiên có không quá 4 sự kiện, điểm bước 2 dưới 0,5, và có tạo file trong thư mục Startup (Event 11) hoặc kết nối cổng 3389 (Event 3) thì đi thẳng bước 3. Trên log bình thường: máy Dũng 0/2.573 phiên và Thiên tuần 1 0/526 phiên, tổng **0/3.099** (1.961 và 323 phiên là phiên ngắn), đạt tiêu chí đặt trước (không quá 3 phiên trên 2.573). Quy tắc ba cho cận trên khoảng 0,1% (độ tin cậy 95%). Cả khóa Run cũng ra 0 trong phiên ngắn, chưa đưa vào quy tắc vì chưa đo trên máy lạ. Script đo đã thử trên hai file tấn công đã biết (dùng để kiểm tra script, không tính là bằng chứng).
 
+### 6e. Lệnh đơn lẻ `data/bo-phat-trien-don-le.csv` (T3 tuần 6, phía phát hiện)
+
+**Cách làm.** Gõ trực tiếp 14 lệnh (không qua Atomic Red Team, nên không có tiền tố `hostname`/`whoami`) trong cửa sổ PowerShell Admin của máy ảo DACN-LAB (Sysmon 15.22, cấu hình SHA256 `E0FA6395…3E209`). Mỗi lệnh xuất một tệp evtx riêng, rồi chạy agent `--khong-slm`. Chi tiết lệnh nằm ở `data/bo-phat-trien-don-le-log.csv` (mật khẩu thử đã thay bằng `<mat-khau-thu>`).
+
+| Nhóm | Lệnh | Kết quả bước 5 |
+|---|---|---|
+| T1547.001 Startup | A1 `Copy-Item`, A2 `cmd /c copy`, A3 `Set-Content .bat` | **dừng ở bước 2** (điểm 0,052 / 0,052 / 0,206) |
+| T1547.001 khóa Run | B1 `reg add Run`, B2 `cmd /c reg add`, B4 `reg add RunOnce` | đúng (điểm 0,968) |
+| T1547.001 khóa Run | B3 `Set-ItemProperty` | **dừng ở bước 2** (điểm 0,165) |
+| T1053.005 | C1 `schtasks`, C2 `cmd /c schtasks` | đúng (0,865 / 0,964) |
+| T1053.005 | C3 `Register-ScheduledTask` | không kết luận: phiên SYSTEM chỉ "chưa xác nhận" (0,679, thiếu dấu vết) |
+| T1136.001 | D1 `net user /add`, D2 `cmd /c net user /add` | đúng (0,989) |
+| T1136.001 | D3 `New-LocalUser` | 0 sự kiện Sysmon, không đo được |
+| T1021.001 | E1 TCP loopback 3389 | 0 sự kiện Sysmon, không đo được |
+
+**Kết quả: 7/12 đúng**, 4 dừng ở bước 2 (A1, A2, A3, B3), 1 không kết luận (C3), 0 sai mã. Hai lệnh D3 và E1 không có sự kiện nên đánh dấu `can kiem tra` và bị `danh_gia.py` bỏ qua.
+
+**Nhận xét.**
+- Các lệnh gọi thẳng công cụ (`reg.exe`, `schtasks.exe`, `net.exe`) đều được nhận ra, kể cả khi bọc qua `cmd /c`. Các lệnh làm việc bằng cmdlet PowerShell hoặc ghi tệp (A1–A3, B3, C3) thì hỏng, vì phiên chỉ có 1 sự kiện và mẫu chuỗi không có gì để khớp. Đây cùng loại lỗi với 17 phiên dừng ở bước 2 của T1 (6c).
+- Phiên thứ hai của C1, C2, C3 là tiến trình SYSTEM của dịch vụ Task Scheduler tạo tệp tác vụ. Phiên này luôn ra "chưa xác nhận", tức nhiễu nhỏ nhưng ổn định.
+- Quy tắc phiên ngắn (phiên ≤ 4 sự kiện có dấu vết mạnh như tệp trong Startup, khóa Run thì chuyển thẳng sang bước 3) sẽ cứu được A1–A3, nhờ đó đạt 10/12. **Đây chưa phải bằng chứng khái quát**: các lệnh A được chọn khi đã biết luật, nên chỉ chứng minh luật làm được chứ không chứng minh nó bắt được lệnh lạ. Phép đo có giá trị hơn là phía báo nhầm: trên hai máy thật, luật phiên ngắn cho 0/3.099 báo nhầm (mục 6d).
+- Các số này đo trên máy ảo, không đo trên bộ thử `bo-thu`. Việc nhận hay không nhận luật do Khôi quyết định, chạy trên `bo-thu` đúng một lần, và phải ghi rõ rằng `bo-thu` đã được đọc khi thiết kế luật.
+
+**Điểm mù của Sysmon (không phải lỗi của agent).** `New-LocalUser` là lời gọi API trong tiến trình nên không sinh sự kiện nào, và kết nối TCP loopback tới 3389 cũng không có sự kiện. Muốn thấy hai hành vi này cần log khác (Security 4720, PowerShell ScriptBlock 4104), nằm ngoài phạm vi hiện tại.
+
 ## 7. Hạn chế
 
 - Ký hiệu không có nội dung dòng lệnh (không phân biệt `net user /add` với `net use`), nên bước 2 chỉ là bộ lọc thô và dấu vết bắt buộc mới quyết định kết luận.
