@@ -71,4 +71,41 @@ Quy tắc giữ nguyên từ tuần 5: mọi chỉnh sửa bước 2 và cách h
 
 ## Kết quả
 
-(Điền cuối tuần.)
+(Đang điền dần, phần còn lại điền cuối tuần.)
+
+### K1. Theo dõi trực tiếp (`src/theo_doi.py`)
+
+- Cứ 3 giây đọc sự kiện mới của kênh `Microsoft-Windows-Sysmon/Operational` và PowerShell 4104 theo RecordID (pywin32), nạp vào DuckDB, chạy 5 bước của `agent.py` trên các phiên vừa có sự kiện mới. Không cần xuất `.evtx`. Bỏ sự kiện do chính agent tạo ra. Phiên đã kết luận thì đặt mốc, sự kiện đến sau được xét như một đoạn mới của phiên.
+- Thử trên máy Khôi bằng `schtasks /create /tn DACN_ThuNghiem /tr notepad.exe /sc once /st 23:59 /f`, rồi xóa ngay:
+
+| Chế độ | Ngày | Agent đọc được sau | Hỏi SLM | Báo sau | Kết luận |
+|---|---|---|---|---|---|
+| Không SLM | 18/11 | 4,1 giây | – | 5,9 giây | T1053.005 |
+| Có SLM (phi4-mini) | 19/11 | 4,7 giây | 18,6 giây (5 dòng, 1 ứng viên) | 23,4 giây | T1053.005 |
+
+- Cả hai lần, lệnh `schtasks /delete` ngay sau đó không bị báo: chuỗi giống T1053.005 nhưng thiếu dấu vết `/create`, dừng ở CHƯA XÁC NHẬN.
+- SLM chọn đúng mã nhưng phần lý do không nhắc tới `schtasks /create` (giải thích là "chạy công việc cho Windows Terminal"). Khớp nhận xét tuần 5: phi4-mini nhận diện theo từ khóa, chưa suy luận.
+- Thời gian SLM phụ thuộc số dòng gửi: lần này 1 ứng viên, 5 dòng; phiên nhiều ứng viên, 40 dòng có thể mất tới khoảng 2 phút (đo tuần 5).
+- Thử trước bằng cách nạp dần `may-khoi-2ngay.evtx` (16.440 sự kiện, 100 sự kiện mỗi lần): 8 cảnh báo, so với 6 khi chạy `agent.py --khong-slm` trên cả file. 2 cảnh báo thêm là "đoạn 2" sau mốc, có bằng chứng mới.
+- Ảnh: `docs/hinh/tuan6-k1-theo-doi-co-slm.png`, `docs/hinh/tuan6-k1-tong-ket-co-slm.png`.
+
+### K2. Theo dõi trực tiếp khi dùng máy bình thường
+
+- 19/11, 18:07–19:22 (75,5 phút), không SLM, máy Khôi, dùng máy như mọi ngày, không thử gì.
+- Đọc 3.901 sự kiện Sysmon và 43 sự kiện PowerShell 4104, theo dõi 63 phiên: **0 cảnh báo**.
+- 0 lần trong khoảng 1,26 giờ chỉ cho phép kết luận tần suất báo nhầm dưới khoảng 2,4 lần / giờ (độ tin cậy 95%, quy tắc 3/n). Cần chạy lâu hơn (24 giờ) để có số chặt hơn.
+- 4 phiên lên bước 3 nhưng dừng ở CHƯA XÁC NHẬN vì thiếu dấu vết bắt buộc (1 phiên thuộc 10 phút log nạp trước khi bật):
+
+| Phiên | Giống | Thực tế | Thiếu |
+|---|---|---|---|
+| #3, SYSTEM, 162 sự kiện | T1053.005, T1070.001 | Lenovo Vantage chạy `schtasks`, `wevtutil`, `icacls`, `taskkill` (cùng kiểu phiên #46 tuần 5) | `schtasks /create`, `wevtutil cl` |
+| #11, #56, SYSTEM, 2 và 6 sự kiện | T1053.005 | Khả năng cao là Task Scheduler ghi file tác vụ (file không đuôi); cùng dạng phiên xuất hiện ngay sau lệnh `schtasks /create` ở K1 | lệnh tạo tác vụ |
+| #39, người dùng, 16 sự kiện | T1547.001 | WPS Office (`ksomisc.exe`) chạy theo lịch, Disk Cleanup và công cụ chẩn đoán Windows tạo file `.ps1`, `.dll` tạm | khóa Run, thư mục Startup |
+
+- Không phiên nào đủ dấu vết nên SLM không được hỏi; chế độ có SLM cũng sẽ ra 0 cảnh báo trong khoảng này.
+- Ghi nhận: một ký hiệu chung `TAO_FILE:*(không đuôi)` đã được 0,679 điểm cho T1053.005, vượt ngưỡng 0,5. Phiên ngắn với ký hiệu chung không chỉ làm sót tấn công (T1 của Thiên) mà còn đẩy hoạt động bình thường lên bước 3. Chỉ ghi nhận, không chỉnh theo dữ liệu này.
+- Ảnh: `docs/hinh/tuan6-k2-tong-ket.png`.
+
+### K6. Ảnh phiên #46 tuần 5
+
+- `docs/hinh/tuan5-phien46-slm-chon-t1070.png`: đã thay tên máy bằng `MAY-KHOI`.
