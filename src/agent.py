@@ -37,6 +37,23 @@ from ky_hieu import loai_quyen, loc_su_kien, mo_ta, rut_gon_chuoi
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
+# ---------------------------------------------------------------- LUẬT STARTUP (thử nghiệm T3 tuần 6)
+# MẶC ĐỊNH TẮT. Bật bằng biến môi trường:  LUAT_STARTUP=1   (PowerShell: $env:LUAT_STARTUP = '1')
+# Khi bật: phiên có Event 11 tạo file trong thư mục Startup (trừ các mục bỏ qua bên dưới) thì thêm ứng viên
+# T1547.001 với điểm đặt bằng ngưỡng (KHÔNG phải điểm khớp chuỗi), để phiên đi tiếp bước 3 và 5.
+# Khi tắt, kết quả và nội dung in ra giống hệt bản không có luật. Luật nằm trong xu_ly_phien nên
+# agent.py, danh_gia.py và theo_doi.py dùng chung.
+LUAT_STARTUP = os.environ.get("LUAT_STARTUP", "") == "1"
+
+# DANH SÁCH BỎ QUA: mỗi mục phải khớp CẢ BA điều kiện (tên tiến trình đơn lẻ là chưa đủ, mã độc có thể đặt tên giống).
+# Lập từ log Dũng (dữ liệu phát triển). Con số 0 báo nhầm trên 3.099 phiên là do thiết kế, không phải bằng chứng.
+# Báo nhầm mới xuất hiện trong đợt đo 6 thì ghi vào báo cáo, KHÔNG thêm vào danh sách này.
+STARTUP_BO_QUA = [
+    {"thu_muc": ("c:\\program files\\", "c:\\program files (x86)\\"),   # đường dẫn đầy đủ của tiến trình
+     "tien_trinh": "onenote.exe",
+     "tep": "send to onenote.lnk"},                                    # file được tạo trong Startup
+]
+
 GOC_REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SO_DONG_GUI_SLM = 40     # mô hình ngôn ngữ nhỏ chạy trên laptop: chỉ gửi tối đa chừng này dòng log
 CUA_SO_GIAY_SLM = 60     # lấy các sự kiện cách dấu vết bắt buộc không quá chừng này giây
@@ -187,6 +204,13 @@ def xu_ly_phien(so, may, logon, ds, con, mh, a):
     diem = train.diem_chuoi(seq, mh) if seq else {}
     ung_vien = sorted((m for m in diem if diem[m] > 0), key=lambda m: -diem[m])[:a.so_ung_vien]
     cao_nhat = diem[ung_vien[0]] if ung_vien else 0.0
+    bang_chung_luat = None
+    if LUAT_STARTUP and diem.get("T1547.001", 0.0) < a.nguong:
+        bang_chung_luat = dau_vet.tep_startup_dau_tien(ds, STARTUP_BO_QUA)
+        if bang_chung_luat:
+            diem["T1547.001"] = a.nguong             # điểm ĐẶT bằng luật, không phải điểm khớp chuỗi
+            ung_vien = sorted(set(ung_vien) | {"T1547.001"}, key=lambda m: -diem[m])
+            cao_nhat = max(cao_nhat, a.nguong)
     if cao_nhat < a.nguong and not a.chi_tiet:
         return "BINH_THUONG", None, cao_nhat
 
@@ -206,7 +230,10 @@ def xu_ly_phien(so, may, logon, ds, con, mh, a):
     if not ung_vien:
         print("    Không đoạn nào khớp mẫu đã train.")
     for m in ung_vien:
-        print(f"    ứng viên {m:10} điểm {diem[m]:.3f}")
+        dat = " (điểm đặt bằng luật Startup, không phải điểm khớp chuỗi)" if bang_chung_luat and m == "T1547.001" else ""
+        print(f"    ứng viên {m:10} điểm {diem[m]:.3f}{dat}")
+    if bang_chung_luat:
+        print(f"    LUẬT STARTUP (LUAT_STARTUP=1, phiên {len(ds)} sự kiện): {bang_chung_luat}")
     if ung_vien:
         print(f"    đoạn khớp nhất với {ung_vien[0]}: {' > '.join(cua_so_khop_nhat(seq, ung_vien[0], mh))}")
     if cao_nhat < a.nguong:
@@ -265,6 +292,8 @@ def xu_ly_phien(so, may, logon, ds, con, mh, a):
     if trong_ds and du_dv:
         buoc_ke = train.doan_buoc_ke(seq[-1], chon, mh) if seq else None
         print(f"    => KẾT LUẬN: {chon} (điểm khớp {diem[chon]:.3f})")
+        if bang_chung_luat and chon == "T1547.001":
+            print("    Lưu ý: ứng viên này được thêm bởi luật Startup, điểm không phải điểm khớp chuỗi.")
         if buoc_ke:
             print(f"    Bước tiếp theo hay gặp sau '{seq[-1]}': {buoc_ke}")
         return "KET_LUAN", chon, diem[chon]
@@ -343,6 +372,8 @@ def main():
     a = ap.parse_args()
 
     mh = nap_mo_hinh(a.mo_hinh)
+    if LUAT_STARTUP:
+        print(f"LUẬT STARTUP: BẬT ({len(STARTUP_BO_QUA)} mục bỏ qua)")
     if a.khong_slm:
         print("Chế độ: KHÔNG SLM (bước 4 chỉ dùng luật + dấu vết)")
     else:

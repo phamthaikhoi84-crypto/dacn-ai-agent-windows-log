@@ -180,7 +180,7 @@ Nhận xét:
 - **6 test bị Windows Defender chặn lúc khởi chạy** (`Access is denied`): T1547.001-4, T1053.005-7, T1059.001-10, T1105-7, T1105-10, T1105-29. Bản LTSC này không có ứng dụng Windows Security nên không tắt được Tamper Protection; Defender vẫn bật, chỉ loại trừ vài thư mục và tiến trình. File log của 6 test này không có lệnh tấn công, nên ghi `can kiem tra` trong CSV và `danh_gia.py` bỏ qua.
 - **21 test hợp lệ** (T1136.001 ×4, T1547.001 ×5, T1053.005 ×5, T1059.001 ×4, T1105 ×3), mỗi test một file, phiên tấn công là phiên 1.
 
-**Kết quả của agent (không SLM, ngưỡng 0,5) trên bộ phát triển v2:**
+**Kết quả của agent (không SLM, ngưỡng 0,5) trên bộ phát triển v2, CÓ tiền tố `hostname > whoami`** (số không tiền tố ở cuối mục này):
 
 | Kỹ thuật | Số phiên | Đúng |
 |---|---|---|
@@ -196,7 +196,25 @@ Nhận xét:
 - **0 phiên dừng ở bước 2.** Độ sớm trung vị 4 sự kiện (13 phiên). 0 trên 32 phiên còn lại (không gán nhãn) trong các file này bị kết luận tấn công.
 - 62% là số trên bộ phát triển (dùng để chỉnh, mẫu 21, cách tạo khác bộ thử), **không so được trực tiếp với 24% của bộ thử**.
 
-**Điều bộ này không đo được.** Mọi phiên tấn công trong v2 bắt đầu bằng `hostname.exe > whoami.exe` do Invoke-AtomicTest sinh ra (nghi là phần ghi nhật ký thực thi, **chưa kiểm chứng**). Tiền tố này đưa điểm bước 2 lên 0,945 đến 0,989, nên không phiên nào dừng ở bước 2, trong khi 17/31 phiên của bộ thử dừng ở đó. Mô hình có vẻ đã học một phần dấu hiệu của bộ công cụ chạy test. Vì vậy bộ v2 **không thể kiểm tra** quy tắc "phiên ngắn có dấu vết mạnh thì đi thẳng bước 3" ở phía phát hiện. Cần thêm đợt chạy từng lệnh đơn lẻ, gõ trực tiếp, không qua Atomic (làm tiếp trong T3).
+**Điều bộ này không đo được, và cách xử lý (theo yêu cầu của Khôi).** Mọi phiên tấn công trong v2 bắt đầu bằng `hostname.exe > whoami.exe` do Invoke-AtomicTest sinh ra (nghi là phần ghi nhật ký thực thi, **chưa kiểm chứng**). Tiền tố này đưa điểm bước 2 lên 0,945 đến 0,989 nên không phiên nào dừng ở bước 2. Cách xử lý: không chạy lại máy ảo mà lọc bỏ hai sự kiện này khỏi bản sao của 27 file `.evtx` (`loc-tien-to.ps1`; lấy Event 1 đầu tiên của `hostname.exe` và Event 1 đầu tiên của `whoami.exe` trong vòng 3 giây sau đó, bỏ mọi sự kiện nhắc tới ProcessGuid của hai tiến trình này; file gốc giữ nguyên). Kết quả lọc: cả 27 file đều bị bỏ đúng 2 sự kiện (hostname và whoami cách nhau 20 đến 50 mili giây ở đầu file), không file nào thiếu cặp này. Chạy lại agent và `danh_gia.py` trên bản đã lọc (`data/bo-phat-trien-khong-tien-to.csv`, số phiên mỗi file tạo lại từ lần chạy mới).
+
+| | Có tiền tố (13/21) | Không tiền tố (12/21) |
+|---|---|---|
+| Phát hiện đúng | 13/21 (62%) | **12/21 (57%)** |
+| Kết luận sai mã | 3 | 0 |
+| Dừng ở bước 2 | **0** | **8** |
+| Chưa xác nhận | 5 | 1 |
+| Độ sớm trung vị | 4 sự kiện (13 phiên) | 2,5 sự kiện (12 phiên) |
+| Phiên còn lại bị kết luận tấn công | 0/32 | 0/32 |
+
+Theo kỹ thuật (không tiền tố): T1547.001 4/5, T1105 2/3, T1059.001 2/4, T1136.001 2/4, T1053.005 2/5.
+
+**Nhận xét.**
+- **Khôi nghi đúng.** Con số tổng gần như không đổi (13 xuống 12), nhưng cấu trúc thì đổi hẳn: không còn phiên nào bị kết luận sai mã, và 8/21 phiên (38%) dừng ở bước 2, so với 0 khi có tiền tố. Tỉ lệ này gần với bộ thử (17/31, 55%) hơn con số 0 trước đó. Số đo trung thực của bước 2 là số **không** tiền tố.
+- Khác biệt theo từng file: T1059.001-11 và T1059.001-17 từ đúng thành bỏ sót (điểm T1059.001 của chúng đến từ tiền tố); T1547.001-3 từ sai mã (T1059.001) thành đúng; T1136.001-5 và T1136.001-9 từ sai mã thành bỏ sót; năm file "chưa xác nhận" cũ (T1053.005 số 4, 6, 8, T1547.001-7, T1105-25) đều thành bỏ sót. Tổng cộng 9 file bỏ sót, trong đó 8 dừng ở bước 2 và 1 còn "chưa xác nhận" (chưa xác định file nào, xem `ket_qua_phien.csv`). Hai phiên T1059.001 còn đúng là hai phiên 41 sự kiện, dài nên không phụ thuộc tiền tố.
+- 0/32 phiên còn lại (không gán nhãn) không bị kết luận tấn công, nên các phiên bỏ sót ở trên không phải do số thứ tự phiên bị lệch; không có kết luận nào bị bỏ ngoài phiên đã đánh dấu.
+- Lọc sau khi thu cũng có giới hạn: lọc bỏ hai sự kiện không biến log thành log của một lần chạy không có Atomic, vì cách Invoke-AtomicTest khởi động tiến trình có thể còn ảnh hưởng đến cây tiến trình và cách gom phiên. Lệnh đơn lẻ ở mục 6e là phép đối chiếu độc lập (không có tiền tố).
+- Vì thế bộ này **có thể** dùng để kiểm tra quy tắc "phiên ngắn có dấu vết mạnh thì đi thẳng bước 3" ở phía phát hiện, nhưng bản không tiền tố chỉ là bộ phát triển (dùng để chỉnh), không dùng để báo cáo hiệu năng cuối.
 
 **T3 mục 2, phía báo nhầm (đã đo, chưa đo phía phát hiện).** Quy tắc thử: phiên có không quá 4 sự kiện, điểm bước 2 dưới 0,5, và có tạo file trong thư mục Startup (Event 11) hoặc kết nối cổng 3389 (Event 3) thì đi thẳng bước 3. Trên log bình thường: máy Dũng 0/2.573 phiên và Thiên tuần 1 0/526 phiên, tổng **0/3.099** (1.961 và 323 phiên là phiên ngắn), đạt tiêu chí đặt trước (không quá 3 phiên trên 2.573). Quy tắc ba cho cận trên khoảng 0,1% (độ tin cậy 95%). Cả khóa Run cũng ra 0 trong phiên ngắn, chưa đưa vào quy tắc vì chưa đo trên máy lạ. Script đo đã thử trên hai file tấn công đã biết (dùng để kiểm tra script, không tính là bằng chứng).
 
@@ -225,6 +243,30 @@ Nhận xét:
 
 **Điểm mù của Sysmon (không phải lỗi của agent).** `New-LocalUser` là lời gọi API trong tiến trình nên không sinh sự kiện nào, và kết nối TCP loopback tới 3389 cũng không có sự kiện. Muốn thấy hai hành vi này cần log khác (Security 4720, PowerShell ScriptBlock 4104), nằm ngoài phạm vi hiện tại.
 
+#### Luật Startup không giới hạn độ dài phiên (T3 mục 2, đo ngày 19/11/2026)
+
+**Dự kiến ghi TRƯỚC khi đo bộ thử (đợt đo 6).** Khôi dự kiến phát hiện của agent không SLM tăng 2 phiên khi bật luật, từ **7/31 lên 9/31** (LM_tsclient_startup_folder phiên 2 và lateral_movement_startup_3_11 phiên 1). Đợt đo 6 chạy ba cấu hình: không SLM tắt luật, không SLM bật luật, có SLM bật luật. Luật được thiết kế **sau khi đã đọc bộ thử**, nên số trên bộ thử không phải kiểm tra độc lập.
+
+**Luật.** Phiên có Event 11 tạo file trong `\Start Menu\Programs\Startup\` (trừ các mục bỏ qua) thì thêm ứng viên T1547.001 với điểm đặt bằng ngưỡng (không phải điểm khớp chuỗi), để phiên đi tiếp bước 3 và 5. Bật bằng biến môi trường `LUAT_STARTUP=1`, mặc định tắt, nằm trong `agent.xu_ly_phien` nên `agent.py`, `danh_gia.py`, `theo_doi.py` dùng chung. Bản đầu có điều kiện "phiên không quá 4 sự kiện", nhưng điều kiện này **không bao giờ chạy trên máy thật** (thử trực tiếp: phiên người dùng 205 sự kiện, T1547.001 chỉ đạt 0,143 nên agent không cảnh báo). Phiên tạo file trong Startup ở log bình thường dài 553 đến 7.147 sự kiện. Khóa Run và cổng 3389 chưa đưa vào luật.
+
+**Báo nhầm trên log bình thường (Dũng 2.573 phiên và Thiên tuần 1 526 phiên, tổng 3.099).** Chỉ 7 phiên (0,23%) có tạo file trong Startup, tất cả đều do `ONENOTE.EXE` tạo `Send to OneNote.lnk` (hợp lệ). Máy Thiên tuần 1 không có phiên nào.
+
+| Agent không SLM trên log Dũng | Kết luận tấn công (báo nhầm) |
+|---|---|
+| Tắt luật | 10 |
+| Bật luật, không bỏ qua gì | 16 (thêm 6) |
+| Bật luật, bỏ qua ONENOTE.EXE (lần đo đầu, chỉ theo tên tiến trình) | 10 |
+| **Bật luật, danh sách bỏ qua cuối (đường dẫn + tên tiến trình + tên file, Khôi chốt)** | **10** (cũng 2.482 phiên bình thường và 81 chưa xác nhận, y hệt khi tắt luật) |
+| Bật luật, chỉ phiên ≤ 4 sự kiện | 10 |
+
+Trong 7 phiên của OneNote, 6 phiên thành báo nhầm thêm; phiên còn lại không làm tăng số kết luận (chưa kiểm tra lý do). 10 báo nhầm sẵn có của agent trên log Dũng không liên quan đến luật.
+
+**Danh sách bỏ qua (Khôi chốt).** Mỗi mục phải khớp cả hai điều kiện: đường dẫn đầy đủ của tiến trình nằm dưới `C:\Program Files\` hoặc `C:\Program Files (x86)\` và tên là `ONENOTE.EXE`; file tạo ra đúng là `Send to OneNote.lnk`. Không chỉ xét tên tiến trình vì mã độc chỉ cần đặt cùng tên. Danh sách được lập từ log Dũng (dữ liệu phát triển, đã dùng để chỉnh dấu vết), nên con số 0 báo nhầm do bỏ qua trên 3.099 phiên **là do thiết kế, không phải bằng chứng**. Báo nhầm mới trong đợt đo 6 sẽ ghi nguyên vào báo cáo, không thêm vào danh sách. Đo lại bản cuối của mã (nhánh `luat-startup`, 19/11 23:30): bộ phát triển không tiền tố tắt luật 12/21, bật luật 13/21; log Dũng bật luật 10 kết luận tấn công, giống hệt khi tắt, nên danh sách bỏ qua cuối khớp đúng cả 7 phiên của OneNote.
+
+**Bộ phát triển không tiền tố (mục 6d).** Dự kiến ghi trước: tăng 1 phiên (T1547.001-7, shortcut `.lnk` trong Startup), 12/21 lên 13/21. Kết quả đo: **13/21** ở cả ba phương án (không giới hạn, bỏ qua OneNote, chỉ phiên ≤ 4 sự kiện), 0 sai mã, 7 phiên dừng ở bước 2 và 1 chưa xác nhận, độ sớm trung vị 3 sự kiện (13 phiên). Ba phương án cho kết quả giống nhau trên bộ này nên bộ này không phân biệt được chúng.
+
+**Hạn chế riêng của luật.** Danh sách bỏ qua chỉ có một mục, rút từ một máy; máy khác sẽ có phần mềm hợp lệ khác ghi vào Startup. Kẻ tấn công có quyền ghi vào `Program Files` và đặt đúng tên tiến trình và tên file vẫn lọt qua mục bỏ qua. Luật thêm ứng viên bằng điểm đặt tay, không phải điểm khớp chuỗi, nên chỉ dựa vào dấu vết bắt buộc để kết luận.
+
 ## 7. Hạn chế
 
 - Ký hiệu không có nội dung dòng lệnh (không phân biệt `net user /add` với `net use`), nên bước 2 chỉ là bộ lọc thô và dấu vết bắt buộc mới quyết định kết luận.
@@ -234,7 +276,7 @@ Nhận xét:
 - Hoạt động hợp lệ tạo đúng dấu vết tấn công (Office, Lenovo, PowerShell bộ cài, ứng dụng ghi khóa Run) vẫn còn báo giả. Đây là điểm yếu chính của hai kỹ thuật T1053.005 và T1547.001: phần mềm hợp lệ làm đúng việc mà kẻ tấn công làm.
 - Phiên rất dài (hàng nghìn sự kiện) làm bước 3 dễ thấy dấu vết ở chỗ không liên quan đoạn khớp ở bước 2, và bước 4 chỉ gửi 40 dòng đầu cho mô hình ngôn ngữ.
 - Bộ thử: file `babyshark_mimikatz_powershell` ban đầu xếp T1059.001, được **đổi sang T1003.001 sau khi xem kết quả agent** (lệnh trong file là Mimikatz); file 04 và 07 từng dùng để phát triển/demo; hai file `remote_file_copy` và `smbmap` có độ chắc nhãn trung bình.
-- Bộ phát triển (mục 6d) dựng bằng Atomic Red Team: 6/27 test bị Defender chặn; phiên tấn công có tiền tố `hostname > whoami` của Invoke-AtomicTest; lần chạy đầu bị nhiễm bởi dòng lệnh bao ngoài. Không dùng bộ này để báo cáo hiệu năng cuối.
+- Bộ phát triển (mục 6d) dựng bằng Atomic Red Team: 6/27 test bị Defender chặn; phiên tấn công có tiền tố `hostname > whoami` của Invoke-AtomicTest (đã lọc bỏ ở bản không tiền tố, 12/21 so với 13/21 khi có tiền tố, nhưng 8 phiên dừng ở bước 2 so với 0); lần chạy đầu bị nhiễm bởi dòng lệnh bao ngoài. Không dùng bộ này để báo cáo hiệu năng cuối.
 - Hai nhãn đáng nghi: `createdump_windows-sysmon.log` (T1003.001) và `sysmon_soaphound.log` (T1059.001).
 
 ## 8. Trả lời câu hỏi "log bình thường chiếm 99,99%"

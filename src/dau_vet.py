@@ -69,6 +69,35 @@ DAU_VET = {
 }
 
 
+# Luật "tạo file trong thư mục Startup" (thử nghiệm T3 tuần 6; agent.py gọi khi bật công tắc LUAT_STARTUP).
+# Viết bằng Python thay vì SQL để kiểm tra rẻ trên từng phiên, không cần nạp phiên vào DuckDB.
+DUONG_DAN_STARTUP = "\\start menu\\programs\\startup\\"
+
+
+def _thuoc_bo_qua(e, bo_qua):
+    """True nếu Event 11 `e` khớp MỘT mục bỏ qua. Mỗi mục phải khớp CẢ BA điều kiện:
+    đường dẫn đầy đủ của tiến trình bắt đầu bằng một trong các thư mục, tên tiến trình, và tên file được tạo."""
+    img = (e["image"] or "").lower().replace("/", "\\")
+    tep = (e["doi_tuong"] or "").lower().replace("/", "\\").rsplit("\\", 1)[-1]
+    for m in bo_qua:
+        if (img.startswith(tuple(m["thu_muc"])) and img.rsplit("\\", 1)[-1] == m["tien_trinh"]
+                and tep == m["tep"]):
+            return True
+    return False
+
+
+def tep_startup_dau_tien(ds, bo_qua=()):
+    """Trả về dòng log (như dong_log) của Event 11 đầu tiên tạo file trong thư mục Startup trong phiên `ds`
+    mà KHÔNG khớp mục bỏ qua nào, hoặc None."""
+    for e in ds:
+        if e["event_id"] != 11 or DUONG_DAN_STARTUP not in (e["doi_tuong"] or "").lower():
+            continue
+        if _thuoc_bo_qua(e, bo_qua):
+            continue
+        return dong_log((e["thoi_gian"], 11, e["image"], None, e["doi_tuong"], None))
+    return None
+
+
 def _chuan_bi(con, ds):
     """Đưa các sự kiện của 1 phiên vào view `phien` để truy vấn.
     Cột doc_bo_nho tính bằng ky_hieu.loai_quyen, để "quyền đọc bộ nhớ" chỉ được định nghĩa ở 1 chỗ."""
