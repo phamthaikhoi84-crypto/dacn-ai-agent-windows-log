@@ -273,7 +273,7 @@ class TheoDoi:
         if a.an_ten:
             for ten, gia in ((os.environ.get("COMPUTERNAME"), "MAY-KHOI"), (os.environ.get("USERNAME"), "nguoi-dung")):
                 if ten:
-                    self.thay.append((re.compile(re.escape(ten), re.I), gia))
+                    self.thay.append((re.compile(r"(?<![A-Za-z0-9])" + re.escape(ten) + r"(?![A-Za-z0-9])", re.I), gia))
 
     def an(self, s):
         for mau, gia in self.thay:
