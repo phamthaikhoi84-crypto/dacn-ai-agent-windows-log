@@ -408,7 +408,8 @@ class TheoDoi:
             f"- Thời gian: {self.bat_dau + LECH_GIO:%Y-%m-%d %H:%M:%S} -> {ket + LECH_GIO:%H:%M:%S} "
             f"({gio * 60:.1f} phút), chu kỳ đọc {self.a.chu_ky} giây, nạp trước {self.a.nap_truoc_phut} phút",
             f"- Chế độ: {'KHÔNG SLM' if self.a.khong_slm else 'CÓ SLM (' + os.environ.get('SLM_MODEL', 'phi4-mini:latest') + ')'}"
-            f", ngưỡng {self.a.nguong}, {self.a.so_ung_vien} ứng viên, cách đọc kênh: {kenh[0].cach}",
+            f", ngưỡng {self.a.nguong}, {self.a.so_ung_vien} ứng viên, cách đọc kênh: {kenh[0].cach}"
+            f", luật Startup: {'BẬT' if getattr(agent, 'LUAT_STARTUP', False) else 'tắt'}",
             "- Sự kiện đã nạp: " + ", ".join(f"{k.nguon} {k.da_doc:,}" for k in kenh)
             + f" (bỏ {self.bo.get('cua_agent', 0):,} sự kiện của chính agent, {self.bo.get('loi', 0)} lỗi đọc)",
             f"- Phiên đã theo dõi: {self.so_phien:,}",
@@ -455,6 +456,7 @@ def main():
         kenh.append(KenhLog(KENH_POWERSHELL, "PowerShell 4104 (truc tiep)", chi_event=4104, cach=a.cach_doc))
 
     td.in_ra(f"THEO DÕI TRỰC TIẾP | {'KHÔNG SLM' if a.khong_slm else 'CÓ SLM (' + os.environ.get('SLM_MODEL', 'phi4-mini:latest') + ')'}"
+             f"{' | LUẬT STARTUP BẬT' if getattr(agent, 'LUAT_STARTUP', False) else ''}"
              f" | mỗi {a.chu_ky:g} giây | đọc kênh bằng {kenh[0].cach} | ghi vào {td.thu_muc}")
     for k in list(kenh):
         try:

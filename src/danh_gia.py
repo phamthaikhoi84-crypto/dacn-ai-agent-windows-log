@@ -440,6 +440,7 @@ def main():
         "Commit": git_commit(),
         "Mô hình mẫu chuỗi": f"{os.path.basename(a.mo_hinh)} (sha256 {bam}), ngưỡng {a.nguong}, {a.so_ung_vien} ứng viên",
         "SLM": os.environ.get("SLM_MODEL", "phi4-mini:latest") if "co-slm" in a.che_do else "(không chạy)",
+        "Luật Startup": "BẬT (LUAT_STARTUP=1)" if getattr(agent, "LUAT_STARTUP", False) else "tắt",
         "Bộ thử": f"{os.path.basename(a.bo_thu)}, {len(duong_file)} file đo được, {len(bo_qua)} dòng chưa tính",
     }
     with open(os.path.join(a.ra, "ket_qua_phien.csv"), "w", encoding="utf-8-sig", newline="") as f:
