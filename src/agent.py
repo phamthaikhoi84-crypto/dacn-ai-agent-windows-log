@@ -20,6 +20,7 @@ Cách chạy (PowerShell, đứng ở thư mục gốc repo):
 """
 import argparse
 import contextlib
+import inspect
 import io
 import json
 import os
@@ -170,7 +171,9 @@ def cua_so_khop_nhat(seq, ma, mh):
 # ---------------------------------------------------------------- mô hình ngôn ngữ (bước 4)
 def goi_mo_hinh_ngon_ngu(dong_log, ung_vien, dau_vet_ung_vien, khong_slm=False):
     """Bước 4. Trả về (kết quả, nguồn, số giây).
-    - Có SLM: gọi slm.chon_ky_thuat(dong_log, ung_vien) -> {"ma_ky_thuat", "bang_chung", "ly_do"[, "loi"]}.
+    - Có SLM: gọi slm.chon_ky_thuat(dong_log, ung_vien[, dau_vet_ung_vien]) -> {"ma_ky_thuat", "bang_chung", "ly_do"[, "loi"]}.
+      Nếu slm.py nhận tham số dau_vet_ung_vien (cách hỏi mới D3, bật bằng SLM_PROMPT_MOI=1) thì truyền kết quả bước 3
+      để SLM biết ứng viên nào đủ / thiếu dấu vết. slm.py cũ không có tham số này thì gọi như trước.
       Nếu gọi lỗi thì trả về kết quả có "loi": True. KHÔNG tự chuyển sang chế độ không SLM,
       để số đo của chế độ có SLM không bị lẫn kết quả của chế độ kia.
     - Không SLM (--khong-slm): chọn ứng viên điểm cao nhất có đủ dấu vết bắt buộc."""
@@ -184,7 +187,10 @@ def goi_mo_hinh_ngon_ngu(dong_log, ung_vien, dau_vet_ung_vien, khong_slm=False):
     bat_dau = time.perf_counter()
     try:
         import slm
-        kq = slm.chon_ky_thuat(dong_log, ung_vien)
+        if "dau_vet_ung_vien" in inspect.signature(slm.chon_ky_thuat).parameters:
+            kq = slm.chon_ky_thuat(dong_log, ung_vien, dau_vet_ung_vien=dau_vet_ung_vien)
+        else:
+            kq = slm.chon_ky_thuat(dong_log, ung_vien)
         nguon = f"slm.py, {getattr(slm, 'MODEL_CHINH', '?')}"
     except Exception as ex:          # thiếu slm.py, lỗi bất ngờ khi gọi: ghi là SLM lỗi, không dừng chương trình
         kq = {"ma_ky_thuat": "CHUA_XAC_NHAN", "bang_chung": [], "ly_do": f"Gọi slm.py lỗi: {ex}", "loi": True}
@@ -297,6 +303,11 @@ def xu_ly_phien(so, may, logon, ds, con, mh, a):
         if buoc_ke:
             print(f"    Bước tiếp theo hay gặp sau '{seq[-1]}': {buoc_ke}")
         return "KET_LUAN", chon, diem[chon]
+    if chon == "BINH_THUONG":
+        # SLM chỉ được CHẶN kết luận, không được giấu phiên: phiên có ứng viên đủ dấu vết vẫn ghi CHƯA XÁC NHẬN
+        # (mã SLM_BINH_THUONG) để người phân tích xem lại, không gộp vào "bình thường dừng ở bước 2".
+        print(f"    => CHƯA XÁC NHẬN: mô hình cho là hoạt động BÌNH THƯỜNG ({kq.get('ly_do', '')[:200]})")
+        return "CHUA_XAC_NHAN", "SLM_BINH_THUONG", cao_nhat
     if chon == "CHUA_XAC_NHAN":
         print(f"    => CHƯA XÁC NHẬN: mô hình cho rằng log không thể hiện kỹ thuật nào ({kq.get('ly_do', '')[:200]})")
         return "CHUA_XAC_NHAN", "SLM_BAC", cao_nhat

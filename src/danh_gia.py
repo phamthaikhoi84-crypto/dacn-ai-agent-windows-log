@@ -305,8 +305,9 @@ def viet_bang(hang, cac_che_do, thong_tin, bo_qua, loi_file, thoi_gian):
 
     o += ["## Báo nhầm theo từng máy (log bình thường, số CHÍNH THỨC)", "",
           "| File | Ghi chú trong bộ thử | Số phiên | " + " | ".join(f"KẾT LUẬN nhầm ({CHE_DO[cd]})" for cd in cac_che_do)
-          + (" | SLM lỗi (Có SLM) | Chưa xác nhận do SLM (Có SLM) |" if "co-slm" in cac_che_do else " |"),
-          "|---|---|---|" + "---|" * (len(cac_che_do) + (2 if "co-slm" in cac_che_do else 0))]
+          + (" | SLM lỗi (Có SLM) | Chưa xác nhận do SLM (Có SLM) | trong đó SLM chọn BÌNH THƯỜNG |"
+             if "co-slm" in cac_che_do else " |"),
+          "|---|---|---|" + "---|" * (len(cac_che_do) + (3 if "co-slm" in cac_che_do else 0))]
     for tep in dict.fromkeys(h["tep"] for h in hang if h["loai"] == "binh_thuong"):
         ds = [h for h in hang if h["tep"] == tep]
         n = len([h for h in ds if h["che_do"] == cac_che_do[0]])
@@ -315,6 +316,7 @@ def viet_bang(hang, cac_che_do, thong_tin, bo_qua, loi_file, thoi_gian):
             co = [h for h in ds if h["che_do"] == "co-slm"]
             cot.append(str(sum(h["ket_qua"] == "LOI_SLM" for h in co)))
             cot.append(str(sum(h["ket_qua"] == "CHUA_XAC_NHAN" and h["so_lan_hoi_slm"] > 0 for h in co)))
+            cot.append(str(sum(h["ma"] == "SLM_BINH_THUONG" for h in co)))
         o.append(f"| {tep} | {thong_tin_ghi_chu.get(tep, '')} | {n} | " + " | ".join(cot) + " |")
     o.append("")
 
@@ -441,6 +443,8 @@ def main():
         "Mô hình mẫu chuỗi": f"{os.path.basename(a.mo_hinh)} (sha256 {bam}), ngưỡng {a.nguong}, {a.so_ung_vien} ứng viên",
         "SLM": os.environ.get("SLM_MODEL", "phi4-mini:latest") if "co-slm" in a.che_do else "(không chạy)",
         "Luật Startup": "BẬT (LUAT_STARTUP=1)" if getattr(agent, "LUAT_STARTUP", False) else "tắt",
+        "Cách hỏi SLM": ("MỚI (SLM_PROMPT_MOI=1)" if os.environ.get("SLM_PROMPT_MOI", "").strip() == "1" else "cũ")
+                        if "co-slm" in a.che_do else "(không chạy)",
         "Bộ thử": f"{os.path.basename(a.bo_thu)}, {len(duong_file)} file đo được, {len(bo_qua)} dòng chưa tính",
     }
     with open(os.path.join(a.ra, "ket_qua_phien.csv"), "w", encoding="utf-8-sig", newline="") as f:
