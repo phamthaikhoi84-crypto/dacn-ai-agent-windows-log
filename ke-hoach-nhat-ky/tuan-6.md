@@ -154,7 +154,7 @@ Chạy trên máy Khôi đêm 20–21/11, commit `1c7211a`, cùng `bo-thu.csv` (
 ### Dũng (D1–D3)
 
 - D1: đã gửi log, nhưng file gom được 353 phiên thay vì 2.573; chưa dùng được làm số tham khảo.
-- D2: kết quả 4 SLM đã có ở K3 (chạy trên máy Khôi); `docs/models.md` (RAM, nhận xét từng mô hình) do Dũng hoàn thiện.
+- D2: `docs/models.md` mục 7: bảng 4 SLM từ kết quả K3 (chạy trên máy Khôi), nhận xét từng mô hình, phân tích theo kỹ thuật và các phiên Lenovo/Defender. Chưa đo RAM (tuần 7).
 - D3, cách hỏi mới (`SLM_PROMPT_MOI=1`): cho SLM biết ứng viên nào đủ / thiếu dấu vết và thêm lựa chọn BINH_THUONG. Cách hỏi cũ giữ nguyên. Thiên đo trên bộ phát triển không tiền tố (phi4-mini, 22/11, `docs/ket-qua/tuan6-d3-dev-cach-hoi-*.md`):
 
 | Cách hỏi | Phát hiện đúng / 21 | Chưa xác nhận | Tổng thời gian hỏi SLM |
@@ -163,6 +163,8 @@ Chạy trên máy Khôi đêm 20–21/11, commit `1c7211a`, cùng `bo-thu.csv` (
 | Mới | 2 (10%) | 11 | 127 giây (12 lần) |
 
 - Cả 10 phiên mất phát hiện đều là SLM tự chọn CHUA_XAC_NHAN (`SLM_BAC`), không phiên nào chọn BINH_THUONG. Cách hỏi mới làm phi4-mini dè dặt quá mức, từ chối cả tấn công có đủ dấu vết. Trượt tiêu chí "không mất phát hiện trên bộ phát triển": D3 ghi là **đã thử, chưa đạt**. Chưa đo được phía báo nhầm trên log Dũng.
+- Báo cáo D3: `docs/ket-qua/d3-prompt-moi.md`. Token prompt cao nhất 7.427/8.192 (91%), phiên 3 ứng viên dài hơn có thể vượt. Ví dụ Sysmon64 trong prompt lấy từ log bình thường riêng của Dũng (`demo_binh_thuong.evtx`, không thuộc bộ thử).
+- Dũng có sửa thêm bước 5 của `agent.py` (điều kiện "bằng chứng liên quan": so dòng bằng chứng của SLM với dòng dấu vết của DuckDB, hai định dạng khác nhau nên không bao giờ khớp). Thay đổi này chặn mọi kết luận, kể cả chế độ không SLM (file schtasks mẫu từ KẾT LUẬN thành CHƯA XÁC NHẬN), nên không gộp vào main; số liệu Dũng chạy trên log riêng bằng bản sửa đó không dùng được, đo lại ở tuần 7.
 
 ## Nội dung ghi phiếu tiến độ
 

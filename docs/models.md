@@ -102,3 +102,109 @@ Dựa trên thử nghiệm kiến thức chung ngày 16/10/2026:
 **Chưa chốt mô hình chính thức ở giai đoạn thử nghiệm kiến thức chung.** Quyết định cuối cùng sẽ dựa trên kết quả kiểm thử phân tích log Windows/Sysmon thực tế và khả năng tích hợp ổn định vào AI Agent.
 
 Mô hình được lựa chọn phải đáp ứng đồng thời yêu cầu về độ chính xác, bằng chứng, giải thích, định dạng JSON và hiệu năng trên máy thử nghiệm.
+
+## 7. Đánh giá 4 SLM trên bộ thử tuần 6 (K3)
+
+### 7.1. Điều kiện thử nghiệm
+
+- Máy thử nghiệm: Máy Khôi.
+- Phương thức suy luận: Ollama, CPU.
+- Mức sử dụng CPU: 100% trong quá trình suy luận.
+- Bộ thử: `data/bo-thu.csv`.
+- Dữ liệu: 29 phiên tấn công và 3.290 phiên log bình thường.
+- Ngưỡng: 0,5.
+- Số ứng viên: 3.
+- Phương pháp hỏi: Prompt cũ, chưa áp dụng D3.
+- Số lần hỏi SLM: 26 lần cho mỗi mô hình.
+- Thời gian thử nghiệm: Đêm 20–21/11/2026.
+- Luật Startup: Tắt, trừ lần đo được ghi rõ.
+
+### 7.2. Bảng so sánh kết quả
+
+| Mô hình | Phát hiện đúng | Báo nhầm | Chưa xác nhận do SLM (trên log bình thường) | SLM lỗi | Thời gian trung bình mỗi lần hỏi | Tổng thời gian |
+|---|---:|---:|---:|---:|---:|---:|
+| Phi-4-mini | 6/29 (21%) | 8/3.290 (0,24%) | 11 | 0 | 52 giây | 38 phút |
+| Qwen3 4B | 7/29 (24%) | 13/3.290 (0,40%) | 6 | 0 | 74 giây | 50 phút |
+| Llama 3.2 3B | 6/29 (21%) | 15/3.290 (0,46%) | 4 | 0 | 45 giây | 30 phút |
+| Gemma 3 4B | 6/29 (21%) | 8/3.290 (0,24%) | 11 | 0 | 58 giây | 34 phút |
+
+### 7.3. Nhận xét từng mô hình
+
+#### Phi-4-mini
+
+- Phát hiện đúng 6/29 phiên tấn công, đạt 21%.
+- Có 8 phiên báo nhầm trên 3.290 phiên bình thường, tương đương 0,24%.
+- Có 11 phiên chưa xác nhận do kết quả SLM không đủ điều kiện kết luận.
+- Thời gian trung bình mỗi lần hỏi là 52 giây; tổng thời gian chạy 38 phút.
+- Mô hình có kết quả lặp lại được với lần đo tuần 5, nhưng chưa cải thiện khả năng phát hiện so với chế độ không SLM.
+
+#### Qwen3 4B
+
+- Phát hiện đúng 7/29 phiên, đạt 24%, cao nhất trong 4 mô hình.
+- Có 13 phiên báo nhầm, tương đương 0,40%.
+- Có 6 phiên chưa xác nhận.
+- Thời gian trung bình mỗi lần hỏi là 74 giây; tổng thời gian 50 phút.
+- Có tỷ lệ phát hiện cao nhất trong nhóm SLM nhưng thời gian xử lý dài nhất.
+
+#### Llama 3.2 3B
+
+- Phát hiện đúng 6/29 phiên, đạt 21%.
+- Có 15 phiên báo nhầm, tương đương 0,46%, cao nhất trong nhóm SLM.
+- Có 4 phiên chưa xác nhận, thấp nhất trong nhóm.
+- Thời gian trung bình mỗi lần hỏi là 45 giây; tổng thời gian 30 phút.
+- Có tốc độ xử lý tương đối nhanh nhưng kết quả phân loại ứng viên chưa ổn định.
+
+#### Gemma 3 4B
+
+- Phát hiện đúng 6/29 phiên, đạt 21%.
+- Có 8 phiên báo nhầm, tương đương 0,24%.
+- Có 11 phiên chưa xác nhận.
+- Thời gian trung bình mỗi lần hỏi là 58 giây; tổng thời gian 34 phút.
+- Có mức báo nhầm thấp tương đương Phi-4-mini nhưng chưa cải thiện số phiên phát hiện đúng.
+
+### 7.4. Phân tích theo kỹ thuật
+
+| Kỹ thuật | Không SLM | Phi-4-mini | Qwen3 4B | Llama 3.2 3B | Gemma 3 4B |
+|---|---:|---:|---:|---:|---:|
+| T1003.001 | 5/6 | 4/6 | 5/6 | 5/6 | 5/6 |
+| T1053.005 | 2/4 | 2/4 | 2/4 | 1/4 | 1/4 |
+
+- Phi-4-mini bỏ sót phiên `babyshark_mimikatz_powershell` do lựa chọn T1059.001 thay vì T1003.001.
+- Llama 3.2 3B và Gemma 3 4B bỏ sót phiên `exec_persist_rundll32_mshta_scheduledtask` do lựa chọn T1059.001 thay vì T1053.005.
+- Qwen3 4B, Llama 3.2 3B và Gemma 3 4B cùng đạt 5/6 ở T1003.001, bằng chế độ không SLM; Phi-4-mini đạt 4/6.
+
+### 7.5. Phân tích báo nhầm trên phiên Lenovo và Defender
+
+Trong 9 lần hỏi có hai ứng viên T1053.005 và T1070.001, các mô hình có xu hướng lựa chọn khác nhau:
+
+| Mô hình | T1053.005 | T1070.001 | Mã khác |
+|---|---:|---:|---:|
+| Phi-4-mini | 0 | 9 | 0 |
+| Qwen3 4B | 3 | 6 | 0 |
+| Llama 3.2 3B | 7 | 1 | 1 |
+| Gemma 3 4B | 3 | 5 | 1 |
+
+Log cho thấy Lenovo thực sự tạo tác vụ Scheduled Task, đủ dấu vết cho T1053.005. Trong khi đó, Defender gọi `wevtutil` để thay đổi cấu hình kênh nhật ký nhưng không có bằng chứng bắt buộc của T1070.001.
+
+Llama 3.2 3B lựa chọn T1053.005 nhiều nhất nhưng cũng có số báo nhầm cao nhất. Phi-4-mini lựa chọn T1070.001 trong cả 9 lần, khiến bước xác minh bằng chứng chặn kết luận sai.
+
+Kết quả cho thấy số phiên chưa xác nhận không đồng nghĩa với việc SLM đã nhận diện được hoạt động bình thường. Prompt cũ chưa cung cấp lựa chọn phân loại bình thường độc lập.
+
+### 7.6. Hạn chế của phép thử
+
+- Không mô hình nào phát hiện nhiều hơn chế độ không SLM (7/29).
+- Không có kết luận sai mã kỹ thuật ở cả bốn mô hình.
+- Không có lỗi SLM trong 26 lần hỏi của mỗi mô hình.
+- Máy Thiên tuần 3: 0/807 báo nhầm ở mọi chế độ, nên mọi khác biệt về báo nhầm đến từ máy Thiên tuần 4 và máy Khôi.
+- RAM trong lúc chạy inference trên máy Khôi chưa được ghi nhận.
+- Kết quả này chưa đánh giá prompt mới D3.
+
+### 7.7. Kết luận
+
+Qwen3 4B đạt số phiên phát hiện đúng cao nhất trong nhóm SLM với 7/29 phiên, nhưng cũng có số báo nhầm cao hơn Phi-4-mini và Gemma 3 4B.
+
+Phi-4-mini và Gemma 3 4B có tỷ lệ báo nhầm thấp nhất (0,24%), tuy nhiên số phiên chưa xác nhận cao.
+
+Llama 3.2 3B có thời gian trung bình hỏi SLM thấp nhất (45 giây), nhưng số báo nhầm cao nhất.
+
+Không có mô hình nào thể hiện ưu thế toàn diện. Kết quả cho thấy SLM chưa cải thiện rõ ràng khả năng phát hiện so với luật và bước xác minh bằng bằng chứng hiện có. Cần đánh giá thêm phương pháp hỏi mới D3 trước khi lựa chọn cấu hình chính thức.

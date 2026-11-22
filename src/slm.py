@@ -1,8 +1,8 @@
-
 import json
 import os
 import re
 import socket
+import sys
 import time
 import urllib.request
 import urllib.error
@@ -10,20 +10,21 @@ import urllib.error
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
 
+# Mỗi lần SLM lỗi (bị cắt, JSON sai cấu trúc, Ollama lỗi HTTP), GHI THÊM prompt và câu trả lời thô vào đây
 FILE_LOI = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "output",
     "slm_loi.txt"
 )
-
+# Timeout tối đa 600 giây; laptop chạy Ollama 100% CPU, prompt 40 dòng có lần mất trên 240 giây
 THOI_GIAN_CHO = 600
 SO_LAN_THU = 2
-
+# Cho phép đổi model bằng biến môi trường SLM_MODEL
 MODEL_CHINH = os.environ.get("SLM_MODEL", "phi4-mini:latest")
 
 # Chỉ bật prompt mới khi SLM_PROMPT_MOI=1.
 SLM_PROMPT_MOI = os.environ.get("SLM_PROMPT_MOI", "0").strip() == "1"
-
+# Tên chính thức của 8 kỹ thuật: đưa vào prompt để mô hình không tự đặt tên sai
 TEN_KY_THUAT = {
     "T1003.001": "OS Credential Dumping: LSASS Memory (đánh cắp thông tin đăng nhập từ bộ nhớ LSASS)",
     "T1021.001": "Remote Services: Remote Desktop Protocol",
@@ -105,16 +106,18 @@ def _ket_qua_loi(ly_do):
 
 def _kiem_tra_lsass_vm_read(chuoi_text):
     """Giữ lại hàm kiểm tra LSASS của phiên bản cũ."""
-
     cac_dong = chuoi_text.splitlines()
 
     for dong in cac_dong:
+        # Phải là Event ID 10
         if not re.search(r'EventID\s*[=:]\s*10\b', dong, re.IGNORECASE):
             continue
 
+        # Phải nhắm vào lsass.exe
         if not re.search(r'lsass\.exe', dong, re.IGNORECASE):
             continue
 
+        # Lấy GrantedAccess
         match = re.search(
             r'GrantedAccess\s*[=:]\s*["\']?(0x[0-9a-fA-F]+|\d+)',
             dong,
@@ -129,6 +132,7 @@ def _kiem_tra_lsass_vm_read(chuoi_text):
         except ValueError:
             continue
 
+        # PROCESS_VM_READ = 0x0010
         if (quyen & 0x0010) != 0:
             return True
 
@@ -436,6 +440,8 @@ def goi_slm(
     cac_dong = [d for d in cac_dong if d.strip()]
     chuoi_text = "\n".join(cac_dong)
 
+    # Đánh số dòng (L1, L2, ...): mô hình chỉ cần trả số dòng làm bằng chứng, không phải chép lại cả dòng.
+    # Chép lại dòng dài (đường dẫn đầy đủ, tiếng Việt) làm mô hình nhỏ viết quá giới hạn token và JSON bị cắt.
     log_danh_so = "\n".join(
         f"L{i}: {d}"
         for i, d in enumerate(cac_dong, 1)
@@ -532,6 +538,7 @@ def goi_slm(
     # 4. Gọi Ollama
     phan_hoi = None
 
+    # Lỗi HTTP 500 hoặc mất kết nối thì thử lại một lần.
     for lan in range(1, SO_LAN_THU + 1):
         try:
             with urllib.request.urlopen(
@@ -590,6 +597,22 @@ def goi_slm(
     if not isinstance(phan_hoi, dict):
         return _loi("Phản hồi Ollama không hợp lệ.", yeu_cau)
 
+    # Ghi số token prompt Ollama thực sự xử lý ra stderr.
+    so_token_prompt = phan_hoi.get('prompt_eval_count')
+    if isinstance(so_token_prompt, int) and not isinstance(so_token_prompt, bool):
+        ti_le_context = so_token_prompt / 8192 * 100
+        print(
+            f"[SLM-DO-LUONG] prompt_eval_count={so_token_prompt}; num_ctx=8192; su_dung={ti_le_context:.1f}%",
+            file=sys.stderr,
+            flush=True
+        )
+    else:
+        print(
+            "[SLM-DO-LUONG] Ollama khong tra prompt_eval_count; num_ctx=8192",
+            file=sys.stderr,
+            flush=True
+        )
+
     thong_tin = phan_hoi.get("message", {})
     noi_dung = thong_tin.get("content", "")
     ly_do_dung = phan_hoi.get("done_reason", "")
@@ -599,7 +622,7 @@ def goi_slm(
         or ly_do_dung == "length"
     )
 
-    # 6. Đọc JSON
+    # 6. Đọc JSON (kể cả khi bị cắt: mô hình có thể đã viết xong JSON rồi mới sinh thêm khoảng trắng thừa)
     try:
         du_lieu = _doc_json(noi_dung)
     except (ValueError, TypeError) as loi:
@@ -675,6 +698,7 @@ def goi_slm(
             "ly_do": ly_do
         }
 
+    # Mã kỹ thuật phải thuộc danh sách ứng viên.
     # 9. Kiểm tra mã kỹ thuật
     if ma != "CHUA_XAC_NHAN" and ma not in ma_hop_le:
         return _ket_qua_chua_xac_nhan(
@@ -682,6 +706,7 @@ def goi_slm(
             + str(du_lieu.get("ma_ky_thuat"))
         )
 
+    # Chỉ chấp nhận bằng chứng có thật trong log.
     # 10. Kiểm tra bằng chứng nguyên văn
     bang_chung_hop_le = []
 
