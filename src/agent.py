@@ -250,29 +250,107 @@ def xu_ly_phien(so, may, logon, ds, con, mh, a):
     print("    trả về: " + json.dumps(kq, ensure_ascii=False)[:600])
 
     # ---- Bước 5
+
     if kq.get("loi"):
         print(f"[5] SLM LỖI: {kq.get('ly_do')}")
         print("    => Không kết luận. Ghi riêng là SLM lỗi (không gộp vào chưa xác nhận).")
         return "LOI_SLM", None, cao_nhat
+
     chon = kq.get("ma_ky_thuat")
     trong_ds = chon in ung_vien
-    du_dv = trong_ds and dv[chon]["du"]
-    cho_phep = dong_log + [d for m in ung_vien for _, ds_ in dv[m]["bang_chung"] for d in ds_]
-    bc = [b for b in kq.get("bang_chung", []) if isinstance(b, str) and b.strip()]
-    bc_that = [b for b in bc if any(b.strip() in d or d in b for d in cho_phep)]
-    print(f"[5] Kiểm chứng {chon}: nằm trong ứng viên: {'có' if trong_ds else 'KHÔNG'} | "
-          f"đủ dấu vết: {'có' if du_dv else 'KHÔNG'} | bằng chứng có thật trong log: {len(bc_that)}/{len(bc)}")
-    if trong_ds and du_dv:
+
+    # Chỉ lấy dấu vết DuckDB của chính kỹ thuật SLM đã chọn.
+    dv_chon = dv[chon] if trong_ds else None
+    du_dv = bool(dv_chon and dv_chon["du"])
+
+    # Bằng chứng SLM phải là chuỗi không rỗng.
+    bc = [
+        b.strip()
+        for b in kq.get("bang_chung", [])
+        if isinstance(b, str) and b.strip()
+    ]
+
+    # Lớp 1: kiểm tra từng bằng chứng có xuất hiện trong log gửi SLM.
+    bc_that = [
+        b for b in bc
+        if any(b in d or d in b for d in dong_log)
+    ]
+
+    # Lớp 2: kiểm tra bằng chứng có liên quan đến dấu vết
+    # DuckDB của chính kỹ thuật được SLM chọn hay không.
+    dong_dau_vet_chon = (
+        [
+            d.strip()
+            for _, ds_ in dv_chon["bang_chung"]
+            for d in ds_
+            if isinstance(d, str) and d.strip()
+        ]
+        if dv_chon else []
+    )
+
+    bc_lien_quan = [
+        b for b in bc_that
+        if any(
+            b in d or d in b
+            for d in dong_dau_vet_chon
+        )
+    ]
+
+    # Không chấp nhận nếu SLM không đưa bằng chứng,
+    # hoặc có bất kỳ bằng chứng nào không xác minh được trong log.
+    tat_ca_bc_co_that = bool(bc) and len(bc_that) == len(bc)
+
+    # Phải có ít nhất một bằng chứng liên quan trực tiếp
+    # đến dấu vết DuckDB của kỹ thuật được chọn.
+    co_bc_lien_quan = bool(bc_lien_quan)
+
+    print(
+        f"[5] Kiểm chứng {chon}: "
+        f"nằm trong ứng viên: {'có' if trong_ds else 'KHÔNG'} | "
+        f"đủ dấu vết: {'có' if du_dv else 'KHÔNG'} | "
+        f"bằng chứng có thật: {len(bc_that)}/{len(bc)} | "
+        f"bằng chứng liên quan: {len(bc_lien_quan)}/{len(bc_that)}"
+    )
+
+    # Chỉ kết luận khi đồng thời đạt cả bốn điều kiện.
+    if (
+        trong_ds
+        and du_dv
+        and tat_ca_bc_co_that
+        and co_bc_lien_quan
+    ):
         buoc_ke = train.doan_buoc_ke(seq[-1], chon, mh) if seq else None
+
         print(f"    => KẾT LUẬN: {chon} (điểm khớp {diem[chon]:.3f})")
+
+        if bang_chung_luat and chon == "T1547.001":
+            print("    Lưu ý: ứng viên này được thêm bởi luật Startup, điểm không phải điểm khớp chuỗi.")
+
         if buoc_ke:
             print(f"    Bước tiếp theo hay gặp sau '{seq[-1]}': {buoc_ke}")
+
         return "KET_LUAN", chon, diem[chon]
+
+    if chon == "BINH_THUONG":
+        # SLM chỉ được chặn kết luận, không được giấu phiên.
+        print(
+            f"    => CHƯA XÁC NHẬN: mô hình cho là hoạt động BÌNH THƯỜNG "
+            f"({kq.get('ly_do', '')[:200]})"
+        )
+        return "CHUA_XAC_NHAN", "SLM_BINH_THUONG", cao_nhat
+
     if chon == "CHUA_XAC_NHAN":
-        print(f"    => CHƯA XÁC NHẬN: mô hình cho rằng log không thể hiện kỹ thuật nào ({kq.get('ly_do', '')[:200]})")
+        print(
+            f"    => CHƯA XÁC NHẬN: mô hình cho rằng log không thể hiện kỹ thuật nào "
+            f"({kq.get('ly_do', '')[:200]})"
+        )
         return "CHUA_XAC_NHAN", "SLM_BAC", cao_nhat
-    else:
-        print("    => CHƯA XÁC NHẬN: mô hình chọn kỹ thuật không qua kiểm chứng -> không kết luận, chờ thêm sự kiện.")
+
+    print(
+        "    => CHƯA XÁC NHẬN: không đạt kiểm chứng ứng viên, "
+        "dấu vết hoặc bằng chứng liên quan -> không kết luận."
+    )
+
     return "CHUA_XAC_NHAN", chon, cao_nhat
 
 
