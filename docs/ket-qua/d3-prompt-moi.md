@@ -78,37 +78,68 @@ Chưa có dữ liệu đầy đủ cho toàn bộ phiên phân tích.
 
 ## 5. Đánh giá
 
-Prompt mới bổ sung lựa chọn BINH_THUONG nhằm giảm việc
-SLM phải gán một kỹ thuật MITRE ATT&CK cho hoạt động
-không có dấu hiệu tấn công.
+Kết quả so sánh trực tiếp trên bộ dữ liệu phát triển do Thiên
+thực hiện trong tuần 6:
 
-Tuy nhiên, file kết quả hiện tại chưa đầy đủ và có vấn đề
-mã hóa văn bản. Chưa thể xác định tổng số phiên được xử lý,
-tỷ lệ nhận diện log bình thường, tỷ lệ báo nhầm hoặc mức
-cải thiện so với Prompt cũ trên cùng một tập dữ liệu.
+| Chỉ số | Prompt cũ | Prompt mới |
+|---|---:|---:|
+| Số phiên phát hiện | 12/21 | 2/21 |
 
-Việc thiếu bằng chứng bắt buộc khiến Agent giữ trạng thái
-CHUA_XAC_NHAN, thay vì kết luận chỉ dựa vào đề xuất của SLM.
+Prompt mới giảm 10 phiên phát hiện so với Prompt cũ.
+
+Kiểm tra 10 phiên bị mất phát hiện cho thấy:
+- Cả 10 phiên đều được SLM lựa chọn CHUA_XAC_NHAN.
+- Không có phiên nào được SLM lựa chọn BINH_THUONG.
+
+Như vậy, việc bổ sung lựa chọn BINH_THUONG không phải nguyên
+nhân trực tiếp của 10 phiên mất phát hiện. Tuy nhiên, Prompt
+mới khiến SLM không đưa ra lựa chọn kỹ thuật để Agent tiếp tục
+xác minh ở các phiên này.
+
+Kết quả cho thấy Prompt mới chưa đáp ứng tiêu chí
+"không làm mất phát hiện" so với Prompt cũ.
+
+Đối với log riêng của Dũng, file kết quả hiện trích xuất được
+72 mục, trong đó có 65 dòng chứa mã kỹ thuật. Đây là số liệu
+thu thập riêng, không được gộp với kết quả so sánh 12/21 và
+2/21 của bộ dữ liệu phát triển.
+
+Hai chỉ số số phiên KET_LUAN và SLM_BINH_THUONG trên log
+riêng của Dũng chưa đo được do vấn đề mã hóa và giới hạn
+dữ liệu đầu ra. Chuyển việc đo này sang tuần 7.
 
 ## 6. Hạn chế
 
-1. File kết quả không chứa đầy đủ kết quả tất cả phiên.
-2. Văn bản đầu ra gặp lỗi mã hóa tiếng Việt.
-3. Chưa có phép so sánh Prompt cũ và Prompt mới trên cùng
-   dữ liệu, cùng cấu hình và cùng điều kiện.
+1. Log riêng của Dũng chưa có đầu ra đầy đủ và gặp vấn đề
+   mã hóa tiếng Việt, nên chưa xác định được chính xác số
+   phiên KET_LUAN và SLM_BINH_THUONG cho từng cách hỏi.
+2. Kết quả 12/21 và 2/21 là kết quả so sánh trên bộ dữ liệu
+   phát triển của Thiên, không phải kết quả đo trên log riêng
+   của Dũng.
+3. Token Prompt cao nhất là 7.427/8.192, tương đương khoảng
+   91% Context. Những phiên có 3 ứng viên hoặc nội dung dài
+   hơn có nguy cơ vượt giới hạn Context.
 4. Chưa đo RAM đỉnh trong quá trình suy luận.
-5. Chưa thể tính các chỉ số Precision, Recall, F1 hoặc
-   tỷ lệ nhận diện bình thường từ phần kết quả hiện có.
-6. Số lần xuất hiện kỹ thuật là số liệu đề xuất, không phải
-   ground truth.
+5. Chưa đủ dữ liệu để tính đầy đủ Precision, Recall và F1
+   cho toàn bộ hệ thống.
+6. Số lần xuất hiện mã kỹ thuật trong log Dũng là số liệu
+   đề xuất, không phải số cuộc tấn công thực tế hoặc số
+   phát hiện đúng.
 
 ## 7. Kết luận
 
-Đã triển khai và chạy thử phương pháp Prompt mới trên log
-Sysmon bình thường. Cơ chế xác minh bằng chứng tiếp tục
-hoạt động và không cho phép xác nhận tấn công khi chưa đủ
-bằng chứng.
+Đã triển khai và đo thử phương pháp Prompt mới.
 
-Kết quả thu thập hiện tại chưa đủ để khẳng định Prompt mới
-cải thiện độ chính xác so với Prompt cũ. Cần dữ liệu đầu ra
-đầy đủ và phép so sánh cùng điều kiện để đánh giá định lượng.
+Trên bộ dữ liệu phát triển của Thiên, Prompt cũ phát hiện
+12/21 phiên, trong khi Prompt mới chỉ phát hiện 2/21 phiên.
+Có 10 phiên mất phát hiện và cả 10 đều do SLM lựa chọn
+CHUA_XAC_NHAN; không có phiên nào chọn BINH_THUONG.
+
+Do đó, Prompt mới chưa đạt tiêu chí "không mất phát hiện"
+so với Prompt cũ.
+
+Trạng thái D3: ĐÃ THỬ, CHƯA ĐẠT.
+
+Chưa sử dụng Prompt mới làm cấu hình chính thức. Cần tiếp tục
+phân tích nguyên nhân, đánh giá và cải thiện phương pháp trong
+tuần 7 trước khi xem xét áp dụng.
