@@ -71,8 +71,6 @@ Quy tắc giữ nguyên từ tuần 5: mọi chỉnh sửa bước 2 và cách h
 
 ## Kết quả
 
-(Đang điền dần, phần còn lại điền cuối tuần.)
-
 ### K1. Theo dõi trực tiếp (`src/theo_doi.py`)
 
 - Cứ 3 giây đọc sự kiện mới của kênh `Microsoft-Windows-Sysmon/Operational` và PowerShell 4104 theo RecordID (pywin32), nạp vào DuckDB, chạy 5 bước của `agent.py` trên các phiên vừa có sự kiện mới. Không cần xuất `.evtx`. Bỏ sự kiện do chính agent tạo ra. Phiên đã kết luận thì đặt mốc, sự kiện đến sau được xét như một đoạn mới của phiên.
@@ -109,3 +107,92 @@ Quy tắc giữ nguyên từ tuần 5: mọi chỉnh sửa bước 2 và cách h
 ### K6. Ảnh phiên #46 tuần 5
 
 - `docs/hinh/tuan5-phien46-slm-chon-t1070.png`: đã thay tên máy bằng `MAY-KHOI`.
+
+### K3. So sánh 4 SLM trên bộ thử, và lần đo 6 không SLM
+
+Chạy trên máy Khôi đêm 20–21/11, commit `1c7211a`, cùng `bo-thu.csv` (29 phiên tấn công chưa dùng chỉnh agent, 3.290 phiên log bình thường), cách hỏi SLM cũ, luật Startup tắt trừ dòng ghi rõ. Chi tiết: `docs/ket-qua/tuan6-k3-so-sanh-4-slm.md` và các file `tuan6-lan6-*.md`, `tuan6-k3-slm-*.md`.
+
+| Chế độ | Phát hiện đúng / 29 | Báo nhầm / 3.290 | TB mỗi lần hỏi SLM |
+|---|---|---|---|
+| Không SLM, luật Startup tắt | 7 (24%) | 19 (0,58%) | – |
+| Không SLM, luật Startup bật | 9 (31%) | 19 (0,58%) | – |
+| phi4-mini | 6 (21%) | 8 (0,24%) | 52 giây |
+| qwen3:4b-instruct-2507 | 7 (24%) | 13 (0,40%) | 74 giây |
+| llama3.2:3b | 6 (21%) | 15 (0,46%) | 45 giây |
+| gemma3:4b | 6 (21%) | 8 (0,24%) | 58 giây |
+
+- Mẫu số phát hiện là 29 (tuần 5 là 31): T4 của Thiên chuyển 2 phiên SharpRDP sang nhóm "đã dùng chỉnh agent".
+- Không mô hình nào phát hiện nhiều hơn chế độ không SLM. 0 KẾT LUẬN sai mã ở mọi chế độ, 0 SLM lỗi.
+- phi4-mini chạy lại ra đúng số lần đo 4 tuần 5 (6/29, 8 báo nhầm): kết quả lặp lại được.
+- Báo nhầm giảm không phải vì SLM nhận ra hoạt động bình thường. Ở 9 phiên Lenovo/Defender trên máy Khôi (2 ứng viên T1053.005 / T1070.001), đọc đúng log phải là T1053.005 vì Lenovo thật sự chạy `schtasks /Create`. phi4-mini chọn T1070.001 cả 9 lần, bị bước 5 chặn nên ít báo nhầm; llama3.2 chọn T1053.005 7/9 lần nên báo nhầm nhiều nhất. Mô hình đọc log càng đúng thì báo nhầm càng nhiều.
+- Log máy Dũng không được tính: file nhận ngày 20/11 gom được 353 phiên, `bo-thu.csv` ghi 2.573 (không phải bản Thiên đã đo). Đang hỏi lại Dũng.
+
+### K4. Agent nhận câu trả lời "bình thường" của SLM
+
+- `agent.py` truyền kết quả bước 3 (ứng viên nào đủ / thiếu dấu vết) cho `slm.py` khi `slm.py` nhận tham số này (cách hỏi mới D3, bật bằng `SLM_PROMPT_MOI=1`); với `slm.py` cũ vẫn gọi như trước.
+- SLM trả lời BINH_THUONG thì agent không kết luận nhưng vẫn ghi phiên là CHƯA XÁC NHẬN, mã `SLM_BINH_THUONG`: SLM chỉ được chặn cảnh báo, không được giấu phiên đã có dấu vết.
+- `danh_gia.py` ghi thêm "Cách hỏi SLM: mới/cũ" và "Luật Startup: bật/tắt" vào điều kiện đo, và cột "SLM chọn BÌNH THƯỜNG" trong bảng báo nhầm theo máy.
+- Lần đo 6 có SLM với cách hỏi mới không chạy vì D3 chưa đạt (xem phần Dũng).
+
+### Thử ghi file vào Startup trên máy thật (19/11)
+
+- Đang chạy `theo_doi.py`, dùng `Set-Content` tạo 1 file `.txt` trong thư mục Startup rồi xóa ngay. Sysmon ghi lại, agent đọc được sau vài giây, nhưng sự kiện nằm trong phiên người dùng 205 sự kiện: bước 2 cho T1105 0,891, T1547.001 chỉ 0,143 nên bị loại ở bước 2 dù dấu vết Startup có sẵn. Kết quả: CHƯA XÁC NHẬN T1105, không cảnh báo.
+- Đây là lý do luật Startup của Thiên bỏ điều kiện "phiên ≤ 4 sự kiện" (điều kiện đó chỉ khớp file mẫu, trên máy thật không bao giờ chạy). Chưa thử lại trên máy thật sau khi có luật.
+
+### K5. Máy lạ thứ hai
+
+- Máy cũ đang chạy Linux, không dùng được (agent và dấu vết xây cho Sysmon trên Windows). Đang nhờ một người quen dùng laptop Windows hằng ngày cài Sysmon; lùi sang tuần 7.
+
+### Thiên (T1–T4)
+
+- T1 (mục 6c trong `docs/ket-qua-huan-luyen.md`): phân loại 17 phiên dừng ở bước 2. Khôi kiểm thêm: giả sử bước 2 đưa đúng kỹ thuật lên ứng viên thì bước 3 cũng chỉ cho qua 4/17 phiên; dữ liệu train của T1136.001 không có ký hiệu `SUA_REGISTRY`, của T1021.001 không có `KET_NOI_MANG`. Chỗ nghẽn là dữ liệu train (phiên dài, có lệnh Event 1) lệch với mẫu tối thiểu (chỉ có tác dụng phụ), không chỉ do ký hiệu. Không sửa `ky_hieu.py` tuần này.
+- T2: bộ phát triển trong máy ảo cô lập có snapshot, Sysmon 15.22 cùng cấu hình, 21 test Atomic hợp lệ (6 bị Defender chặn, ghi "can kiem tra"), có số test và GUID. Script chạy test thêm `hostname`, `whoami` ở đầu mỗi phiên; đã làm thêm bản bỏ tiền tố: không SLM đúng 12/21. Thêm 12 lệnh đơn lẻ gõ tay (không qua Atomic): 7/12 đúng. Dữ liệu train lấy từ Atomic của Splunk nên bộ này chỉ dùng làm bộ phát triển.
+- T3, luật Startup (`LUAT_STARTUP=1`, mặc định tắt): phiên có tạo file trong thư mục Startup thì thêm ứng viên T1547.001. Không có danh sách bỏ qua: 7 báo nhầm trên 3.099 phiên log Dũng + Thiên tuần 1, cả 7 là OneNote tạo "Send to OneNote.lnk". Danh sách bỏ qua phải khớp cả đường dẫn dưới `Program Files`, tên `onenote.exe` và tên file; con số 0 báo nhầm sau đó là do thiết kế, không phải bằng chứng. Trên bộ thử: đúng dự kiến ghi trước, 7 lên 9/29, không thêm báo nhầm. Luật được thiết kế sau khi đã đọc bộ thử.
+- T4: `LM_sysmon_3_12_13_1_SharpRDP.evtx` từng dùng khi thiết kế `ky_hieu.py` (RunMRU), tách khỏi bảng chính; `docs/danh-gia.md` khớp với `danh_gia.py`.
+- Điểm mù của Sysmon ghi nhận khi làm bộ phát triển: không ghi kết nối loopback 3389; `New-LocalUser` không sinh sự kiện nào.
+
+### Dũng (D1–D3)
+
+- D1: đã gửi log, nhưng file gom được 353 phiên thay vì 2.573; chưa dùng được làm số tham khảo.
+- D2: kết quả 4 SLM đã có ở K3 (chạy trên máy Khôi); `docs/models.md` (RAM, nhận xét từng mô hình) do Dũng hoàn thiện.
+- D3, cách hỏi mới (`SLM_PROMPT_MOI=1`): cho SLM biết ứng viên nào đủ / thiếu dấu vết và thêm lựa chọn BINH_THUONG. Cách hỏi cũ giữ nguyên. Thiên đo trên bộ phát triển không tiền tố (phi4-mini, 22/11, `docs/ket-qua/tuan6-d3-dev-cach-hoi-*.md`):
+
+| Cách hỏi | Phát hiện đúng / 21 | Chưa xác nhận | Tổng thời gian hỏi SLM |
+|---|---|---|---|
+| Cũ | 12 (57%), bằng không SLM | 1 | 82 giây (12 lần) |
+| Mới | 2 (10%) | 11 | 127 giây (12 lần) |
+
+- Cả 10 phiên mất phát hiện đều là SLM tự chọn CHUA_XAC_NHAN (`SLM_BAC`), không phiên nào chọn BINH_THUONG. Cách hỏi mới làm phi4-mini dè dặt quá mức, từ chối cả tấn công có đủ dấu vết. Trượt tiêu chí "không mất phát hiện trên bộ phát triển": D3 ghi là **đã thử, chưa đạt**. Chưa đo được phía báo nhầm trên log Dũng.
+
+## Nội dung ghi phiếu tiến độ
+
+Phiếu tuần 6 (16/11 – 22/11/2026), 4 dòng:
+
+- Theo dõi trực tiếp log Sysmon trên máy thật
+- Chạy 75 phút trên máy dùng bình thường: 0 cảnh báo
+- So sánh 4 SLM trên bộ thử cố định
+- Bộ phát triển Atomic, luật Startup, thử cách hỏi SLM mới
+
+## Kết luận tạm
+
+- Đã có đủ 4 thứ thầy cần cuối kỳ: theo dõi trực tiếp trên máy thật, bảng có / không SLM, báo nhầm trên máy chưa dùng huấn luyện, bảng so sánh 4 SLM.
+- Với cả 4 SLM nhỏ và cách hỏi hiện tại, SLM không tăng phát hiện. Báo nhầm giảm ở một số mô hình là do SLM chọn sai kỹ thuật rồi bị bước kiểm chứng chặn, không phải do SLM nhận ra hoạt động bình thường. Thêm lựa chọn "bình thường" bằng cách hỏi (D3) làm mô hình từ chối cả tấn công thật.
+- Bước kiểm chứng (bước 3 và 5) là phần giữ agent khỏi kết luận bừa. Điểm yếu lớn nhất vẫn là bước 2, do dữ liệu train lệch với cách tấn công được ghi lại trong mẫu tối thiểu và trên máy thật.
+
+## Hạn chế cần ghi rõ
+
+- Luật Startup được thiết kế sau khi đã đọc bộ thử; danh sách bỏ qua lập từ log Dũng.
+- Mới có 1 máy lạ (máy Khôi); K2 chỉ 75 phút, chưa đủ để nói tần suất báo nhầm theo ngày.
+- Bộ phát triển Atomic có thể trùng test với dữ liệu train (Splunk Atomic).
+- Mỗi cấu hình SLM chỉ chạy 1 lần (temperature 0 nên cùng đầu vào cho cùng câu trả lời).
+- Sysmon không ghi loopback 3389 và `New-LocalUser`.
+
+## Việc tuần 7
+
+- Khôi: máy lạ thứ hai (K5); chạy theo dõi trực tiếp 24 giờ; thử lại ghi file vào Startup trên máy thật với luật bật; `src/dacn.py` một cửa vào và mục "Cách chạy" trong README.
+- Dũng: hoàn thiện `docs/models.md`; xác nhận lại file log máy Dũng; phân tích vì sao cách hỏi mới chọn CHUA_XAC_NHAN (xem lý do bằng `--in-dong-slm`) và đo cách hỏi mới trên log máy Dũng.
+- Thiên: bắt đầu chương dữ liệu và chương đánh giá của báo cáo cuối kỳ, dùng mục 6b–6e và bảng tuần 6.
+
+## Dùng AI
+
+- Claude (Anthropic) hỗ trợ Khôi viết `src/theo_doi.py`, sửa `agent.py` / `danh_gia.py` cho K4, duyệt bản vá luật Startup và cách hỏi mới, phân tích kết quả đo và soạn nội dung tuần này. Mọi lần đo do nhóm tự chạy trên máy thật; số liệu lấy từ file kết quả, không do AI tạo. Chi tiết trong `ai-logs/`.
