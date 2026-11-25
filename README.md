@@ -50,7 +50,7 @@ Mọi lệnh dưới đây chạy trong **PowerShell**, đứng ở **thư mục
 cd <đường dẫn tới>\dacn-ai-agent-windows-log
 ```
 
-Tất cả chế độ đều chạy qua một lệnh `python src\dacn.py <chế độ> ...`. File này chỉ gọi lại `agent.py`, `theo_doi.py`, `danh_gia.py`, nên mọi tham số của các file đó vẫn dùng được.
+Tất cả chế độ đều chạy qua một lệnh `python src\dacn.py <chế độ> ...`. File này chỉ gọi lại `agent.py`, `theo_doi.py`, `danh_gia.py`, `chuoi_tan_cong.py`, nên mọi tham số của các file đó vẫn dùng được.
 
 ### 1. Cài đặt (làm một lần)
 
@@ -71,11 +71,11 @@ Tất cả chế độ đều chạy qua một lệnh `python src\dacn.py <chế
 ### 2. Xem trợ giúp
 
 ```powershell
-python src\dacn.py --help            # 4 chế độ và tham số chung
+python src\dacn.py --help            # 5 chế độ và tham số chung
 python src\dacn.py quet --help       # tham số riêng của một chế độ
 ```
 
-### 3. Bốn chế độ
+### 3. Năm chế độ
 
 | Chế độ | Làm gì | Lệnh mẫu |
 |---|---|---|
@@ -83,6 +83,7 @@ python src\dacn.py quet --help       # tham số riêng của một chế độ
 | `phat-lai` | Đưa từng sự kiện của file vào agent theo thứ tự thời gian, để xem agent báo sớm tới đâu | `python src\dacn.py phat-lai D:\log\a.evtx` |
 | `theo-doi` | Theo dõi trực tiếp log Sysmon và PowerShell của máy đang chạy. **Phải mở PowerShell MỚI bằng "Run as administrator", rồi `cd` lại vào thư mục repo** (cửa sổ admin mới mở luôn đứng ở `C:\Windows\system32`). Dừng bằng Ctrl + C | `cd <đường dẫn tới>\dacn-ai-agent-windows-log` rồi `python src\dacn.py theo-doi --khong-slm` |
 | `danh-gia` | Chạy agent trên bộ thử `data/bo-thu.csv`, có và không có SLM, rồi xuất bảng so sánh | `python src\dacn.py danh-gia --thu-muc <thư mục log tấn công> <thư mục log bình thường>` |
+| `chuoi` | Phát lại file `.evtx` từng sự kiện giống hệt `theo-doi` (sau mỗi KẾT LUẬN thì xét tiếp phần sau như đoạn mới), rồi nối các KẾT LUẬN cùng máy thành chuỗi tấn công theo giai đoạn. Dùng cho log chứa nhiều bước tấn công liền nhau | `python src\dacn.py chuoi "<file>.evtx" --khong-slm` |
 
 **Thử nhanh:** chạy `quet` trên file `sysmon_10_11_outlfank_dumpert_and_andrewspecial_memdump.evtx` của EVTX-ATTACK-SAMPLES (trong bộ gốc, file nằm ở thư mục con `Credential Access`). Nếu không nhớ để ở đâu, tìm bằng:
 
@@ -117,6 +118,8 @@ Tham số được chuyển cho script của chế độ:
 | `--in-dong-slm` | `quet`, `phat-lai`, `theo-doi` | In các dòng log đã gửi cho SLM |
 | `--chi-tiet` | `quet` | In cả các phiên điểm thấp |
 | `--tre S` | `phat-lai` | Nghỉ S giây giữa 2 đợt (để demo dễ theo dõi) |
+| `--mong-doi A,B,...` | `chuoi` | Thứ tự mã kỹ thuật mong đợi; in ĐÚNG / KHÁC khi so với chuỗi agent tìm ra |
+| `--khoang-phut M` | `chuoi`, `theo-doi` | Hai KẾT LUẬN cùng máy cách nhau quá M phút thì tách thành chuỗi mới (mặc định 60) |
 | `--an-ten` | `theo-doi` | Thay tên máy, tên người dùng. Bật khi chụp ảnh báo cáo |
 | `--nap-truoc-phut M` | `theo-doi` | Lúc bật, nạp thêm M phút log gần nhất (mặc định 10) |
 | `--thu-muc A B` | `danh-gia` | Các thư mục chứa log của bộ thử |
@@ -146,6 +149,7 @@ Dòng `[dacn] chạy: ...` chỉ hiện trên màn hình, không ghi vào file.
 - `quet`, `phat-lai`: in ra màn hình (hoặc vào file nếu dùng `>`).
 - `theo-doi`: `output\theo_doi\<ngày-giờ bắt đầu>\` gồm `canh_bao.csv`, `chi_tiet.txt`, `tong_ket.md`.
 - `danh-gia`: `output\danh_gia\` gồm `bang.md`, `ket_qua_phien.csv`, chi tiết từng file trong `khong-slm\` và `co-slm\`.
+- `chuoi`: `output\chuoi\<ngày-giờ>\` gồm `chuoi.md` (chuỗi tấn công) và `chi_tiet.txt`, `canh_bao.csv` như `theo-doi`.
 
 Thư mục `output\` không được đưa lên GitHub.
 

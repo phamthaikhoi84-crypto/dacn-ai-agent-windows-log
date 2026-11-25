@@ -40,6 +40,7 @@ import duckdb
 
 import agent
 import dau_vet
+from chuoi_tan_cong import ChuoiTanCong, luc_bang_chung, mo_ta_chuoi
 from doc_log import COT, TAO_BANG, _phan_tich_xml, _thoi_gian_xml
 from gom_phien import gom_phien
 from ky_hieu import loai_quyen
@@ -268,6 +269,7 @@ class TheoDoi:
         self.csv.writerow(["lan", "loai", "bao_luc", "may", "nguoi_dung", "logon_id", "ma_ky_thuat", "diem",
                            "so_su_kien_doan", "bang_chung_luc", "tre_doc_giay", "tre_bao_giay", "tu_log_truoc_khi_bat"])
         self.nho_slm = None if a.khong_slm else NhoSLM()
+        self.chuoi = ChuoiTanCong(getattr(a, "khoang_phut", 60))   # K2 tuần 7: nối KẾT LUẬN cùng máy thành chuỗi
         # Thay tên máy / người dùng khi in (để chụp ảnh báo cáo)
         self.thay = []
         if a.an_ten:
@@ -375,6 +377,11 @@ class TheoDoi:
                 self.in_ra(f"!!! Bằng chứng mới nhất xảy ra lúc {gio_may(bc_luc)}: agent đọc được sau {tre_doc:.1f} giây, "
                            f"báo sau {tre_bao:.1f} giây")
             self.in_ra(chi_tiet.strip("\n"))
+            chuoi = self.chuoi.them(may, luc_bang_chung(doan, khoa_bc) or doan[-1]["thoi_gian"], ma, diem)
+            if len({b["ma"] for b in chuoi}) >= 2:      # từ 2 kỹ thuật khác nhau mới in chuỗi
+                self.in_ra("")
+                for d in mo_ta_chuoi(chuoi, may, LECH_GIO):
+                    self.in_ra(d)
         else:
             if kq == "CHUA_XAC_NHAN":
                 self.nghi_ngo.add(tt["id"])
@@ -421,6 +428,10 @@ class TheoDoi:
         ]
         if self.nho_slm:
             dong.append(f"- Hỏi SLM: {self.nho_slm.so_lan} lần, tổng {self.nho_slm.giay:.0f} giây")
+        ds_chuoi = self.chuoi.cac_chuoi()
+        dong.append(f"- Chuỗi tấn công (cùng máy, từ 2 kỹ thuật): {len(ds_chuoi)}")
+        for may, c in ds_chuoi:
+            dong += ["", "```"] + mo_ta_chuoi(c, may, LECH_GIO) + ["```", ""]
         dong.append("- Chi tiết: `canh_bao.csv`, `chi_tiet.txt` cùng thư mục")
         chu = self.an("\n".join(dong))
         print("\n" + "=" * 78 + "\n" + chu, flush=True)
@@ -447,6 +458,8 @@ def main():
     ap.add_argument("--ra", default=os.path.join("output", "theo_doi"))
     ap.add_argument("--an-ten", action="store_true", help="thay tên máy, tên người dùng khi in và ghi file")
     ap.add_argument("--trang-thai", type=float, default=60.0, help="số giây giữa 2 dòng trạng thái (mặc định 60)")
+    ap.add_argument("--khoang-phut", type=float, default=60,
+                    help="hai KẾT LUẬN cùng máy cách nhau quá chừng này phút thì tách chuỗi tấn công mới (mặc định 60)")
     a = ap.parse_args()
     a.chi_tiet = False
 

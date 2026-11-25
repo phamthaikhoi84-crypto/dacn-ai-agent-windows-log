@@ -5,6 +5,7 @@ File này KHÔNG chứa logic phát hiện. Nó chỉ gọi lại các script đ
   phat-lai  -> agent.py <file> ... --phat-lai [N]
   theo-doi  -> theo_doi.py ...
   danh-gia  -> danh_gia.py ...
+  chuoi     -> chuoi_tan_cong.py <file.evtx> ...
 Ba công tắc môi trường được đổi thành tham số (phải đặt TRƯỚC khi chạy script con,
 vì agent.py và slm.py đọc chúng lúc import):
   --startup     -> LUAT_STARTUP=1
@@ -35,10 +36,12 @@ CHE_DO = {
     "phat-lai": ("agent.py",    "Phát lại file .evtx theo thời gian, xem agent báo sớm tới đâu"),
     "theo-doi": ("theo_doi.py", "Theo dõi trực tiếp log Sysmon của máy này (Run as administrator)"),
     "danh-gia": ("danh_gia.py", "Đo trên bộ thử data/bo-thu.csv, xuất bảng có / không SLM"),
+    "chuoi":    ("chuoi_tan_cong.py", "Phát lại file .evtx như theo dõi trực tiếp, nối các KẾT LUẬN thành chuỗi tấn công"),
 }
 
 # Tham số của agent.py có kèm giá trị: bỏ qua giá trị đó khi tìm đường dẫn file
-AGENT_KEM_1_GIA_TRI = {"--mo-hinh", "--nguong", "--so-ung-vien", "--db", "--tre"}
+AGENT_KEM_1_GIA_TRI = {"--mo-hinh", "--nguong", "--so-ung-vien", "--db", "--tre",
+                       "--moi-dot", "--khoang-phut", "--mong-doi", "--ra"}       # 4 tham số sau: của chuoi_tan_cong.py
 AGENT_KEM_SO = {"--phien", "--phat-lai"}      # theo sau là 0, 1 hoặc nhiều số
 
 
@@ -55,13 +58,13 @@ def tao_parser():
         add_help=False,       # tự xử lý --help để chuyển được cho script con
         allow_abbrev=False,   # không "ăn" nhầm tham số viết tắt của script con
     )
-    p.add_argument("che_do", nargs="?", choices=list(CHE_DO), metavar="CHẾ_ĐỘ", help="một trong 4 chế độ bên dưới")
+    p.add_argument("che_do", nargs="?", choices=list(CHE_DO), metavar="CHẾ_ĐỘ", help="một trong 5 chế độ bên dưới")
     p.add_argument("-h", "--help", action="store_true", help="in hướng dẫn")
     p.add_argument("--startup", action="store_true", help="bật luật thư mục Startup, T1547.001 (LUAT_STARTUP=1)")
     p.add_argument("--model", metavar="TÊN", help="mô hình Ollama (SLM_MODEL), mặc định phi4-mini:latest")
     p.add_argument("--prompt-moi", action="store_true", help="dùng cách hỏi SLM mới (SLM_PROMPT_MOI=1)")
-    p.add_argument("--moi-dot", type=int, default=1, metavar="N",
-                   help="(phat-lai) số sự kiện mỗi đợt, mặc định 1")
+    p.add_argument("--moi-dot", type=int, default=None, metavar="N",
+                   help="(phat-lai, chuoi) số sự kiện mỗi đợt, mặc định 1")
     return p
 
 
@@ -129,10 +132,12 @@ def main():
     else:
         if Path.cwd().resolve() != GOC_REPO:
             bao(f"nên đứng ở thư mục gốc repo ({GOC_REPO}): kết quả output\\ sẽ ghi vào thư mục hiện tại")
-        if ts.che_do in ("quet", "phat-lai") and not kiem_tra_file(ts.che_do, tham_so):
+        if ts.che_do in ("quet", "phat-lai", "chuoi") and not kiem_tra_file(ts.che_do, tham_so):
             return 2
         if ts.che_do == "phat-lai" and "--phat-lai" not in tham_so:
-            tham_so += ["--phat-lai", str(ts.moi_dot)]
+            tham_so += ["--phat-lai", str(ts.moi_dot or 1)]
+        if ts.che_do == "chuoi" and ts.moi_dot:
+            tham_so += ["--moi-dot", str(ts.moi_dot)]
 
     env = os.environ.copy()
     cong_tac = []
