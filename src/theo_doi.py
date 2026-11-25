@@ -276,6 +276,8 @@ class TheoDoi:
             for ten, gia in ((os.environ.get("COMPUTERNAME"), "MAY-KHOI"), (os.environ.get("USERNAME"), "nguoi-dung")):
                 if ten:
                     self.thay.append((re.compile(r"(?<![A-Za-z0-9])" + re.escape(ten) + r"(?![A-Za-z0-9])", re.I), gia))
+            # SID của tài khoản (vd trong đường dẫn registry HKU\S-1-5-21-...): cũng định danh được máy / người
+            self.thay.append((re.compile(r"S-1-5-21(?:-\d+){3,4}"), "S-1-5-21-<an>"))
 
     def an(self, s):
         for mau, gia in self.thay:
