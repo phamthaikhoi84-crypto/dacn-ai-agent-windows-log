@@ -323,4 +323,22 @@ Bộ dùng để so sánh: data/bo-phat-trien-so-sanh-v1-v2.csv (27 dòng tấn 
 
 ### Kết luận
 
-Theo đúng tiêu chí Khôi đặt ra (chỉ chốt bản 2 nếu bộ phát triển tốt hơn và báo nhầm không tăng) — bản 2 không đạt ở cả hai mặt, nên giữ nguyên bản 1 (mau_chuoi.json) làm mô hình chính thức. Nghi ngờ nguyên nhân: các chuỗi huấn luyện mới từ phiên ngắn (phần lớn chỉ 1-2 ký hiệu) quá ngắn/mơ hồ, khiến mô hình học nhầm, suy rộng chuỗi ngắn tương tự T1059.001 sang nhiều kỹ thuật khác — vừa làm giảm độ chính xác trên bộ phát triển, vừa làm tăng báo động giả trên log bình thường.
+Theo đúng tiêu chí Khôi đặt ra (chỉ chốt bản 2 nếu bộ phát triển tốt hơn và báo nhầm không tăng) — bản 2 không đạt ở cả hai mặt, nên giữ nguyên bản 1 (mau_chuoi.json) làm mô hình chính thức. Đã kiểm chứng nguyên nhân bằng số liệu cụ thể (xem mục phân tích bên dưới): toàn bộ 54 báo nhầm trên log Dũng đều bị bản 2 kết luận nhầm là T1547.001, do mẫu T1547.001 học từ các phiên ngắn mới trở nên quá ngắn/chung chung — chỉ cần chuỗi kết thúc bằng ghi registry khoá Run (SUA_REGISTRY:Run), một hành vi rất phổ biến của phần mềm cập nhật/tự khởi động cùng Windows bình thường (vd: vgc.exe, taskhostw.exe), là đã khớp mẫu.
+
+### Bằng chứng cụ thể: phân tích 54 báo nhầm của bản 2 (log Dũng)
+
+Lọc từ output/danh_gia_dev_v2/ket_qua_phien.csv các phiên có ket_qua=KET_LUAN trên benign_sysmon_dung.evtx (nhãn thật là bình thường), đối chiếu với đoạn ký hiệu khớp trong file chi tiết khong-slm/benign_sysmon_dung.evtx.txt.
+
+| Mã kỹ thuật bị báo nhầm | Số phiên |
+|---|---|
+| T1547.001 | 54/54 (100%) |
+
+Toàn bộ 54 phiên đều báo nhầm đúng 1 kỹ thuật duy nhất: T1547.001. 5 đoạn ký hiệu khớp xuất hiện nhiều nhất:
+
+1. (3 lần) TAO_TIEN_TRINH:taskhostw.exe > TAO_TIEN_TRINH:runonce.exe > SUA_REGISTRY:Run > TAO_TIEN_TRINH:setup.exe
+2. (2 lần) MO_BO_NHO:lsass.exe:TRUY_VAN > TAO_TIEN_TRINH:svchost.exe > TAO_TIEN_TRINH:vgc.exe > MO_BO_NHO:lsass.exe:TRUY_VAN > TAO_TIEN_TRINH:vgc.exe > SUA_REGISTRY:Run
+3. (1 lần) MO_BO_NHO:lsass.exe:TRUY_VAN > TAO_TIEN_TRINH:microsoft.data.usageandqualityinsights.maintenancetask.exe > TAO_TIEN_TRINH:taskhostw.exe > SUA_REGISTRY:khac > TAO_TIEN_TRINH:vgc.exe > SUA_REGISTRY:Run
+4. (1 lần) MO_BO_NHO:lsass.exe:TRUY_VAN > TAO_TIEN_TRINH:svchost.exe > TAO_TIEN_TRINH:vgc.exe > MO_BO_NHO:lsass.exe:TRUY_VAN > TAO_TIEN_TRINH:taskhostw.exe > SUA_REGISTRY:Run
+5. (1 lần) TAO_TIEN_TRINH:wermgr.exe > MO_BO_NHO:lsass.exe:TRUY_VAN > TAO_TIEN_TRINH:svchost.exe > TAO_TIEN_TRINH:vgc.exe > MO_BO_NHO:lsass.exe:TRUY_VAN > SUA_REGISTRY:Run
+
+Điểm chung: cả 5 đoạn đều kết thúc bằng SUA_REGISTRY:Run, nhiều đoạn còn lẫn MO_BO_NHO:lsass.exe:TRUY_VAN (truy vấn bộ nhớ LSASS bình thường của hệ thống, không phải dump thật). Cho thấy mẫu T1547.001 trong bản 2 không còn phân biệt được việc ghi registry Run key hợp lệ (phần mềm tự khởi động cùng Windows) với hành vi duy trì (persistence) thật sự — đây là nguyên nhân chính gây báo nhầm tăng mạnh.
