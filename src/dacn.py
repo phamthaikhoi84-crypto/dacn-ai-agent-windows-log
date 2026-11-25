@@ -97,6 +97,14 @@ def kiem_tra_file(che_do, tham_so):
             f"python src\\dacn.py {che_do} D:\\DoAnChuyenNganh\\log\\<file>.evtx")
         return False
     thieu = [d for d in ds if not Path(d).exists()]
+    if thieu and len(ds) > 1:
+        # PowerShell tách đường dẫn có khoảng trắng (vd "Credential Access") thành nhiều tham số
+        for i in range(len(ds)):
+            for j in range(len(ds), i + 1, -1):
+                ghep = " ".join(ds[i:j])
+                if Path(ghep).exists():
+                    bao(f'đường dẫn có khoảng trắng phải đặt trong ngoặc kép, vd: "{ghep}"')
+                    return False
     for d in thieu:
         bao(f"không thấy: {d}")
         if Path(d + ".evtx").exists():

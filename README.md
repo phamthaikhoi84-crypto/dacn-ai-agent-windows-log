@@ -81,13 +81,19 @@ python src\dacn.py quet --help       # tham số riêng của một chế độ
 |---|---|---|
 | `quet` | Phân tích một file `.evtx` (hoặc cả thư mục) qua 5 bước của agent | `python src\dacn.py quet D:\log\a.evtx` |
 | `phat-lai` | Đưa từng sự kiện của file vào agent theo thứ tự thời gian, để xem agent báo sớm tới đâu | `python src\dacn.py phat-lai D:\log\a.evtx` |
-| `theo-doi` | Theo dõi trực tiếp log Sysmon và PowerShell của máy đang chạy. **Phải mở PowerShell bằng "Run as administrator".** Dừng bằng Ctrl + C | `python src\dacn.py theo-doi --khong-slm` |
+| `theo-doi` | Theo dõi trực tiếp log Sysmon và PowerShell của máy đang chạy. **Phải mở PowerShell MỚI bằng "Run as administrator", rồi `cd` lại vào thư mục repo** (cửa sổ admin mới mở luôn đứng ở `C:\Windows\system32`). Dừng bằng Ctrl + C | `cd <đường dẫn tới>\dacn-ai-agent-windows-log` rồi `python src\dacn.py theo-doi --khong-slm` |
 | `danh-gia` | Chạy agent trên bộ thử `data/bo-thu.csv`, có và không có SLM, rồi xuất bảng so sánh | `python src\dacn.py danh-gia --thu-muc <thư mục log tấn công> <thư mục log bình thường>` |
 
-**Thử nhanh:** chạy `quet` trên file `sysmon_10_11_outlfank_dumpert_and_andrewspecial_memdump.evtx` (trong thư mục log tấn công, lấy từ EVTX-ATTACK-SAMPLES):
+**Thử nhanh:** chạy `quet` trên file `sysmon_10_11_outlfank_dumpert_and_andrewspecial_memdump.evtx` của EVTX-ATTACK-SAMPLES (trong bộ gốc, file nằm ở thư mục con `Credential Access`). Nếu không nhớ để ở đâu, tìm bằng:
 
 ```powershell
-python src\dacn.py quet <thư mục log>\sysmon_10_11_outlfank_dumpert_and_andrewspecial_memdump.evtx --khong-slm
+Get-ChildItem <thư mục log> -Recurse -Filter *dumpert*.evtx | Select-Object FullName
+```
+
+Rồi chạy (đường dẫn **phải đặt trong ngoặc kép** vì có khoảng trắng ở `Credential Access`):
+
+```powershell
+python src\dacn.py quet "<thư mục log>\Credential Access\sysmon_10_11_outlfank_dumpert_and_andrewspecial_memdump.evtx" --khong-slm
 ```
 
 Kết quả phải có dòng `=> KẾT LUẬN: T1003.001`. Với `phat-lai` trên cùng file, sự kiện 1 ra CHƯA XÁC NHẬN, sự kiện 2 chuyển sang KẾT LUẬN.
@@ -147,7 +153,8 @@ Thư mục `output\` không được đưa lên GitHub.
 
 | Thấy gì | Làm gì |
 |---|---|
-| `[dacn] không thấy: ...` | Sai đường dẫn, hoặc file bị thành `.evtx.evtx` (xem mục 1.5) |
+| `[dacn] không thấy: ...` | Sai đường dẫn, hoặc file bị thành `.evtx.evtx` (xem mục 1.5). Đường dẫn có khoảng trắng (vd `Credential Access`) phải đặt trong ngoặc kép `"..."` |
+| `can't open file ...\src\dacn.py` | Chưa `cd` vào thư mục repo (hay gặp khi vừa mở cửa sổ PowerShell admin mới cho `theo-doi`) |
 | `invalid choice` | Thiếu tên chế độ. Lệnh phải bắt đầu bằng `python src\dacn.py quet ...` |
 | `[dacn] nên đứng ở thư mục gốc repo` | `cd` về thư mục repo rồi chạy lại |
 | `Không đọc được kênh Sysmon` | Mở lại PowerShell bằng "Run as administrator"; kiểm tra `Get-Service Sysmon*` |
