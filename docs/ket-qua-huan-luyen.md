@@ -290,3 +290,37 @@ Log bình thường nhiều hơn log tấn công rất nhiều, nên bộ lọc 
 Kết quả: máy Thiên (log mới) 0 phiên nhầm trên 807 và 4 trên 1.704 ở tuần 4; máy Dũng 10 phiên nhầm trên 2.573 (0,39%); máy Khôi, máy lạ, 15 phiên nhầm trên 779 (1,9%, khoảng tin cậy 95% xấp xỉ 1,2% đến 3,2%, ba nguyên nhân gốc). Tức là tỉ lệ báo giả cuối cùng khoảng 0 đến vài phần trăm số phiên tùy máy, thấp hơn nhiều so với chỉ so khớp chuỗi (1,5% đến 5,6% phiên qua bước 2), nhưng chưa về 0 trên máy lạ. Phần còn lại chủ yếu là phần mềm hợp lệ tạo tác vụ hẹn giờ hay khóa Run.
 
 Mặt còn lại: trên tấn công ngoài tập huấn luyện (bộ thử cố định, mục 6b) agent chỉ kết luận đúng kỹ thuật ở 7/29 phiên (24%) khi không dùng SLM, và 6/29 (21%) khi dùng SLM (đã tách file Dumpert và SharpRDP dùng để phát triển). Báo nhầm trên 3.290 phiên bình thường chưa dùng chỉnh: 19 (0,58%) không SLM, 8 (0,24%) có SLM. SLM `phi4-mini` chưa giúp: phần giảm báo giả là do bước kiểm chứng, và SLM làm mất 1 phát hiện thật. Báo giả thấp nhờ agent thận trọng, nhưng cái giá là bỏ sót nhiều ca ngắn hoặc chỉ sửa registry.
+## 9. Tuần 7 — So sánh mô hình bản 1 và bản 2 (T2)
+
+Mục tiêu: thử xem thêm dữ liệu huấn luyện từ các phiên ngắn (data/phien-ngan-log.csv, 24 lệnh thủ công mới trên 8 kỹ thuật) có giúp agent học tốt hơn không.
+
+### Dữ liệu huấn luyện thêm
+
+- Nhãn mới: data/nhan-file-v2.csv = data/nhan-file.csv (64 dòng gốc) + 24 dòng mới từ các lệnh thu thập thủ công trong tuần 7 (data/phien-ngan-log.csv).
+- Trong 24 dòng mới, có 5 dòng không tìm được chuỗi mang dấu hiệu kỹ thuật (0 chuỗi huấn luyện), đánh dấu DungHuanLuyen=khong:
+  - T1021.001 (I3), T1105 (J2, J3), T1136.001 (H1, H3)
+  - Nguyên nhân: Sysmon không ghi Event 1 cho các hành động không sinh tiến trình mới hoặc không có process con rõ ràng (vd: New-LocalUser, tạo user qua ADSI/.NET AccountManagement, Invoke-WebRequest, Start-BitsTransfer chạy nền) — đây là điểm mù của Sysmon cần ghi nhận lại, không phải lỗi thu thập.
+- 19 dòng còn lại dùng để huấn luyện (DungHuanLuyen=co).
+
+### Huấn luyện bản 2
+
+Lệnh chạy:
+python src\train.py --nhan data\nhan-file-v2.csv --splunk C:\DACN-logs\splunk\datasets\attack_techniques --cache C:\DACN-logs\chuoi-co-nhan-v2.json --ra models\mau_chuoi_v2.json
+
+- 69 file nạp vào, 314 chuỗi gộp còn 150 sau khi khử trùng, 64 file / 8 kỹ thuật dùng được.
+- Tỉ lệ đoán đúng kỹ thuật khi bỏ lần lượt từng file (leave-one-out): trung bình 74%.
+- Nhầm lẫn hay gặp nhất: T1547.001 → T1059.001, T1003.001 → T1059.001, T1105 → T1059.001, T1059.001 → T1136.001 — nhiều kỹ thuật khác bị mô hình "hút" nhầm về T1059.001.
+
+### So sánh bản 1 và bản 2 trên bộ phát triển + báo nhầm
+
+Bộ dùng để so sánh: data/bo-phat-trien-so-sanh-v1-v2.csv (27 dòng tấn công lấy từ data/bo-phat-trien-khong-tien-to.csv, cộng 2 dòng log bình thường: benign_sysmon_dung.evtx của Dũng và benign_sysmon_thien_tuan1.evtx log tuần 1 của Thiên).
+
+|                          | Bản 1 (mau_chuoi.json) | Bản 2 (mau_chuoi_v2.json) |
+|--------------------------|------------------------|----------------------------|
+| Bộ phát triển đúng       | 12/21 (57%)            | 5/21 (24%)                 |
+| Báo nhầm trên log Dũng   | 10/2573 phiên          | 54/2573 phiên              |
+| Báo nhầm log tuần 1 Thiên| 1/526 phiên            | 13/526 phiên                |
+
+### Kết luận
+
+Theo đúng tiêu chí Khôi đặt ra (chỉ chốt bản 2 nếu bộ phát triển tốt hơn và báo nhầm không tăng) — bản 2 không đạt ở cả hai mặt, nên giữ nguyên bản 1 (mau_chuoi.json) làm mô hình chính thức. Nghi ngờ nguyên nhân: các chuỗi huấn luyện mới từ phiên ngắn (phần lớn chỉ 1-2 ký hiệu) quá ngắn/mơ hồ, khiến mô hình học nhầm, suy rộng chuỗi ngắn tương tự T1059.001 sang nhiều kỹ thuật khác — vừa làm giảm độ chính xác trên bộ phát triển, vừa làm tăng báo động giả trên log bình thường.
