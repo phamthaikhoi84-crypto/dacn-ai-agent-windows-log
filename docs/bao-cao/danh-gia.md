@@ -95,7 +95,7 @@ Phân tích nguyên nhân (54 báo nhầm của bản 2 trên log Dũng): lọc 
 
 ## 7. Theo dõi trực tiếp
 
-(chưa điền đầy đủ — Thiên bổ sung thêm: độ trễ cảnh báo, số cảnh báo mỗi giờ khi chạy theo-doi trên log trực tiếp của Khôi, kèm ảnh docs/hinh/tuan7-k2-chuoi-truc-tiep.png.)
+(chưa điền đầy đủ — Khôi điền thêm: độ trễ cảnh báo, số cảnh báo mỗi giờ khi chạy theo-doi trên log trực tiếp của Khôi, kèm ảnh docs/hinh/tuan7-k2-chuoi-truc-tiep.png.)
 
 Ví dụ cảnh báo sai khi theo dõi trực tiếp (Khôi, 00:00-00:07 ngày 26/11/2026, theo-doi --khong-slm --an-ten):
 
@@ -105,16 +105,16 @@ Thứ tự lệnh và cảnh báo:
 3. Dọn dẹp: schtasks /delete ... và reg delete HKCU...\Run /v DACN_ThuNghiem /f -> CẢNH BÁO 3, KẾT LUẬN T1547.001 (điểm 0,968). Cảnh báo này sai.
 
 Cảnh báo 3 có 2 bằng chứng, không cái nào thật sự là hành vi tấn công:
-- Event 12 reg.exe ghi ...\Run\DACN_ThuNghiem: đây chính là lệnh xóa khóa (dọn dẹp), nhưng dấu vết bắt buộc hiện tại chỉ kiểm tra Event 12/13/14 có nhắc tới đường dẫn khóa Run, không phân biệt ghi hay xóa giá trị (src/dau_vet.py chưa có cột EventType).
+- Event 12 reg.exe ghi ...\Run\DACN_ThuNghiem: đây chính là lệnh xóa khóa (dọn dẹp), nhưng dấu vết bắt buộc hiện tại chỉ kiểm tra Event 12/13/14 có nhắc tới đường dẫn khóa Run, không phân biệt ghi hay xóa giá trị (bảng su_kien (doc_log.py) chưa có cột EventType).
 - Event 13 của sihost.exe ghi khóa HKU...CurrentVersion\RunNotification\StartupTNoti...: đây là khóa Windows tự ghi để hiển thị thông báo khi có mục khởi động mới, không liên quan đến T1547.001, nhưng bị khớp vì điều kiện dấu vết hiện tại chỉ kiểm tra chuỗi đường dẫn có chứa currentversion\run.
 
 Ảnh docs/hinh/tuan7-k2-chuoi-truc-tiep.png (K2, Khôi) chỉ ghi lại cảnh báo 1 và 2; chi tiết cảnh báo 3 lấy từ log máy Khôi, không push lên repo.
 
-Hướng sửa đề xuất: thêm cột EventType (ghi giá trị hay xóa giá trị) vào dấu vết bắt buộc của T1547.001 để loại các thao tác xóa; sửa điều kiện khớp đường dẫn registry thành khớp chính xác đoạn \run\ có dấu gạch chéo ở cuối, để không khớp nhầm các khóa con khác như RunNotification, RunOnce có tên bắt đầu giống Run nhưng không phải khóa tự khởi động thật.
+Hướng sửa đề xuất: thêm cột EventType (ghi giá trị hay xóa giá trị) vào dấu vết bắt buộc của T1547.001 để loại các thao tác xóa; sửa điều kiện khớp đường dẫn registry thành khớp chính xác đoạn \run\ hoặc \runonce\ có dấu gạch chéo ở cuối (RunOnce cũng là khóa tự khởi động thật của T1547.001), để không khớp nhầm các khóa con khác như RunNotification có tên bắt đầu giống Run nhưng không phải khóa tự khởi động thật.
 
 ## 8. Chuỗi tấn công
 
-(chưa điền — Thiên bổ sung: kết quả ghép chuỗi T1 bằng src/chuoi_tan_cong.py của Khôi, xác nhận đúng thứ tự 7 bước (bước 0 và 6 kỹ thuật), kèm ảnh docs/hinh/tuan7-k2-chuoi-t1-khong-slm.png.)
+(chưa điền — Khôi điền: kết quả ghép chuỗi T1 bằng src/chuoi_tan_cong.py của Khôi, xác nhận đúng thứ tự 7 bước (bước 0 và 6 kỹ thuật), kèm ảnh docs/hinh/tuan7-k2-chuoi-t1-khong-slm.png.)
 
 ## 9. Hạn chế
 

@@ -46,10 +46,9 @@ Hai kỹ thuật T1070.001 và T1136.001 chỉ có 2-3 chuỗi huấn luyện, n
 
 ## 4. Bộ thử cố định (data/bo-thu.csv)
 
-Giữ tách biệt hoàn toàn khỏi dữ liệu huấn luyện, chỉ dùng để theo dõi tiến độ trong lúc còn chỉnh code; số chính thức cuối cùng của đồ án sẽ đo một lần duy nhất ở tuần 8 sau khi chốt cấu hình. Gồm 21 file chấm điểm từ EVTX-ATTACK-SAMPLES, ban đầu 31 phiên có nhãn.
+Giữ tách biệt hoàn toàn khỏi dữ liệu huấn luyện, chỉ dùng để theo dõi tiến độ trong lúc còn chỉnh code; số chính thức cuối cùng của đồ án sẽ đo một lần duy nhất ở tuần 8 sau khi chốt cấu hình. Gồm 21 file chấm điểm từ EVTX-ATTACK-SAMPLES, sau khi tách Dumpert (tuần 5) còn 31, tuần 6 tách SharpRDP còn 29.
 
-- Tuần 5: tách riêng 1 file đã dùng khi phát triển (Dumpert — dùng để chạy thử và sửa code tuần 4-5), còn 31 phiên.
-- Tuần 6: tách thêm 1 file nữa (SharpRDP — dùng để thiết kế ký hiệu RunMRU ngày 28/10), còn 29 phiên. Từ tuần 6 trở đi, 29 phiên là mẫu số dùng xuyên suốt các lần đo.
+Dumpert dùng để chạy thử và sửa code tuần 4-5; SharpRDP dùng để thiết kế ký hiệu RunMRU ngày 28/10. Từ tuần 6 trở đi, 29 phiên là mẫu số dùng xuyên suốt các lần đo.
 
 Log bình thường đi kèm: 3.290 phiên (Thiên tuần 3, tuần 4, Khôi 7 ngày). Log Dũng hiện không tính được ở các lần đo từ 20/11 trở đi do lỗi lệch số thứ tự phiên (gom được 353 phiên nhưng bo-thu.csv ghi SoPhien=2.573 từ file cũ) — đang chờ gán nhãn lại.
 
