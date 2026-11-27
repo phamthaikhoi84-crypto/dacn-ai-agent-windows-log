@@ -95,9 +95,47 @@ Phân tích nguyên nhân (54 báo nhầm của bản 2 trên log Dũng): lọc 
 
 ## 7. Theo dõi trực tiếp
 
-(chưa điền đầy đủ — Khôi điền thêm: độ trễ cảnh báo, số cảnh báo mỗi giờ khi chạy theo-doi trên log trực tiếp của Khôi, kèm ảnh docs/hinh/tuan7-k2-chuoi-truc-tiep.png.)
+Chế độ `theo-doi` (src/theo_doi.py) đọc kênh Sysmon và PowerShell 4104 của chính máy đang chạy theo RecordID, chu kỳ 3 giây, nạp trước 10 phút log có sẵn. Mỗi lần có sự kiện mới, agent chạy lại 5 bước trên phiên đó. Khi một phiên đã có KẾT LUẬN, các sự kiện sau mốc đó được xét như một đoạn mới, nên một phiên dài có thể có nhiều cảnh báo. Tất cả số dưới đây đo trên máy Khôi, không phải bộ thử, và không dùng để chỉnh luật hay ngưỡng.
 
-Ví dụ cảnh báo sai khi theo dõi trực tiếp (Khôi, 00:00-00:07 ngày 26/11/2026, theo-doi --khong-slm --an-ten):
+### 7.1. Chạy liên tục 21 giờ (tuần 7, K3)
+
+| Mục | Giá trị |
+|---|---|
+| Thời gian | 26/11/2026 00:26:43 -> 21:31:44 (1.265 phút ≈ 21,1 giờ, chạy liền, không tắt) |
+| Chế độ | không SLM, ngưỡng 0,5, 3 ứng viên, luật Startup bật |
+| Sự kiện đã đọc | Sysmon 16.581, PowerShell 4104: 59 (0 lỗi đọc) |
+| Phiên đã theo dõi | 502 |
+| KẾT LUẬN | 1 (T1547.001), chính là lần thử Startup có chủ đích lúc 00:27, báo sau 7,8 giây |
+| KẾT LUẬN sai | 0 |
+| Phiên từng ở trạng thái CHƯA XÁC NHẬN | 4 (2 T1059.001, 2 T1547.001). Các phiên này chưa đủ dấu vết bắt buộc nên không thành cảnh báo |
+
+Trong thời gian này Khôi dùng máy như mọi ngày và không làm thao tác thử nào khác ngoài lần thử Startup. Trừ phiên thử Startup, còn 501 phiên bình thường và không có KẾT LUẬN sai nào. Theo quy tắc ba (rule of three), cận trên khoảng tin cậy 95% của tỉ lệ báo nhầm là khoảng 3/501 ≈ 0,6% số phiên. Với khoảng 24 phiên mỗi giờ của máy này, cận trên đó tương đương khoảng 3 cảnh báo sai mỗi ngày. Đây là cận trên, không phải số đo được: số đo được là 0.
+
+Để tham khảo: tuần 4, trên cùng máy, bản agent lúc đó báo 15/779 phiên log bình thường (1,9%). Hai số không so trực tiếp được vì khác bản agent và khác cách đo (tuần 4 là quét log đã xuất, tuần 7 là theo dõi trực tiếp).
+
+Giới hạn của lần đo này: chỉ một máy, một người dùng, một ngày; chưa xét từng phiên trong 4 phiên CHƯA XÁC NHẬN; chưa chạy dài với SLM.
+
+### 7.2. Độ trễ cảnh báo
+
+Độ trễ là khoảng thời gian từ lúc có bằng chứng (sự kiện sớm nhất làm đủ dấu vết bắt buộc) đến lúc agent in cảnh báo, lấy từ cột `tre_bao_giay` trong `canh_bao.csv`.
+
+| Lần chạy | Chế độ | Thao tác thử | Độ trễ (giây) |
+|---|---|---|---|
+| 18/11 00:38 | không SLM | schtasks /create | 5,9 |
+| 19/11 01:28 | có SLM (phi4-mini) | schtasks /create | 23,4 |
+| 24/11 23:32 | không SLM | schtasks /create | 9,2 |
+| 26/11 00:00 | không SLM | schtasks /create | 15,6 |
+| 26/11 00:00 | không SLM | reg add khóa Run | 4,9 |
+| 26/11 00:00 | không SLM | reg delete khóa Run (cảnh báo sai, xem 7.3) | 3,8 |
+| 26/11 00:26 | không SLM, luật Startup | file vào thư mục Startup | 7,8 |
+
+Không SLM: 3,8-15,6 giây trên 6 lần. Có SLM: 23,4 giây, mới đo 1 lần nên chưa kết luận được. Một phần độ trễ là chu kỳ đọc 3 giây và việc chờ đủ các sự kiện của dấu vết bắt buộc.
+
+Ảnh docs/hinh/tuan7-k2-chuoi-truc-tiep.png là lần chạy 26/11 00:00 (đã che tên máy, người dùng và SID).
+
+### 7.3. Ví dụ cảnh báo sai khi theo dõi trực tiếp
+
+Lần chạy của Khôi, 00:00-00:07 ngày 26/11/2026, lệnh theo-doi --khong-slm --an-ten.
 
 Thứ tự lệnh và cảnh báo:
 1. schtasks /create /tn DACN_ThuNghiem ... -> CẢNH BÁO 1, KẾT LUẬN T1053.005 (đúng).
@@ -114,7 +152,33 @@ Hướng sửa đề xuất: thêm cột EventType (ghi giá trị hay xóa giá
 
 ## 8. Chuỗi tấn công
 
-(chưa điền — Khôi điền: kết quả ghép chuỗi T1 bằng src/chuoi_tan_cong.py của Khôi, xác nhận đúng thứ tự 7 bước (bước 0 và 6 kỹ thuật), kèm ảnh docs/hinh/tuan7-k2-chuoi-t1-khong-slm.png.)
+Chế độ `chuoi` (src/chuoi_tan_cong.py) trả lời câu hỏi: các kỹ thuật agent phát hiện có nối được thành một cuộc tấn công theo thứ tự không. Chế độ `quet` chỉ cho một kết quả cho mỗi phiên, nên `chuoi` phát lại file .evtx từng sự kiện một qua đúng phần theo dõi trực tiếp (TheoDoi.xet ở mục 7), lấy từng KẾT LUẬN theo thời gian, rồi nối các KẾT LUẬN cùng máy cách nhau không quá 60 phút thành một chuỗi. Mỗi kỹ thuật được gán một giai đoạn (1 Xâm nhập, 2 Thực thi, 3 Bám trụ, 4 Đánh cắp đăng nhập, 5 Lan rộng, 6 Xóa dấu vết); chuỗi có bước đi lùi giai đoạn sẽ được ghi chú để người xem kiểm tra lại.
+
+Quy tắc gộp: cùng một kỹ thuật lặp lại trong vòng 300 giây được gộp thành một bước và ghi số lần (ví dụ "x2"). Quy tắc này chỉ để hiển thị, không đổi kết quả phát hiện, và được đặt ra sau khi thấy log T1 có kỹ thuật lặp, nên cần ghi rõ ở đây.
+
+### 8.1. Kết quả trên log chuỗi T1
+
+Log tuan7-t1-chuoi-tan-cong.evtx do Thiên tạo tuần 7 theo kịch bản có sẵn (62 sự kiện, xem data/tuan7-t1-bang-thoi-gian.md). Log này không dùng để huấn luyện hay chỉnh luật. Chạy không SLM:
+
+| Bước | Giờ | Giai đoạn | Kỹ thuật |
+|---|---|---|---|
+| 1 | 00:08:04 | 6 Xóa dấu vết | T1070.001 (bước 0 của kịch bản: xóa log trước khi bắt đầu) |
+| 2 | 00:08:56 | 1 Xâm nhập | T1105 |
+| 3 | 00:09:25 | 2 Thực thi | T1059.001 |
+| 4 | 00:10:02 | 3 Bám trụ | T1547.001 |
+| 5 | 00:10:20 | 3 Bám trụ | T1136.001 (x2) |
+| 6 | 00:11:16 | 4 Đánh cắp đăng nhập | T1003.001 (x2) |
+| 7 | 00:12:15 | 6 Xóa dấu vết | T1070.001 |
+
+Kết quả: 7 bước, 6 kỹ thuật, trong 4,2 phút; so với thứ tự mong đợi trong bảng thời gian của Thiên (tham số --mong-doi): ĐÚNG thứ tự cả 7 bước. Agent ghi chú một bước lùi giai đoạn (bước 1 -> 2, Xóa dấu vết -> Xâm nhập); đây là bước 0 của kịch bản nên ghi chú này đúng như thiết kế, không phải lỗi. Ảnh: docs/hinh/tuan7-k2-chuoi-t1-khong-slm.png.
+
+### 8.2. Chuỗi khi theo dõi trực tiếp
+
+Chuỗi cũng được nối ngay trong lúc theo dõi trực tiếp. Lần chạy 26/11 00:00 trên máy Khôi (mục 7.2) cho chuỗi 2 bước: T1053.005 (00:01:12) rồi T1547.001 (00:01:46, x2). Bước T1547.001 thứ hai trong đó là cảnh báo sai lúc dọn dẹp (mục 7.3), nên chuỗi này cũng bị ảnh hưởng. Chạy 21 giờ ở mục 7.1 không có chuỗi nào.
+
+### 8.3. Giới hạn
+
+Mới có một log chuỗi, do nhóm tự tạo với kịch bản biết trước, nên kết quả này cho thấy cách nối chuỗi chạy đúng chứ chưa đo được tỉ lệ đúng. Chưa chạy chế độ `chuoi` có SLM trên log T1. Một KẾT LUẬN sai cùng máy trong 60 phút sẽ bị nối vào chuỗi (như 8.2).
 
 ## 9. Hạn chế
 
