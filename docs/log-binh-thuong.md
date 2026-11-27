@@ -137,6 +137,16 @@ Các kết quả chỉ phản ánh khả năng xử lý của Agent trên nhữn
 
 Không thể từ các kết quả này khẳng định Agent không bao giờ cảnh báo nhầm hoặc có thể phát hiện chính xác mọi kỹ thuật tấn công trong mọi môi trường Windows.
 
+### 8.5. Máy lạ thứ hai (đang thu, tuần 7)
+
+Để có thêm một máy chưa dùng để huấn luyện hay chỉnh dấu vết, nhóm cài Sysmon trên laptop Windows của một người quen (không ghi tên người, tên máy):
+
+- Bắt đầu thu: 25/11/2026, khoảng 22:45.
+- Cùng cấu hình `config/sysmonconfig-dacn.xml`, kênh Sysmon tăng lên 1 GB, bật Script Block Logging.
+- Người dùng máy đã được giải thích Sysmon ghi những gì; tên máy và tài khoản sẽ được che trong mọi kết quả.
+- Dự kiến xuất log khoảng 1/12/2026, rồi gỡ Sysmon và tắt Script Block Logging.
+- Log này chỉ dùng để đo báo nhầm ở lần đo cuối (tuần 8), không dùng để huấn luyện hay chỉnh dấu vết.
+
 ## 9. Kết luận và hướng phát triển
 
 Qua ba tập dữ liệu kiểm thử:

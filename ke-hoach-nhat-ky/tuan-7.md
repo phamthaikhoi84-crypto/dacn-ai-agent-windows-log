@@ -89,4 +89,100 @@ Việc nào đến chủ nhật vẫn chưa xong thì chuyển sang tuần 8.
 
 ## Kết quả
 
-(Điền cuối tuần.)
+Cập nhật tối T6 27/11 (hạn chính). Việc còn dở làm tiếp đến CN 29/11; đến đó vẫn chưa xong thì ghi lý do và chuyển sang tuần 8.
+
+| Việc | Trạng thái | Commit / file |
+|---|---|---|
+| K1 `dacn.py` + README | Xong | `555856d`, sửa theo T4 ở `630680d` |
+| K2 chuỗi tấn công | Xong | `5ddb36e`; thử trực tiếp `25ca167`, `c4c9636` |
+| K3 theo dõi 24 giờ + thử Startup | Xong (21,1 giờ) | `docs/bao-cao/danh-gia.md` mục 7 (`5aeab74`) |
+| K4 Streamlit bản đầu | Chưa làm | Làm trong hạn bù CN 29/11 |
+| K5 máy lạ thứ hai | Đang thu từ 25/11 | `docs/log-binh-thuong.md` mục 8.5 |
+| K6 `tuan-7.md`, phiếu, `ai-logs/` | Đang làm | file này |
+| T1 log chuỗi tấn công | Xong | `79eca24` |
+| T2 dữ liệu train phiên ngắn | Xong, kết quả âm | `docs/ket-qua-huan-luyen.md` mục 9 |
+| T3 nháp chương Dữ liệu, Đánh giá | Xong bản nháp | `f185786`, `2fcc679`, `aa8b72b` |
+| T4 thử README | Xong | 3 góp ý, đã sửa ở `630680d` |
+| D1–D3 Dũng | Chưa thấy kết quả trên repo | xem mục Dũng bên dưới |
+
+### K1. Một lệnh chạy agent (`src/dacn.py`)
+
+- 5 chế độ: `quet`, `phat-lai`, `theo-doi`, `danh-gia`, `chuoi`. `dacn.py` chỉ gọi lại script có sẵn và chuyển nguyên tham số, không chứa logic phát hiện.
+- Tham số chung: `--startup` (luật Startup), `--model`, `--prompt-moi`, `--moi-dot`.
+- Báo lỗi dễ hiểu khi thiếu file, file bị thành `.evtx.evtx`, đường dẫn có khoảng trắng mà không có ngoặc kép, sai tên chế độ, không đứng ở thư mục gốc repo. Ctrl+C không làm mất tổng kết của `theo-doi`.
+- README mục "Cách chạy": cài đặt (có Sysmon), bảng chế độ, thử nhanh bằng file Dumpert, bảng tham số, nơi để kết quả, lỗi hay gặp.
+- T4: Thiên làm theo README trên máy Thiên chạy được; 3 chỗ bị kẹt (đường dẫn file Dumpert, ngoặc kép, nhắc `cd` khi mở cửa sổ admin mới) đã sửa.
+
+### K2. Chuỗi tấn công (`src/chuoi_tan_cong.py`)
+
+- `quet` chỉ cho một kết quả mỗi phiên, mà chuỗi T1 nằm trọn trong một phiên, nên `quet` chỉ ra 1 kỹ thuật. `chuoi` phát lại file từng sự kiện qua đúng phần theo dõi trực tiếp; sau mỗi KẾT LUẬN, phần còn lại của phiên được xét như đoạn mới. Không đổi bước 1–5, dấu vết hay mô hình.
+- Nối KẾT LUẬN cùng máy cách nhau không quá 60 phút; gán giai đoạn (Xâm nhập, Thực thi, Bám trụ, Đánh cắp đăng nhập, Lan rộng, Xóa dấu vết); ghi chú bước lùi giai đoạn. Cùng kỹ thuật lặp trong 300 giây gộp thành một bước: quy tắc chỉ để hiển thị, đặt ra sau khi thấy log T1.
+- Log T1 của Thiên, không SLM: **7 bước, 6 kỹ thuật, 4,2 phút, ĐÚNG thứ tự** so với bảng của Thiên (`--mong-doi`). Ảnh `docs/hinh/tuan7-k2-chuoi-t1-khong-slm.png`.
+- `theo_doi.py` in chuỗi khi một máy có từ 2 kỹ thuật. Thử trên máy Khôi (26/11 00:00): `schtasks /create` rồi `reg add` khóa Run ra chuỗi 2 bước. Ảnh `docs/hinh/tuan7-k2-chuoi-truc-tiep.png` (đã che tên máy, người dùng, SID; `--an-ten` giờ che cả SID).
+- Lúc thử lộ ra 2 điểm yếu của dấu vết T1547.001: lệnh dọn `reg delete` (Event 12, xóa) cũng bị KẾT LUẬN; khóa `RunNotification` do Windows tự ghi bị khớp nhầm. Chi tiết và hướng sửa ở `docs/bao-cao/danh-gia.md` mục 7.3. Hai lỗi này phát hiện trên máy thật, không phải bộ thử, nên được phép sửa; quyết ở tuần 8 trước khi chốt cấu hình.
+
+### K3. Theo dõi trực tiếp 21 giờ
+
+- 26/11 00:26 → 21:31 (21,1 giờ, chạy liền), không SLM, luật Startup bật, máy Khôi dùng như mọi ngày.
+- 16.581 sự kiện Sysmon, 59 sự kiện PowerShell 4104, **502 phiên**.
+- **0 KẾT LUẬN sai.** KẾT LUẬN duy nhất là lần thử ghi file vào thư mục Startup lúc 00:27: ra T1547.001 sau 7,8 giây (tuần 6 lần thử này bị bỏ sót).
+- 4 phiên dừng ở CHƯA XÁC NHẬN (2 T1059.001, 2 T1547.001), chưa xét từng phiên.
+- Quy tắc ba: cận trên tỉ lệ báo nhầm khoảng 0,6% số phiên, tức khoảng 3 cảnh báo sai mỗi ngày với máy này. So với tuần 6 (75 phút, cận trên khoảng 2,4 lần / giờ) thì chặt hơn nhiều.
+- Độ trễ cảnh báo qua các lần thử: không SLM 3,8–15,6 giây, có SLM 23,4 giây (1 lần).
+- Ghi vào `docs/bao-cao/danh-gia.md` mục 7 và 8 (`5aeab74`).
+
+### K4. Streamlit bản đầu
+
+- Chưa làm đến tối T6 27/11. Ưu tiên K1–K3 và báo cáo trước. Làm trong hạn bù CN 29/11.
+
+### K5. Máy lạ thứ hai
+
+- Laptop Windows của một người quen, Sysmon chạy từ 25/11/2026 khoảng 22:45, cùng cấu hình `config/sysmonconfig-dacn.xml`, kênh Sysmon 1 GB, bật Script Block Logging. Người đó đã được giải thích Sysmon ghi những gì; tên máy, tài khoản sẽ được che.
+- Khoảng 1/12 xuất log; chỉ dùng đo báo nhầm ở lần đo cuối, không dùng để train hay chỉnh.
+
+### Thiên (T1–T4)
+
+- T1: làm lại một lần (bản đầu: comsvcs không dump được do LSA protection, bước xóa log nằm sau lúc xuất, thiếu T1105 và T1136.001, lẫn test cũ). Bản đạt: 62 sự kiện, máy ảo `DACN-LAB`, bước 0 xóa log Sysmon để chuẩn bị và 6 bước T1105 > T1059.001 > T1547.001 > T1136.001 > T1003.001 > T1070.001. Bảng `data/tuan7-t1-bang-thoi-gian.md`. Không dùng để train hay chỉnh agent.
+- T2: 24 lệnh phiên ngắn mới cho 8 kỹ thuật (5 lệnh không sinh chuỗi nào vì Sysmon không ghi, vd `New-LocalUser`, `Invoke-WebRequest`), train `models/mau_chuoi_v2.json`. Bản 2 tệ hơn bản 1 cả hai mặt: bộ phát triển 5/21 so với 12/21; báo nhầm log Dũng 54 so với 10, log Thiên tuần 1 13 so với 1. 54/54 báo nhầm đều là T1547.001, do mẫu học từ phiên ngắn chỉ cần kết thúc bằng ghi khóa Run. **Giữ bản 1.**
+- T3: nháp `docs/bao-cao/du-lieu.md` và `docs/bao-cao/danh-gia.md`, sửa 2 lượt theo góp ý (lần đo và mẫu số, cách gọi "chính thức", luật Startup thiết kế sau khi đọc bộ thử, RunOnce, Dumpert/SharpRDP). Mục 7–8 do Khôi điền.
+- T4: xem K1.
+
+### Dũng (D1–D3)
+
+- Đến tối T6 27/11 chưa có file mới trong `docs/ket-qua/` hay `docs/models.md`. Nhánh `origin/review-dung-d2-d3` chưa xem, chưa gộp.
+- (Dũng bổ sung trước CN 29/11. D3 fine-tune nếu không có kết quả thì ghi "đã thử, không kịp, bỏ fine-tune khỏi phạm vi" kèm lý do.)
+
+## Nội dung ghi phiếu tiến độ
+
+Phiếu tuần 7 (23/11 – 29/11/2026), 4 dòng:
+
+- Một lệnh chạy agent (`dacn.py`) và hướng dẫn chạy trong README
+- Nối chuỗi tấn công: log kịch bản 6 kỹ thuật ra đúng thứ tự
+- Theo dõi trực tiếp 21 giờ trên máy thật: 0 cảnh báo sai / 502 phiên
+- Thử dữ liệu train phiên ngắn (không đạt, giữ bản 1); nháp 2 chương báo cáo
+
+## Kết luận tạm
+
+- Đề cương hứa "nối phát hiện thành chuỗi tấn công": đã làm và chạy đúng trên một kịch bản. Mới một kịch bản do nhóm tự tạo nên chưa đo được tỉ lệ nối đúng.
+- Theo dõi trực tiếp chạy ổn một ngày liền trên máy thật, không có cảnh báo sai; lần thử Startup bị bỏ sót tuần 6 nay đã phát hiện.
+- Thêm dữ liệu train dạng phiên ngắn làm bước 2 tệ hơn. Bước 2 vẫn là điểm yếu chính, nhưng không cải thiện được bằng cách thêm dữ liệu kiểu này.
+
+## Hạn chế cần ghi rõ
+
+- K3 chỉ một máy, một ngày, chế độ không SLM; chưa xét 4 phiên CHƯA XÁC NHẬN.
+- Chuỗi tấn công mới thử trên 1 log, kịch bản biết trước, chế độ không SLM. Quy tắc gộp 300 giây đặt ra sau khi xem log T1 (chỉ ảnh hưởng phần hiển thị).
+- Dấu vết T1547.001 chưa phân biệt ghi / xóa giá trị registry và khớp nhầm `RunNotification`.
+- Luật Startup vẫn là luật thiết kế sau khi đã đọc bộ thử (ghi từ tuần 6).
+- Máy lạ thứ hai mới bắt đầu thu.
+
+## Việc tuần 8
+
+- Chốt cấu hình: `mau_chuoi.json` bản 1; cách hỏi SLM; luật Startup bật hay tắt; quyết có sửa 2 điểm yếu T1547.001 không (sửa thì thử lại trên máy thật trước khi chốt).
+- Đo cuối trên bộ thử một lần duy nhất, sau khi chốt.
+- Lấy log máy lạ thứ hai (khoảng 1/12), đo báo nhầm, rồi gửi lệnh gỡ Sysmon.
+- Giao diện (K4) xong; báo cáo nháp đủ các chương.
+- Dũng: kết luận fine-tune.
+
+## Dùng AI
+
+- Claude (Anthropic) hỗ trợ Khôi viết `src/dacn.py`, `src/chuoi_tan_cong.py`, phần in chuỗi và che SID trong `theo_doi.py`, mục "Cách chạy" của README; góp ý log T1, bảng T1, hướng dẫn T2 và 2 chương nháp của Thiên; viết mục 7–8 của `danh-gia.md` và phần kết quả tuần này từ file kết quả do nhóm tự chạy. Mọi lần chạy (K2 trên log T1, thử trực tiếp, K3 21 giờ) do Khôi chạy trên máy thật; số liệu lấy từ `tong_ket.md`, `canh_bao.csv`, `chuoi.md`, không do AI tạo. Chi tiết trong `ai-logs/`.
