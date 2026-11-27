@@ -139,7 +139,7 @@ CHUA_XAC_NHAN; không có phiên nào chọn BINH_THUONG.
 
 Do đó, Prompt mới chưa đạt tiêu chí "không mất phát hiện"
 so với Prompt cũ.
-## 8. Quyết định fine-tune LoRA – Tuần 7 (28/11/2026)
+## 8. Quyết định fine-tune LoRA 
 
 **Trạng thái: Chưa triển khai; không đưa fine-tune LoRA vào phạm vi đồ án hiện tại.**
 
