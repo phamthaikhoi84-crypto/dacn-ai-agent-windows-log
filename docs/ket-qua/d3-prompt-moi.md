@@ -139,6 +139,27 @@ CHUA_XAC_NHAN; không có phiên nào chọn BINH_THUONG.
 
 Do đó, Prompt mới chưa đạt tiêu chí "không mất phát hiện"
 so với Prompt cũ.
+## 8. Quyết định fine-tune LoRA 
+
+**Trạng thái: Không triển khai fine-tune LoRA trong phạm vi đồ án.**
+
+Trong tuần 7, nhóm chưa hoàn thành thử nghiệm fine-tune LoRA trên Google Colab. Sau khi xem xét thời gian còn lại và tiến độ đồ án, quyết định không tiếp tục triển khai fine-tune trong phạm vi hiện tại.
+
+**Lý do:**
+
+1. Thời gian còn lại cần ưu tiên chốt cấu hình Agent và hoàn thành đánh giá cuối trên bộ thử ở tuần 8.
+2. Bước 2 vẫn cần được kiểm chứng và cải thiện trên bộ dữ liệu phát triển.
+3. Chưa có mô hình LoRA được huấn luyện, chuyển đổi và chạy thành công qua Ollama để đánh giá hiệu quả.
+4. Việc bổ sung fine-tune sẽ làm tăng số cấu hình cần kiểm thử, ảnh hưởng tiến độ hoàn thiện báo cáo và demo.
+
+**Phương án thực hiện:**
+
+- Tiếp tục sử dụng `phi4-mini:latest` làm mô hình SLM.
+- Tập trung đánh giá Prompt và cơ chế xác minh bằng chứng.
+- Không sử dụng bộ thử hoặc bộ phát triển để huấn luyện.
+- Ghi nhận fine-tune LoRA là hướng phát triển tiếp theo.
+
+**Kết luận:** Dừng triển khai fine-tune LoRA trong phạm vi đồ án. Đây là quyết định giới hạn phạm vi do tiến độ và chưa có kết quả thử nghiệm, không phải kết luận rằng phương pháp LoRA không hiệu quả.
 
 Trạng thái D3: ĐÃ THỬ, CHƯA ĐẠT.
 
