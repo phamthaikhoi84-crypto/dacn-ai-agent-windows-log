@@ -208,3 +208,35 @@ Phi-4-mini và Gemma 3 4B có tỷ lệ báo nhầm thấp nhất (0,24%), tuy n
 Llama 3.2 3B có thời gian trung bình hỏi SLM thấp nhất (45 giây), nhưng số báo nhầm cao nhất.
 
 Không có mô hình nào thể hiện ưu thế toàn diện. Kết quả cho thấy SLM chưa cải thiện rõ ràng khả năng phát hiện so với luật và bước xác minh bằng bằng chứng hiện có. Cần đánh giá thêm phương pháp hỏi mới D3 trước khi lựa chọn cấu hình chính thức.
+
+## 8. Đo SIZE model bằng Ollama trên máy Dũng (28/11/2026)
+
+### 8.1. Môi trường đo
+
+- Công cụ: Ollama, lệnh `ollama ps`.
+- Phương pháp: nạp từng model riêng biệt, gửi một câu hỏi ngắn, sau đó ghi nhận thông tin khi model đang chạy.
+- Bộ xử lý: 100% CPU ở cả bốn model.
+- Context: 4096 ở cả bốn model.
+- Runner: llamacpp.
+
+### 8.2. Kết quả
+
+| Model | ID | SIZE | Processor | Context |
+|---|---|---:|---|---:|
+| Phi-4 Mini | 78fad5d182a7 | 3.1 GB | 100% CPU | 4096 |
+| Qwen3 4B | 359d7dd4bcda | 3.2 GB | 100% CPU | 4096 |
+| Gemma3 4B | 68ceab7e468a | 2.9 GB | 100% CPU | 4096 |
+| Llama3.2 3B | a80c4f17acd5 | 2.6 GB | 100% CPU | 4096 |
+
+### 8.3. Nhận xét và giới hạn
+
+- Qwen3 4B có SIZE cao nhất: 3.2 GB.
+- Llama3.2 3B có SIZE thấp nhất: 2.6 GB.
+- Phi-4 Mini có SIZE 3.1 GB.
+- Gemma3 4B có SIZE 2.9 GB.
+
+SIZE là dung lượng Ollama báo khi model đang được nạp và chạy. Đây không phải số đo RAM cực đại của toàn hệ thống, cũng không đại diện cho tổng RAM tiêu thụ của Windows và các tiến trình khác.
+
+Phép đo này không thay thế phép đo RAM đỉnh trong quá trình suy luận dài. Các số liệu cũ trong bảng benchmark được giữ nguyên, không thay bằng số đo SIZE mới.
+
+Kết luận: Đã ghi nhận được SIZE thực tế khi chạy riêng từng model trên máy Dũng, cùng cấu hình CPU và context 4096.

@@ -1,4 +1,4 @@
-﻿# D3 - Đánh giá phương pháp Prompt mới
+# D3 - Đánh giá phương pháp Prompt mới
 
 ## 1. Mục tiêu
 
@@ -61,19 +61,19 @@ kết quả đã thu thập.
 
 ## 4. Đo lượng token Prompt
 
-File đo token thu thập được 21 lần gọi SLM.
+File đầu ra ghi nhận 21 dòng đo token.
 
 | Chỉ số | Kết quả |
 |---|---:|
-| Số lần gọi được đo | 21 |
+| Số dòng ghi nhận đo token | 21 |
 | Tổng token Prompt | 105.560 |
-| Trung bình mỗi lần gọi | 5.026,67 |
+| Trung bình token mỗi dòng ghi nhận | 5.026,67 |
 | Thấp nhất | 2.211 |
 | Cao nhất | 7.427 |
 | Context | 8.192 |
 | Mức sử dụng Context cao nhất | 90,66% |
 
-Số liệu đo token chỉ đại diện cho 21 lần gọi được ghi nhận.
+Số liệu đo token chỉ đại diện cho 21 dòng ghi nhận trong file đầu ra, không xác nhận số lần gọi API thực tế.
 Chưa có dữ liệu đầy đủ cho toàn bộ phiên phân tích.
 
 ## 5. Đánh giá
@@ -143,3 +143,71 @@ Trạng thái D3: ĐÃ THỬ, CHƯA ĐẠT.
 Chưa sử dụng Prompt mới làm cấu hình chính thức. Cần tiếp tục
 phân tích nguyên nhân, đánh giá và cải thiện phương pháp trong
 tuần 7 trước khi xem xét áp dụng.
+
+## 8. Kết quả khảo sát bổ sung tuần 7 (28/11/2026)
+
+### 8.1. Xác nhận dữ liệu đầu vào
+
+Hai lượt chạy Prompt cũ và Prompt mới sử dụng cùng nguồn:
+
+`sysmon_binh_thuong_D3_20261119_072713.evtx`
+
+Kiểm tra hai DuckDB cho kết quả giống nhau:
+- Số sự kiện: 436.729.
+- Nguồn: cùng một file EVTX.
+- Số phiên được gom theo thông báo trong log: 5.414.
+
+### 8.2. Kết quả ghi nhận trong hai file đầu ra
+
+| Chỉ số | Prompt cũ | Prompt mới |
+|---|---:|---:|
+| Tiêu đề phiên ghi trong file | 150 | 72 |
+| Dòng [SLM-DO-LUONG] ghi nhận đo token | 34 | 21 |
+| Lần kiểm chứng [5] | 149 | 72 |
+| Lần SLM chọn mã kỹ thuật và có dấu vết trong log, nhưng chưa vượt qua xác minh bắt buộc | 15 | 0 |
+
+Phân loại 15 dòng SLM chọn mã kỹ thuật của Prompt cũ:
+- T1547.001: 11 lần.
+- T1059.001: 4 lần.
+
+Trong 15 dòng của Prompt cũ, SLM chọn T1547.001 ở 11 lần và T1059.001 ở 4 lần. Tuy nhiên, bước xác minh dấu vết bắt buộc đều ghi nhận không đạt. Vì vậy, không tính các trường hợp này là phát hiện thành công. Đây là những trường hợp cần điều tra khả năng báo nhầm trên log bình thường.
+
+Trong file Prompt mới:
+- Có 7 lần trả về CHUA_XAC_NHAN do thiếu bằng chứng bắt buộc.
+- Có 1 trường hợp ứng viên T1053.005 nhưng bằng chứng liên quan không đáp ứng điều kiện xác minh.
+- Không ghi nhận kết quả BINH_THUONG rõ ràng.
+
+### 8.3. Giới hạn kết quả
+
+Hai file đầu ra có số phiên được ghi nhận khác nhau (150 và 72), dù cùng nguồn EVTX và cùng số sự kiện trong DuckDB.
+
+Chưa xác nhận được cả hai lượt đã xử lý đầy đủ 5.414 phiên. Lịch sử PowerShell hiện tại không còn lưu nguyên lệnh chạy hai lượt để đối chiếu đầy đủ tham số.
+
+Do đó:
+1. Không sử dụng 150 và 72 làm mẫu số để tính tỷ lệ phát hiện.
+2. Không kết luận Prompt mới tốt hơn chỉ vì có ít dòng ghi nhận đo token hơn.
+3. Chưa có số liệu hợp lệ về số phiên BINH_THUONG và KET_LUAN trên toàn bộ log Dũng.
+4. Kết quả 15 và 0 chỉ mô tả các lần kiểm chứng ghi nhận trong hai file đầu ra, không phải phép đo Precision, Recall hoặc F1.
+5. Chưa đủ điều kiện công bố đây là phép so sánh định lượng hoàn chỉnh giữa hai prompt.
+
+Trạng thái khảo sát bổ sung: ĐÃ ĐỐI CHIẾU NGUỒN DỮ LIỆU, CHƯA ĐỦ ĐIỀU KIỆN SO SÁNH ĐỊNH LƯỢNG.
+
+## 9. Quyết định fine-tune LoRA – Tuần 7 (28/11/2026)
+
+**Trạng thái: Chưa triển khai; không đưa fine-tune LoRA vào phạm vi đồ án hiện tại.**
+
+Trong tuần 7, nhóm chưa có mô hình LoRA được huấn luyện, chuyển đổi và chạy thành công qua Ollama để đánh giá. Do đó, không ghi nhận fine-tune LoRA là kết quả thực nghiệm đã hoàn thành.
+
+**Lý do:**
+1. Thời gian còn lại cần ưu tiên chốt cấu hình Agent và hoàn thành đánh giá cuối ở tuần 8.
+2. Bước nhận diện chuỗi vẫn cần được kiểm chứng và cải thiện trên bộ dữ liệu phát triển.
+3. Chưa có mô hình LoRA hoàn chỉnh để so sánh với SLM hiện tại.
+4. Bổ sung fine-tune lúc này làm tăng số cấu hình cần kiểm thử, ảnh hưởng tiến độ báo cáo và demo.
+
+**Phương án:**
+- Tiếp tục sử dụng phi4-mini:latest theo cấu hình hiện tại.
+- Tập trung đánh giá Prompt và cơ chế xác minh ứng viên bằng dấu vết bắt buộc.
+- Không sử dụng bộ phát triển hoặc bộ thử để huấn luyện.
+- Ghi nhận fine-tune LoRA là hướng phát triển tiếp theo, ngoài phạm vi triển khai hiện tại.
+
+**Kết luận:** Dừng triển khai fine-tune LoRA trong phạm vi đồ án do giới hạn tiến độ và chưa có mô hình thử nghiệm chạy được. Đây không phải kết luận rằng phương pháp LoRA không hiệu quả.

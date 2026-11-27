@@ -1,4 +1,4 @@
-import json
+﻿import json
 import os
 import re
 import socket
@@ -242,19 +242,20 @@ CHỈ TRẢ VỀ MỘT JSON:
 """
 
 
+
 def _tao_prompt_moi(ds_ung_vien, log_danh_so, thong_tin_bang_chung):
-    """Prompt D3: phân biệt hoạt động bình thường và dấu hiệu tấn công."""
+    """Prompt v2: đánh giá độc lập từng ứng viên, giữ nguyên hàng rào bằng chứng."""
 
     return f"""Bạn là chuyên gia phân tích log Windows/Sysmon và MITRE ATT&CK.
 
 NHIỆM VỤ:
 Phân tích log của một phiên hoạt động Windows.
 Đánh giá các kỹ thuật trong danh sách ứng viên dựa trên:
-1. Log thực tế được cung cấp.
+1. Hành vi thực tế thể hiện trong log.
 2. Trạng thái bằng chứng bắt buộc được kiểm tra bởi DuckDB.
 
-Chọn MỘT kết quả:
-- Mã kỹ thuật trong danh sách ứng viên.
+Chỉ được chọn MỘT kết quả cuối cùng:
+- Mã kỹ thuật có trong danh sách ứng viên.
 - BINH_THUONG.
 - CHUA_XAC_NHAN.
 
@@ -269,153 +270,152 @@ LOG ĐƯỢC ĐÁNH SỐ:
 
 QUY TẮC PHÂN TÍCH BẮT BUỘC:
 
-1. DANH SÁCH ỨNG VIÊN
-- Danh sách ứng viên chỉ là kết quả phát hiện sơ bộ của chương trình.
-- Điểm số cao không đồng nghĩa với có hành vi tấn công.
-- Không được coi tên kỹ thuật hoặc điểm số là bằng chứng.
+1. NGUYÊN TẮC ĐÁNH GIÁ ĐỘC LẬP
 
-2. KIỂM TRA BẰNG CHỨNG DUCKDB
-- Đọc trạng thái bằng chứng của từng ứng viên.
-- Nếu kỹ thuật CHƯA ĐỦ BẰNG CHỨNG BẮT BUỘC,
-  không được chọn kỹ thuật đó làm kết quả.
-- Không tự tạo, suy diễn hoặc bổ sung bằng chứng còn thiếu.
-- Nếu kỹ thuật ĐỦ BẰNG CHỨNG BẮT BUỘC,
-  vẫn phải kiểm tra log có thực sự thể hiện hành vi tương ứng không.
+- Đánh giá từng kỹ thuật trong danh sách ứng viên một cách độc lập.
+- Không để trạng thái thiếu bằng chứng của một ứng viên
+  ảnh hưởng đến việc đánh giá các ứng viên còn lại.
+- Không sử dụng bằng chứng của kỹ thuật này để xác nhận
+  kỹ thuật khác.
+- Không mặc định ứng viên có điểm cao nhất là kỹ thuật đúng.
+- Không coi tên kỹ thuật, tên tiến trình hoặc điểm số là bằng chứng.
 
-3. ĐỐI CHIẾU HÀNH VI
-Chỉ chấp nhận bằng chứng có nội dung liên quan trực tiếp
-đến hành vi của kỹ thuật MITRE ATT&CK đang đánh giá.
+2. KIỂM TRA TỪNG ỨNG VIÊN
 
-Ví dụ:
+Với MỖI ứng viên, lần lượt thực hiện:
+
+BƯỚC A - KIỂM TRA BẰNG CHỨNG DUCKDB:
+- Đọc trạng thái bằng chứng bắt buộc của chính ứng viên đó.
+- Nếu CHƯA ĐỦ bằng chứng bắt buộc:
+  + Không được chọn kỹ thuật đó làm kết quả.
+  + Không tự tạo, suy diễn hoặc bổ sung bằng chứng còn thiếu.
+  + Tiếp tục đánh giá các ứng viên khác.
+- Nếu ĐỦ bằng chứng bắt buộc:
+  + Chuyển sang kiểm tra hành vi thực tế trong log.
+
+BƯỚC B - ĐỐI CHIẾU HÀNH VI:
+- Kiểm tra log có thực sự thể hiện hành vi của kỹ thuật không.
+- Bằng chứng phải liên quan trực tiếp đến hành vi đang đánh giá.
+- Xem xét tiến trình, dòng lệnh, Event ID, thông tin sự kiện
+  và chuỗi hoạt động có liên quan.
+- Nếu bằng chứng đủ nhưng hành vi không phù hợp,
+  không được kết luận kỹ thuật đó.
+- Không suy luận hành vi tấn công chỉ từ tên tiến trình.
+
+BƯỚC C - ĐÁNH GIÁ KẾT QUẢ CỦA ỨNG VIÊN:
+- Chỉ đánh giá ứng viên là phù hợp khi đồng thời:
+  + Nằm trong danh sách ứng viên.
+  + DuckDB xác nhận đủ bằng chứng bắt buộc.
+  + Log thể hiện hành vi tương ứng.
+  + Có ít nhất một dòng log trực tiếp hỗ trợ nhận định.
+
+3. CÁC LƯU Ý VỀ LOG WINDOWS/SYSMON
+
 - Event ID 3 thể hiện kết nối mạng.
-  Không được tự suy ra tạo tài khoản, xóa log,
-  thực thi PowerShell hoặc đánh cắp thông tin xác thực.
+  Không thể chỉ dựa vào Event ID 3 để kết luận tạo tài khoản,
+  xóa log, thực thi PowerShell hoặc đánh cắp thông tin xác thực.
+
 - Event ID 1 thể hiện tạo tiến trình.
-  Chỉ được kết luận hành vi khi thông tin tiến trình,
-  command line và ngữ cảnh thực sự hỗ trợ.
+  Phải xem xét tiến trình cha, tiến trình con, dòng lệnh
+  và ngữ cảnh thực thi.
+
 - Event ID 10 thể hiện truy cập tiến trình.
-  Phải dựa trên thông tin truy cập thực tế trong log
+  Phải xem xét TargetImage, SourceImage, GrantedAccess
   và trạng thái bằng chứng DuckDB.
+
 - Tên tiến trình như svchost.exe, msiexec.exe, net.exe
-  không tự chứng minh hành vi tấn công.
-- Một tiến trình có tên đáng ngờ không đồng nghĩa
-  với hành vi tấn công đã được xác nhận.
+  không tự chứng minh có hành vi tấn công.
 
-4. QUY TRÌNH RA QUYẾT ĐỊNH
+- Tên tiến trình đáng ngờ cũng không đủ để kết luận tấn công
+  nếu thiếu hành vi và bằng chứng trực tiếp.
 
-Thực hiện lần lượt các bước sau:
+4. LỰA CHỌN KẾT QUẢ CUỐI CÙNG
 
-BƯỚC 1 - ĐÁNH GIÁ HÀNH VI THỰC TẾ:
-- Xác định các hoạt động chính của phiên Windows.
-- Đánh giá tiến trình, command line, sự kiện và ngữ cảnh.
-- Xem xét các sự kiện có liên quan với nhau theo trình tự.
-- Phân biệt hoạt động quản trị hệ thống, hoạt động người dùng
-  và hành vi có dấu hiệu tấn công.
-- Không đánh giá chỉ dựa trên tên tiến trình.
+Sau khi đánh giá độc lập TẤT CẢ ứng viên, chọn một kết quả:
 
-BƯỚC 2 - ĐỐI CHIẾU BẰNG CHỨNG:
-- Kiểm tra trạng thái bằng chứng DuckDB của từng ứng viên.
-- Ứng viên thiếu bằng chứng bắt buộc không được kết luận
-  là kỹ thuật tấn công.
-- Không suy diễn hoặc tự bổ sung bằng chứng còn thiếu.
+A. KẾT LUẬN KỸ THUẬT:
+Chỉ chọn một mã kỹ thuật khi có ứng viên đáp ứng đầy đủ:
+- Có trong danh sách ứng viên.
+- Đủ bằng chứng bắt buộc từ DuckDB.
+- Log thể hiện hành vi tương ứng.
+- Có bằng chứng trực tiếp trong log.
 
-BƯỚC 3 - LỰA CHỌN KẾT QUẢ:
-
-A. KẾT LUẬN KỸ THUẬT TẤN CÔNG:
-Chỉ chọn mã kỹ thuật khi đồng thời:
-- Nằm trong danh sách ứng viên.
-- DuckDB xác nhận đủ bằng chứng bắt buộc.
-- Log thực tế thể hiện hành vi tương ứng.
-- Bằng chứng trực tiếp hỗ trợ kết luận.
+Nếu nhiều ứng viên cùng đáp ứng:
+- Chọn kỹ thuật được bằng chứng trực tiếp hỗ trợ rõ ràng nhất.
+- Không dùng bằng chứng của ứng viên này để hỗ trợ ứng viên khác.
+- Không chọn chỉ dựa vào điểm số.
 
 B. BINH_THUONG:
 Chọn BINH_THUONG khi:
-- Các ứng viên không đủ bằng chứng bắt buộc.
+- Không có ứng viên nào đáp ứng đủ điều kiện kết luận tấn công.
 - Các hoạt động trong log có ngữ cảnh bình thường
-  hoặc có thể giải thích hợp lý.
-- Không có hành vi đáng ngờ rõ ràng chưa được giải thích.
-- Không có mâu thuẫn đáng kể trong dữ liệu.
+  hoặc được giải thích hợp lý.
+- Không còn hành vi đáng ngờ chưa được giải thích.
+- Không có dữ liệu mâu thuẫn đáng kể.
 
-Ví dụ hoạt động có thể bình thường:
+Ví dụ:
+- Quản trị viên chạy Sysmon64.exe -c để cập nhật cấu hình.
+- Người dùng mở tệp cấu hình Sysmon bằng Notepad.
+- Các hoạt động quản trị Windows có ngữ cảnh hợp lý.
 
-Ví dụ 1 - Quản trị Sysmon:
-- PowerShell chạy Sysmon64.exe với tham số -c
-  để cấu hình Sysmon.
-- Người dùng mở sysmonconfig.xml bằng Notepad.
-- PowerShell chạy Sysmon64.exe với tham số -s
-  hoặc -c kèm đường dẫn tệp cấu hình.
-- DuckDB không xác nhận bằng chứng bắt buộc
-  của kỹ thuật tấn công PowerShell T1059.001.
-- Log không thể hiện hành vi tấn công đáng ngờ
-  chưa được giải thích.
-
-Trong trường hợp này, hoạt động có ngữ cảnh
-quản trị hệ thống rõ ràng.
-Chọn BINH_THUONG, không chọn CHUA_XAC_NHAN
-chỉ vì T1059.001 nằm trong danh sách ứng viên.
-
-Ví dụ 2 - Hoạt động Windows thông thường:
-- Các tiến trình hệ thống được tạo theo trình tự
-  hợp lý.
-- Không có bằng chứng bắt buộc của kỹ thuật
-  tấn công.
-- Không có hành vi đáng ngờ chưa được giải thích.
-
-Có thể chọn BINH_THUONG nếu log thực tế hỗ trợ
-nhận định này.
-
-Các ví dụ trên không mặc định luôn an toàn.
-Phải đánh giá command line, ngữ cảnh và dữ liệu thực tế.
-Không áp dụng kết quả mẫu một cách máy móc
-cho phiên log khác.
+Không được chọn BINH_THUONG chỉ vì thiếu bằng chứng DuckDB.
 
 C. CHUA_XAC_NHAN:
 Chọn CHUA_XAC_NHAN khi:
-- Có dấu hiệu đáng ngờ nhưng chưa đủ bằng chứng.
-- Không xác định được mục đích thực tế của hành vi.
-- Log thiếu dữ liệu quan trọng.
-- Các sự kiện mâu thuẫn hoặc không đủ ngữ cảnh.
-- Không thể phân biệt hoạt động bình thường
-  với hoạt động tấn công.
+- Có hành vi đáng ngờ nhưng chưa đủ bằng chứng bắt buộc.
+- Mục đích hoạt động chưa rõ.
+- Thiếu dữ liệu quan trọng.
+- Các sự kiện mâu thuẫn hoặc không đủ ngữ cảnh
+  để phân biệt hoạt động bình thường và tấn công.
 
-QUY TẮC ƯU TIÊN:
+Không được chọn CHUA_XAC_NHAN chỉ vì:
+- Có ứng viên trong danh sách.
+- Điểm số ứng viên cao.
+- Một ứng viên không đủ bằng chứng,
+  trong khi các hoạt động còn lại đã được giải thích bình thường.
+
+5. THỨ TỰ ƯU TIÊN
+
 - Đủ bằng chứng kỹ thuật và hành vi phù hợp:
   chọn mã kỹ thuật.
-- Hoạt động bình thường có thể giải thích được,
-  không có dấu hiệu đáng ngờ chưa giải thích:
+- Không có kỹ thuật đủ điều kiện, hoạt động bình thường
+  và không còn dấu hiệu đáng ngờ:
   chọn BINH_THUONG.
-- Có dấu hiệu đáng ngờ nhưng chưa xác minh:
+- Có dấu hiệu đáng ngờ nhưng chưa xác minh được:
   chọn CHUA_XAC_NHAN.
-- Không được chọn BINH_THUONG chỉ vì thiếu bằng chứng.
-- Không được chọn CHUA_XAC_NHAN chỉ vì có ứng viên
-  hoặc điểm ứng viên cao.
 
-7. BẰNG CHỨNG TRẢ VỀ
+6. QUY TẮC BẰNG CHỨNG ĐẦU RA
+
 Nếu chọn mã kỹ thuật:
-- bang_chung chứa từ 1 đến 3 số dòng log.
-- Chỉ ghi số dòng, ví dụ [2, 5].
-- Các dòng phải thể hiện trực tiếp hành vi liên quan.
-- Không chọn các dòng chỉ có liên quan thời gian
-  hoặc cùng phiên nhưng không chứng minh hành vi.
-- Không được bịa số dòng.
+- bang_chung phải chứa từ 1 đến 3 số thứ tự dòng log.
+- Chỉ chọn dòng log có nội dung trực tiếp hỗ trợ hành vi.
+- Không chọn dòng chỉ thể hiện quan hệ thời gian hoặc phiên.
+- Không tạo số dòng không tồn tại.
+- Không dùng bằng chứng của kỹ thuật khác.
 
 Nếu chọn BINH_THUONG hoặc CHUA_XAC_NHAN:
 - bang_chung phải là [].
 
-8. LÝ DO
-- Viết tiếng Việt ngắn gọn.
-- Nêu dữ liệu thực tế hỗ trợ quyết định.
-- Không khẳng định sự kiện không xuất hiện trong log.
-- Không suy diễn từ tên tiến trình hoặc điểm ứng viên.
+7. QUY TẮC LÝ DO
 
-9. ĐỊNH DẠNG
-- ma_ky_thuat chỉ ghi mã kỹ thuật.
-- Không ghi tên kỹ thuật kèm mã.
-- Không thêm nội dung ngoài JSON.
+- ly_do phải viết bằng tiếng Việt.
+- Chỉ viết một câu ngắn.
+- Chỉ dựa trên log và trạng thái bằng chứng được cung cấp.
+- Không khẳng định hành vi chưa được xác minh.
+- Không tự bổ sung thông tin ngoài dữ liệu đầu vào.
+
+8. ĐỊNH DẠNG ĐẦU RA
+
+- ma_ky_thuat chỉ ghi mã kỹ thuật, ví dụ T1003.001.
+- Nếu bình thường, ghi BINH_THUONG.
+- Nếu chưa xác nhận, ghi CHUA_XAC_NHAN.
+- bang_chung là danh sách số nguyên.
+- Không thêm Markdown, lời giải thích hoặc nội dung ngoài JSON.
 
 CHỈ TRẢ VỀ MỘT JSON:
-{{"ma_ky_thuat": "...", "bang_chung": [], "ly_do": "..."}}
+{{"ma_ky_thuat": "...", "bang_chung": [2], "ly_do": "..."}}
 """
+
 
 
 def goi_slm(
