@@ -139,30 +139,22 @@ CHUA_XAC_NHAN; không có phiên nào chọn BINH_THUONG.
 
 Do đó, Prompt mới chưa đạt tiêu chí "không mất phát hiện"
 so với Prompt cũ.
-## 8. Quyết định fine-tune LoRA 
+## 8. Quyết định fine-tune LoRA – Tuần 7 (28/11/2026)
 
-**Trạng thái: Không triển khai fine-tune LoRA trong phạm vi đồ án.**
+**Trạng thái: Chưa triển khai; không đưa fine-tune LoRA vào phạm vi đồ án hiện tại.**
 
-Trong tuần 7, nhóm chưa hoàn thành thử nghiệm fine-tune LoRA trên Google Colab. Sau khi xem xét thời gian còn lại và tiến độ đồ án, quyết định không tiếp tục triển khai fine-tune trong phạm vi hiện tại.
+Trong tuần 7, nhóm chưa có mô hình LoRA được huấn luyện, chuyển đổi và chạy thành công qua Ollama để đánh giá. Do đó, không ghi nhận fine-tune LoRA là kết quả thực nghiệm đã hoàn thành.
 
 **Lý do:**
+1. Thời gian còn lại cần ưu tiên chốt cấu hình Agent và hoàn thành đánh giá cuối ở tuần 8.
+2. Bước nhận diện chuỗi vẫn cần được kiểm chứng và cải thiện trên bộ dữ liệu phát triển.
+3. Chưa có mô hình LoRA hoàn chỉnh để so sánh với SLM hiện tại.
+4. Bổ sung fine-tune lúc này làm tăng số cấu hình cần kiểm thử, ảnh hưởng tiến độ báo cáo và demo.
 
-1. Thời gian còn lại cần ưu tiên chốt cấu hình Agent và hoàn thành đánh giá cuối trên bộ thử ở tuần 8.
-2. Bước 2 vẫn cần được kiểm chứng và cải thiện trên bộ dữ liệu phát triển.
-3. Chưa có mô hình LoRA được huấn luyện, chuyển đổi và chạy thành công qua Ollama để đánh giá hiệu quả.
-4. Việc bổ sung fine-tune sẽ làm tăng số cấu hình cần kiểm thử, ảnh hưởng tiến độ hoàn thiện báo cáo và demo.
+**Phương án:**
+- Tiếp tục sử dụng `phi4-mini:latest` theo cấu hình hiện tại.
+- Tập trung đánh giá Prompt và cơ chế xác minh ứng viên bằng dấu vết bắt buộc.
+- Không sử dụng bộ phát triển hoặc bộ thử để huấn luyện.
+- Ghi nhận fine-tune LoRA là hướng phát triển tiếp theo, ngoài phạm vi triển khai hiện tại.
 
-**Phương án thực hiện:**
-
-- Tiếp tục sử dụng `phi4-mini:latest` làm mô hình SLM.
-- Tập trung đánh giá Prompt và cơ chế xác minh bằng chứng.
-- Không sử dụng bộ thử hoặc bộ phát triển để huấn luyện.
-- Ghi nhận fine-tune LoRA là hướng phát triển tiếp theo.
-
-**Kết luận:** Dừng triển khai fine-tune LoRA trong phạm vi đồ án. Đây là quyết định giới hạn phạm vi do tiến độ và chưa có kết quả thử nghiệm, không phải kết luận rằng phương pháp LoRA không hiệu quả.
-
-Trạng thái D3: ĐÃ THỬ, CHƯA ĐẠT.
-
-Chưa sử dụng Prompt mới làm cấu hình chính thức. Cần tiếp tục
-phân tích nguyên nhân, đánh giá và cải thiện phương pháp trong
-tuần 7 trước khi xem xét áp dụng.
+**Kết luận:** Dừng triển khai fine-tune LoRA trong phạm vi đồ án do giới hạn tiến độ và chưa có mô hình thử nghiệm chạy được. Đây không phải kết luận rằng phương pháp LoRA không hiệu quả.
