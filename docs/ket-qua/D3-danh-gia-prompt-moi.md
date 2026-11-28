@@ -72,9 +72,9 @@ Nguồn log: `sysmon_binh_thuong_D3_20261119_072713.evtx`.
 
 **Giới hạn:** Số tiêu đề phiên, dòng đo token và dòng xác minh giữa hai đầu ra không bằng nhau. Vì vậy không được dùng phép chia trực tiếp các số này để kết luận tỷ lệ phát hiện hoặc tỷ lệ báo nhầm. Kết quả chỉ là so sánh dấu vết đầu ra trên cùng nguồn EVTX.
 
-## 7. Quyết định về LoRA
+## 7. Fine-tune LoRA
 
-Không triển khai huấn luyện LoRA trong phạm vi thử nghiệm D3 do giới hạn thời gian và phạm vi đồ án. Đây là quyết định giới hạn phạm vi thực hiện, không phải kết luận rằng LoRA không hiệu quả.
+Tuần 7 chưa làm kịp, làm ở tuần 8. Fine-tune là yêu cầu của giảng viên và có trong đề cương, nên không bỏ. Kế hoạch và mốc dừng: xem `docs/ket-qua/d3-prompt-moi.md` mục 8.
 
 ## 8. Kết luận
 

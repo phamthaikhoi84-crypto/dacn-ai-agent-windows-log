@@ -139,22 +139,15 @@ CHUA_XAC_NHAN; không có phiên nào chọn BINH_THUONG.
 
 Do đó, Prompt mới chưa đạt tiêu chí "không mất phát hiện"
 so với Prompt cũ.
-## 8. Quyết định fine-tune LoRA 
+## 8. Fine-tune LoRA
 
-**Trạng thái: Chưa triển khai; không đưa fine-tune LoRA vào phạm vi đồ án hiện tại.**
+**Trạng thái: tuần 7 chưa làm kịp; làm ở tuần 8.**
 
-Trong tuần 7, nhóm chưa có mô hình LoRA được huấn luyện, chuyển đổi và chạy thành công qua Ollama để đánh giá. Do đó, không ghi nhận fine-tune LoRA là kết quả thực nghiệm đã hoàn thành.
+Trong tuần 7 nhóm chưa có mô hình LoRA được huấn luyện, chuyển đổi và chạy qua Ollama, nên chưa có kết quả fine-tune. Fine-tune là yêu cầu của giảng viên từ buổi 1 (08/10/2026) và đề cương có đánh giá trước/sau fine-tune, nên nhóm không bỏ phần này.
 
-**Lý do:**
-1. Thời gian còn lại cần ưu tiên chốt cấu hình Agent và hoàn thành đánh giá cuối ở tuần 8.
-2. Bước nhận diện chuỗi vẫn cần được kiểm chứng và cải thiện trên bộ dữ liệu phát triển.
-3. Chưa có mô hình LoRA hoàn chỉnh để so sánh với SLM hiện tại.
-4. Bổ sung fine-tune lúc này làm tăng số cấu hình cần kiểm thử, ảnh hưởng tiến độ báo cáo và demo.
-
-**Phương án:**
-- Tiếp tục sử dụng `phi4-mini:latest` theo cấu hình hiện tại.
-- Tập trung đánh giá Prompt và cơ chế xác minh ứng viên bằng dấu vết bắt buộc.
-- Không sử dụng bộ phát triển hoặc bộ thử để huấn luyện.
-- Ghi nhận fine-tune LoRA là hướng phát triển tiếp theo, ngoài phạm vi triển khai hiện tại.
-
-**Kết luận:** Dừng triển khai fine-tune LoRA trong phạm vi đồ án do giới hạn tiến độ và chưa có mô hình thử nghiệm chạy được. Đây không phải kết luận rằng phương pháp LoRA không hiệu quả.
+**Kế hoạch tuần 8** (chốt phân công sau buổi báo cáo 28/11/2026):
+- LoRA cho 1 mô hình trên Google Colab (ưu tiên `phi4-mini`, mô hình đang dùng mặc định, để so trước/sau trực tiếp).
+- Dữ liệu huấn luyện chỉ lấy từ log huấn luyện (`data/nhan-file.csv`, Splunk Attack Data). Không dùng bộ thử, bộ phát triển, log chuỗi T1.
+- Xuất GGUF, nạp vào Ollama; agent chạy bằng `--model <tên mô hình>`, không sửa code.
+- Đo mô hình gốc và mô hình fine-tune trên bộ phát triển; đạt thì đưa vào lần đo cuối trên bộ thử.
+- Mốc dừng: đến T4 3/12/2026 chưa có mô hình chạy được qua Ollama thì ghi "đã thử, không chạy được" kèm bằng chứng (notebook, log lỗi) và đo cuối không có fine-tune.

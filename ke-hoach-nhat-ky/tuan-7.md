@@ -103,7 +103,7 @@ Cập nhật tối T6 27/11 (hạn chính). Việc còn dở làm tiếp đến 
 | T2 dữ liệu train phiên ngắn | Xong, kết quả âm | `docs/ket-qua-huan-luyen.md` mục 9 |
 | T3 nháp chương Dữ liệu, Đánh giá | Xong bản nháp | `f185786`, `2fcc679`, `aa8b72b` |
 | T4 thử README | Xong | 3 góp ý, đã sửa ở `630680d` |
-| D1–D3 Dũng | Chưa thấy kết quả trên repo | xem mục Dũng bên dưới |
+| D1–D3 Dũng | D2 cách hỏi bản 2 có kết quả; D1 một phần; D3 fine-tune chưa làm, chuyển tuần 8 | `docs/ket-qua/D1-*`, `D2-*`, `D3-*`, `d3-prompt-moi.md`; nhánh `review-dung-d2-d3` |
 
 ### K1. Một lệnh chạy agent (`src/dacn.py`)
 
@@ -149,8 +149,12 @@ Cập nhật tối T6 27/11 (hạn chính). Việc còn dở làm tiếp đến 
 
 ### Dũng (D1–D3)
 
-- Đến tối T6 27/11 chưa có file mới trong `docs/ket-qua/` hay `docs/models.md`. Nhánh `origin/review-dung-d2-d3` chưa xem, chưa gộp.
-- (Dũng bổ sung trước CN 29/11. D3 fine-tune nếu không có kết quả thì ghi "đã thử, không kịp, bỏ fine-tune khỏi phạm vi" kèm lý do.)
+Dũng đẩy kết quả từ tối 27/11 đến sáng 28/11.
+
+- D1: file log máy Dũng hiện có gom được 353 phiên (70.232 sự kiện). Số 2.573 phiên trong `bo-thu.csv` và các lần đo của Thiên là từ một file khác; tuần 8 Thiên và Dũng đối chiếu tên file. RAM theo `ollama ps` trên máy Dũng: 2,6–3,2 GB cho 4 mô hình. Chưa đo lại trên log riêng bằng `agent.py` của main.
+- D2, cách hỏi mới bản 2 (`slm.py` trên nhánh `review-dung-d2-d3`, `docs/ket-qua/d2-prompt-moi.md` trên nhánh đó): bộ phát triển không tiền tố, 21 file, phi4-mini: 12 KẾT LUẬN đúng mã, 8 dừng ở bước 2, 1 CHƯA XÁC NHẬN do thiếu dấu vết. Bằng cách hỏi cũ; không còn phiên nào SLM tự chọn CHUA_XAC_NHAN như bản 1 (2/21). Chưa đo trên log bình thường, nên chưa biết SLM có chọn BINH_THUONG ở các phiên Lenovo/Defender không.
+- Lần đo bản 2 chạy trên nhánh vẫn còn đoạn sửa bước 5 của `agent.py` (22/11), nên nhánh này không gộp; tuần 8 lấy riêng `slm.py` sang main rồi đo lại.
+- D3 fine-tune: tuần 7 chưa làm. Fine-tune là yêu cầu của thầy từ buổi 1 và đề cương có so sánh trước/sau fine-tune, nên không bỏ; làm ở tuần 8 (`docs/ket-qua/d3-prompt-moi.md` mục 8).
 
 ## Nội dung ghi phiếu tiến độ
 
@@ -165,6 +169,7 @@ Phiếu tuần 7 (23/11 – 29/11/2026), 4 dòng:
 
 - Đề cương hứa "nối phát hiện thành chuỗi tấn công": đã làm và chạy đúng trên một kịch bản. Mới một kịch bản do nhóm tự tạo nên chưa đo được tỉ lệ nối đúng.
 - Theo dõi trực tiếp chạy ổn một ngày liền trên máy thật, không có cảnh báo sai; lần thử Startup bị bỏ sót tuần 6 nay đã phát hiện.
+- SLM: cách hỏi bản 2 không còn làm mất phát hiện trên bộ phát triển như bản 1; chưa biết có giúp giảm báo nhầm không.
 - Thêm dữ liệu train dạng phiên ngắn làm bước 2 tệ hơn. Bước 2 vẫn là điểm yếu chính, nhưng không cải thiện được bằng cách thêm dữ liệu kiểu này.
 
 ## Hạn chế cần ghi rõ
@@ -181,7 +186,8 @@ Phiếu tuần 7 (23/11 – 29/11/2026), 4 dòng:
 - Đo cuối trên bộ thử một lần duy nhất, sau khi chốt.
 - Lấy log máy lạ thứ hai (khoảng 1/12), đo báo nhầm, rồi gửi lệnh gỡ Sysmon.
 - Giao diện (K4) xong; báo cáo nháp đủ các chương.
-- Dũng: kết luận fine-tune.
+- Fine-tune LoRA 1 mô hình trên Colab: Thiên làm dữ liệu từ log huấn luyện, Dũng chạy Colab, Khôi đo trước/sau; mốc dừng T4 3/12. Phân công chốt sau buổi báo cáo 28/11.
+- Đo cách hỏi bản 2 trên main (bộ phát triển và log bình thường) rồi chốt cách hỏi.
 
 ## Dùng AI
 
